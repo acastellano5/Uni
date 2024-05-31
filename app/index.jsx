@@ -3,7 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { FontAwesome6 } from "@expo/vector-icons";
-// import logo  from "../assets/images/logo.png"
 import logo from "../assets/images/logo.png";
 import google from "../assets/icons/google.webp"
 import CustomButton from "../components/CustomButton";
@@ -53,7 +52,7 @@ const Onboarding = () => {
         </View>
       </View>
 
-      <StatusBar backgroundColor="#000" style="light"/>
+      <StatusBar style="light"/>
     </SafeAreaView>
   );
 };
