@@ -15,7 +15,7 @@ const Onboarding = () => {
       </View>
 
 
-      <View className="bg-white mt-5 h-full">
+      <View className="bg-white mt-5 h-full rounded-t-3xl">
         <View>
             <Image
               source={logo}
