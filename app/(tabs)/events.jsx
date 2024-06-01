@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function events() {
+export default function Events() {
   return (
     <View>
-      <Text>events</Text>
+      <Text>E</Text>
     </View>
   )
 }

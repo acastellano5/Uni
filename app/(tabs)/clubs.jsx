@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function clubs() {
+export default function Clubs() {
   return (
     <View>
       <Text>clubs</Text>
