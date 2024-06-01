@@ -6,8 +6,11 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import logo from "../assets/images/logo.png";
 import google from "../assets/icons/google.webp"
 import CustomButton from "../components/CustomButton";
+import { Redirect } from "expo-router";
 
 const Onboarding = () => {
+
+  if (1==1) return <Redirect href="/home" />;
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
