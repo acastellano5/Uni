@@ -6,7 +6,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import logo from "../assets/images/logo.png";
 import google from "../assets/icons/google.webp"
 import CustomButton from "../components/CustomButton";
-import { Redirect } from "expo-router";
+import { Redirect, router } from "expo-router";
 
 const Onboarding = () => {
 
@@ -18,6 +18,7 @@ const Onboarding = () => {
       </View>
 
       <View className="bg-white mt-5 h-full rounded-t-3xl pt-5">
+        {/* Heading */}
         <>
           <Image
             source={logo}
@@ -34,22 +35,26 @@ const Onboarding = () => {
           Let's connect{"\n"}together
         </Text>
 
+
+
+        {/* Buttons */}
         <View className="mt-5 items-center">
           <CustomButton
-            containerStyles="bg-secondary"
+            containerStyles="bg-secondary w-9/12"
             textStyles="text-white"
             title="Log In"
+            handlePress={() => router.push("/(auth)/log-in")}
           />
 
           <CustomButton 
-            containerStyles="bg-tertiary mt-5" 
+            containerStyles="bg-tertiary mt-5 w-9/12" 
             title="Sign Up" 
           />
 
           <CustomButton 
             image={google}
             imageStyles="h-[25] w-[25] mr-2"
-            containerStyles="bg-tertiary mt-5" 
+            containerStyles="bg-tertiary mt-5 w-9/12" 
             title="Log In with Google" 
           />
         </View>

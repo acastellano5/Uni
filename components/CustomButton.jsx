@@ -6,7 +6,7 @@ const CustomButton = ({title, handlePress, containerStyles, textStyles, isLoadin
     <TouchableOpacity
         onPress={handlePress}
         activeOpacity={0.7}
-        className={`min-h-[50px] w-9/12 items-center justify-center rounded-lg  ${containerStyles} flex-row`}
+        className={`min-h-[50px] items-center justify-center rounded-lg  ${containerStyles} flex-row`}
     >
         <Image
           source={image}
