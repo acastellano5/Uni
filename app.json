@@ -29,6 +29,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      
       "expo-router",
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
@@ -39,7 +40,10 @@
             "useFrameworks": "static"
           }
         }
-      ]
+
+      ],
+      ["@react-native-google-signin/google-signin"]
+
     ]
   }
 }

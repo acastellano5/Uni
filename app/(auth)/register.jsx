@@ -9,14 +9,21 @@ import FormField from "../../components/FormField";
 import auth from '@react-native-firebase/auth';
 import { Redirect, router } from "expo-router";
 import db from '@react-native-firebase/database';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-
+import {
+  GoogleOneTapSignIn,
+  statusCodes,
+  isErrorWithCode,
+  GoogleSignin,
+} from "@react-native-google-signin/google-signin";
+GoogleSignin.configure({
+  webClientId: '571895727465-ip6t1dtiqdmabqnlrp9brb2tc1uujg83.apps.googleusercontent.com',
+});
 const Register = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-  /*async function onGoogleButtonPress() {
+  async function onGoogleButtonPress() {
     // Check if your device supports Google Play
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     // Get the users ID token
@@ -27,7 +34,7 @@ const Register = () => {
   
     // Sign-in the user with the credential
     return auth().signInWithCredential(googleCredential);
-  }*/
+  }
   const registerAndGoToMainFlow = async () => {
     
     console.log(form.email);
@@ -119,7 +126,7 @@ const Register = () => {
             imageStyles="h-[25] w-[25] mr-2"
             containerStyles="bg-tertiary w-5/6" 
             title="Log In with Google" 
-            //</View>handlePress={() => {onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}}
+            handlePress={() => {onGoogleButtonPress().then(() => router.push("/(tabs)/home"))}}
           />
 
           <Text className="mt-9 text-base">Don't have an account?{' '}
