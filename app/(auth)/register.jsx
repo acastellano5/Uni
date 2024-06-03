@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -6,13 +6,49 @@ import logo from "../../assets/images/logo.png";
 import google from "../../assets/icons/google.webp";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
+import auth from '@react-native-firebase/auth';
+import { Redirect, router } from "expo-router";
+import db from '@react-native-firebase/database';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-const LogIn = () => {
+const Register = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  /*async function onGoogleButtonPress() {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    // Get the users ID token
+    const { idToken } = await GoogleSignin.signIn();
+  
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+  
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
+  }*/
+  const registerAndGoToMainFlow = async () => {
+    
+    console.log(form.email);
+    console.log(form.password);
+    if (form.email && form.password) {
+        try {
+          console.log("die");
+            const response = await auth().createUserWithEmailAndPassword(form.email,form.password)
+            console.log("HEYYOO");
 
+           
+                router.push("/(tabs)/home")
+                console.log("HEYYOO");
+              
+              
+              
+        } catch (error) {
+            Alert.alert("Bro LACKIN,",error)
+        }
+    }
+  }
   // if (1==1) return <Redirect href="/home" />;
   return (
     <SafeAreaView className="bg-black h-full">
@@ -70,7 +106,11 @@ const LogIn = () => {
             title="Log In"
             containerStyles="bg-secondary w-5/6"
             textStyles="text-white font-bold"
-          />
+            handlePress={() => {
+              console.log("Gay.");
+            registerAndGoToMainFlow();
+            }}
+            />
 
           <Text className="text-tertiary my-4">OR</Text>
 
@@ -79,11 +119,12 @@ const LogIn = () => {
             imageStyles="h-[25] w-[25] mr-2"
             containerStyles="bg-tertiary w-5/6" 
             title="Log In with Google" 
+            //</View>handlePress={() => {onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}}
           />
 
           <Text className="mt-9 text-base">Don't have an account?{' '}
 
-            <Text className="text-yellow-500 font-bold" >Sign up</Text>
+            <Text className="text-yellow-500 font-bold">Sign up</Text>
           </Text>
         </View>
         
@@ -94,4 +135,4 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default Register;

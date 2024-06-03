@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "571895727465",
+    "firebase_url": "https://uniapp-6c7b4-default-rtdb.firebaseio.com",
+    "project_id": "uniapp-6c7b4",
+    "storage_bucket": "uniapp-6c7b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571895727465:android:c5728977da16cf667a29f8",
+        "android_client_info": {
+          "package_name": "com.uni.uniapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571895727465-826uqjt251c74v33kfujorobh9tb3vcj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWWqYapSyXgx_SNDVinX49p4zuciN6wLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571895727465-826uqjt251c74v33kfujorobh9tb3vcj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "571895727465-ip6t1dtiqdmabqnlrp9brb2tc1uujg83.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.uni.uniapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

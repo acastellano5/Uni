@@ -10,7 +10,7 @@ import { Redirect, router } from "expo-router";
 
 const Onboarding = () => {
 
-  if (1==1) return <Redirect href="/home" />;
+  //if (1==1) return <Redirect href="/home" />;
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
@@ -49,6 +49,8 @@ const Onboarding = () => {
           <CustomButton 
             containerStyles="bg-tertiary mt-5 w-9/12" 
             title="Sign Up" 
+            handlePress={() => router.push("/(auth)/register")}
+
           />
 
           <CustomButton 
