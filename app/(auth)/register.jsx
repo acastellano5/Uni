@@ -9,6 +9,7 @@ import FormField from "../../components/FormField";
 import auth from '@react-native-firebase/auth';
 import { Redirect, router } from "expo-router";
 import db from '@react-native-firebase/database';
+import {createUserWithEmailAndPassword,loginWithGoogle} from '../../lib/firebase'
 import {
   GoogleOneTapSignIn,
   statusCodes,
@@ -18,44 +19,14 @@ import {
 GoogleSignin.configure({
   webClientId: '571895727465-ip6t1dtiqdmabqnlrp9brb2tc1uujg83.apps.googleusercontent.com',
 });
+
 const Register = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-  async function onGoogleButtonPress() {
-    // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
+ 
   
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-  
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
-  }
-  const registerAndGoToMainFlow = async () => {
-    
-    console.log(form.email);
-    console.log(form.password);
-    if (form.email && form.password) {
-        try {
-          console.log("die");
-            const response = await auth().createUserWithEmailAndPassword(form.email,form.password)
-            console.log("HEYYOO");
-
-           
-                router.push("/(tabs)/home")
-                console.log("HEYYOO");
-              
-              
-              
-        } catch (error) {
-            Alert.alert("Bro LACKIN,",error)
-        }
-    }
-  }
   // if (1==1) return <Redirect href="/home" />;
   return (
     <SafeAreaView className="bg-black h-full">
@@ -115,7 +86,7 @@ const Register = () => {
             textStyles="text-white font-bold"
             handlePress={() => {
               console.log("Gay.");
-            registerAndGoToMainFlow();
+            createUserWithEmailAndPassword(form.email,form.password);
             }}
             />
 
@@ -126,7 +97,7 @@ const Register = () => {
             imageStyles="h-[25] w-[25] mr-2"
             containerStyles="bg-tertiary w-5/6" 
             title="Log In with Google" 
-            handlePress={() => {onGoogleButtonPress().then(() => router.push("/(tabs)/home"))}}
+            handlePress={() => {loginWithGoogle().then(() => router.push("/(tabs)/home"))}}
           />
 
           <Text className="mt-9 text-base">Don't have an account?{' '}
@@ -140,6 +111,6 @@ const Register = () => {
       <StatusBar style="light" />
     </SafeAreaView>
   );
-};
+;}
 
 export default Register;
