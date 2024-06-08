@@ -6,7 +6,7 @@ import logo from "../../assets/images/logo.png";
 import google from "../../assets/icons/google.webp";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
-import { router } from "expo-router";
+import { router, Redirect } from "expo-router";
 import { loginWithEmail } from "../../lib/firebase";
 import { loginWithGoogle } from "../../lib/firebase";
 const LogIn = () => {
@@ -17,7 +17,7 @@ const LogIn = () => {
   async function verifyEmail(email) {
     router.push("/(auth)/needsEmail")
   }
-  // if (1==1) return <Redirect href="/home" />;
+  if (1==1) return <Redirect href="/home" />;
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
