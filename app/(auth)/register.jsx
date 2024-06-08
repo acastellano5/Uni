@@ -31,7 +31,7 @@ const Register = () => {
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
-        <Text className="text-primary text-2xl font-bold">Log In</Text>
+        <Text className="text-primary text-2xl font-bold">Register</Text>
       </View>
 
 
@@ -45,7 +45,7 @@ const Register = () => {
             className="h-[100px] w-[100]"
           />
           <Text className="text-primary text-5xl font-bold mt-5">Uni</Text>
-          <Text className="text-tertiary text-lg">Log in to continue</Text>
+          <Text className="text-tertiary text-lg">Sign up for Uni</Text>
         </View>
 
 
@@ -71,9 +71,7 @@ const Register = () => {
         </View>
 
 
-        <View className="w-5/6 mx-auto mt-3 items-end">
-          <Text className="font-bold text-yellow-500">Forgot Password?</Text>
-        </View>
+        
 
 
 
@@ -81,12 +79,12 @@ const Register = () => {
         {/* Form buttons */}
         <View className="mt-9 items-center">
           <CustomButton
-            title="Log In"
+            title="Sign Up"
             containerStyles="bg-secondary w-5/6"
             textStyles="text-white font-bold"
             handlePress={() => {
-              console.log("Gay.");
-            createUserWithEmailAndPassword(form.email,form.password);
+
+            createUserWithEmailAndPassword(form.email,form.password).then(() => router.push("/(auth)/needsEmail"));
             }}
             />
 
@@ -97,12 +95,12 @@ const Register = () => {
             imageStyles="h-[25] w-[25] mr-2"
             containerStyles="bg-tertiary w-5/6" 
             title="Log In with Google" 
-            handlePress={() => {loginWithGoogle().then(() => router.push("/(tabs)/home"))}}
+            handlePress={() => {loginWithGoogle().then(() => router.push("//index"))}}
           />
 
-          <Text className="mt-9 text-base">Don't have an account?{' '}
+          <Text className="mt-9 text-base">Already have an account?{' '}
 
-            <Text className="text-yellow-500 font-bold">Sign up</Text>
+            <Text className="text-yellow-500 font-bold"onPress={()=> router.replace('./log-in')}>Sign in</Text>
           </Text>
         </View>
         

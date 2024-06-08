@@ -1,13 +1,16 @@
 import { StatusBar } from "expo-status-bar";
 import { Redirect, Tabs } from "expo-router";
 import { Image, Text, View } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
+import GlobalProvider, { useGlobalContext } from "../../context/globalProvider";
 // import { icons } from "../../constants";
 // import { Loader } from "../../components";
 // import { useGlobalContext } from "../../context/GlobalProvider";
 
 const TabIcon = ({ icon, color, name, focused }) => {
+  
   return (
+    
     <View className="flex items-center justify-center gap-2">
       <Image
         source={icon}
@@ -26,8 +29,14 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const TabLayout = () => {
+  const { loading, isLogged, isVerified } = useGlobalContext();
+
+  if (!loading && !isLogged) router.replace('//index');
+
+ 
   return (
     <>
+    <GlobalProvider>
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: "#FFA001",
@@ -69,6 +78,7 @@ const TabLayout = () => {
           options={{
             title: "Messages",
             headerShown: false,
+            
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 // icon={icons.bookmark}
@@ -113,6 +123,7 @@ const TabLayout = () => {
       </Tabs>
 
       <StatusBar backgroundColor="#000" style="light" />
+      </GlobalProvider>
     </>
   );
 };

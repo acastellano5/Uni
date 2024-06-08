@@ -7,21 +7,17 @@ import google from "../../assets/icons/google.webp";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
-import { loginWithEmail } from "../../lib/firebase";
-import { loginWithGoogle } from "../../lib/firebase";
-const LogIn = () => {
+import { resetPass } from "../../lib/firebase";
+const forgotPassword = () => {
   const [form, setForm] = useState({
     email: "",
-    password: "",
   });
-  async function verifyEmail(email) {
-    router.push("/(auth)/needsEmail")
-  }
+
   // if (1==1) return <Redirect href="/home" />;
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
-        <Text className="text-primary text-2xl font-bold">Log In</Text>
+        <Text className="text-primary text-2xl font-bold">Reset Password</Text>
       </View>
 
 
@@ -35,7 +31,7 @@ const LogIn = () => {
             className="h-[100px] w-[100]"
           />
           <Text className="text-primary text-5xl font-bold mt-5">Uni</Text>
-          <Text className="text-tertiary text-lg">Log in to continue</Text>
+          <Text className="text-tertiary text-lg">Enter Email to continue</Text>
         </View>
 
 
@@ -51,19 +47,11 @@ const LogIn = () => {
             labelStyles="text-m"
           />
 
-          <FormField
-            title="Password"
-            value={form.password}
-            handleChangeText={(e) => setForm({ ...form, password: e })}
-            otherStyles="mt-3 w-5/6"
-            labelStyles="text-m"
-          />
+          
         </View>
 
 
-        <View className="w-5/6 mx-auto mt-3 items-end">
-          <Text className="font-bold text-yellow-500"onPress={() => router.replace("./forgotPassword")}>Forgot Password?</Text>
-        </View>
+        
 
 
 
@@ -74,26 +62,14 @@ const LogIn = () => {
             title="Log In"
             containerStyles="bg-secondary w-5/6"
             textStyles="text-white font-bold"
-            handlePress={() => {
-
-              loginWithEmail(form.email,form.password);
-              }}
+            handlePress={()=> resetPass(form.email)}
           />
 
-          <Text className="text-tertiary my-4">OR</Text>
+         
 
-          <CustomButton 
-            image={google}
-            imageStyles="h-[25] w-[25] mr-2"
-            containerStyles="bg-tertiary w-5/6" 
-            title="Log In with Google" 
-            handlePress={() => {loginWithGoogle().then(() => router.push("/(tabs)/home"))}}
+          <Text className="mt-9 text-base">Wrong Place?{' '}
 
-          />
-
-          <Text className="mt-9 text-base">Don't have an account?{' '}
-
-            <Text className="text-yellow-500 font-bold" onPress={() => router.replace("./register")}>Sign up</Text>
+            <Text className="text-yellow-500 font-bold" onPress={() => router.push("../../../log-in")}>Back To Login</Text>
           </Text>
         </View>
         
@@ -104,4 +80,4 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default forgotPassword;

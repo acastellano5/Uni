@@ -1,20 +1,43 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 
-import getCurrentUser from "../lib/firebase";
+import {getCurrentUser} from "../lib/firebase";
 const GlobalContext = createContext()
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({children}) => {
     const [isLogged, setIsLogged] = useState(false);
+    const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isVerified, setIsVerified] = useState(false);
+
+
+    
 
     useEffect(() => {
         getCurrentUser().then((res) => {
             if (res) {
-                setIsLogged(true)
-                setUser(res)
-            } else {
+                //console.log(res);
+                if (res=="nV") {
+                    setIsLogged(false)
+                    setIsVerified(false)
+                    setUser(res)
+
+                }
+                else
+                {
+                    setIsLogged(true)
+                    setIsVerified(true)
+                    setUser(res)
+                    /*console.log('====================================');
+                    console.log("ATT");
+                    console.log('====================================');
+                    */
+                }
+                
+            } 
+            
+            else {
                 setIsLogged(false)
                 setUser(res)
             }
@@ -31,7 +54,9 @@ const GlobalProvider = ({children}) => {
             setIsLogged,
             user,
             setUser,
-            loading
+            loading,
+            isVerified,
+            setIsVerified
         }}
         >
             {children}

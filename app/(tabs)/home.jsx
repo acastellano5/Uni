@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-
+import { router } from 'expo-router';
 export default function Home() {
+  
   return (
+
     <View>
       <Text>home</Text>
     </View>
