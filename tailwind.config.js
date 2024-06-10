@@ -6,7 +6,10 @@ module.exports = {
       colors: {
         primary: "#22c55e",
         secondary: "#000",
-        tertiary: "#C9C9C9"
+        tertiary: "#C9C9C9", 
+        boxShadow: {
+          '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
+        }
       }
     },
   },
