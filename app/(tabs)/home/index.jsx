@@ -2,8 +2,8 @@ import { Text, View, ScrollView } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Header from "../../components/Header";
-import Post from "../../components/Post"
+import Header from "../../../components/Header";
+import Post from "../../../components/Post"
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
         textStyles="right-2"
       />
 
-      <View className="bg-white mt-5 h-full rounded-t-3xl pt-5">
+      <View className="bg-white mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView showsVerticalScrollIndicator={false}>
           <Post/>
 

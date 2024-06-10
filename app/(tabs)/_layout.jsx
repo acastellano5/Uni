@@ -6,13 +6,11 @@ import GlobalProvider, { useGlobalContext } from "../../context/globalProvider";
 // import { icons } from "../../constants";
 // import { Loader } from "../../components";
 // import { useGlobalContext } from "../../context/GlobalProvider";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const TabIcon = ({ icon, color, name, focused }) => {
-
   return (
     <View className="flex items-center justify-center gap-2">
-
       <Ionicons name={`${icon}`} size={24} color={`${color}`} />
 
       <Text

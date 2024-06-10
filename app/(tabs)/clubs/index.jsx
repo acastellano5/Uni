@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Header from "../../components/Header";
-import SearchBar from "../../components/SearchBar";
-import ClubSection from "../../components/ClubSection";
+import Header from "../../../components/Header";
+import SearchBar from "../../../components/SearchBar";
+import ClubSection from "../../../components/ClubSection";
 
 export default function Clubs() {
   return (
@@ -24,7 +24,7 @@ export default function Clubs() {
 
             <ClubSection category="Athletic" />
 
-            <ClubSection category="Academic" />
+            <ClubSection category="Academic"/>
 
             <ClubSection category="Service" />
           </View>
