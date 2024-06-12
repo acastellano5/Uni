@@ -1,9 +1,12 @@
-import { View, Text, Image } from "react-native";
-import React from "react";
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import schoolImage from "../../assets/images/school.png";
+import Comments from "./CommentsSection";
 
 const Post = () => {
+  const [ isModalVisible, setIsModalVisible ] = useState(false)
+
   return (
     <View className="w-10/12 mx-auto mb-10">
       {/* User info */}
@@ -38,7 +41,9 @@ const Post = () => {
 
           {/* comment */}
           <View className="flex-row items-center ml-10">
-            <FontAwesome name="commenting-o" size={24} color="black" />
+            <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+              <FontAwesome name="commenting-o" size={24} color="black" />
+            </TouchableOpacity>
             <Text className="text-base ml-2">234</Text>
           </View>
         </View>
@@ -54,8 +59,25 @@ const Post = () => {
       <Text className="mt-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.</Text>
 
 
+      {/* View comments button */}
+
+      <TouchableOpacity className="mt-3" onPress={() => setIsModalVisible(true)}>
+        <Text className="font-semibold text-darkGray">View Comments</Text>
+      </TouchableOpacity>
+
       {/* time */}
       <Text className="font-semibold mt-3">45 minutes ago</Text>
+
+
+
+
+      {/* comments section modal */}
+      <Comments
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+        animationType="slide"
+        presentationStyle="formSheet"
+      />
     </View>
   );
 };
