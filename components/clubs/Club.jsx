@@ -5,7 +5,7 @@ import { router } from 'expo-router'
 const Club = ({img, name}) => {
   return (
     <TouchableOpacity 
-      className="border border-tertiary rounded-md p-2 bg-white shadow items-center mb-3"
+      className="border border-tertiary rounded-md p-2 bg-white shadow items-center m-1"
       style={styles.clubWidth} 
       // redirect to club home page
       onPress={() => {
@@ -24,7 +24,7 @@ const Club = ({img, name}) => {
       />
 
       {/* displays club name */}
-      <Text className="text-center text-xs" style={styles.redBackground}>{name}</Text>
+      <Text className="text-center text-xs">{name}</Text>
     </TouchableOpacity>
   )
 }
@@ -32,7 +32,7 @@ const Club = ({img, name}) => {
 const styles = StyleSheet.create({
 
     clubWidth: {
-        width: '31%'
+        width: '30%'
     }
   });
 

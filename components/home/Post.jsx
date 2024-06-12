@@ -1,7 +1,7 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import schoolImage from "../assets/images/school.png";
+import schoolImage from "../../assets/images/school.png";
 
 const Post = () => {
   return (

@@ -3,7 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
 import SearchBar from "../../../components/SearchBar";
-import ClubSection from "../../../components/ClubSection";
+import ClubSection from "../../../components/clubs/ClubSection";
 
 export default function Clubs() {
   return (

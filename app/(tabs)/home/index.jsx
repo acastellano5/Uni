@@ -3,7 +3,7 @@ import React from "react";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
-import Post from "../../../components/Post"
+import Post from "../../../components/home/Post"
 
 export default function Home() {
   return (
