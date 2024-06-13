@@ -1,18 +1,21 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import logo from "../assets/images/logo.png";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router";
 
-const Header = ({title, textStyles}) => {
+const Header = ({ title, textStyles }) => {
   return (
     <View className="flex-row justify-between w-11/12 mx-auto items-center">
-      <Image 
-      source={logo} 
-      className="h-[30] w-[30]"
-      />
-      <Text className={`mx-auto text-3xl font-semibold text-white ${textStyles}`}>{title}</Text>
+      <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile')}>
+        <FontAwesome name="user-circle" size={27} color="white" />
+      </TouchableOpacity>
 
-      <FontAwesome name="user-circle" size={24} color="white" />
+      <Text className={`text-2xl font-semibold text-white ${textStyles}`}>
+        Salesianum
+      </Text>
+
+      <Image source={logo} className="h-[30px] w-[30px] ml-3" />
     </View>
   );
 };

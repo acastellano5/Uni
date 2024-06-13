@@ -12,7 +12,6 @@ export default function Home() {
       {/* Header */}
       <Header
         title="Home"
-        textStyles="right-2"
       />
 
       <View className="bg-white mt-5 h-full rounded-t-3xl pt-5 pb-10">
