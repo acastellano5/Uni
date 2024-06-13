@@ -80,7 +80,7 @@ const Register = () => {
         <View className="mt-9 items-center">
           <CustomButton
             title="Sign Up"
-            containerStyles="bg-secondary w-5/6"
+            containerStyles="bg-secondary w-5/6 min-h-[50px]"
             textStyles="text-white font-bold"
             handlePress={async () => {
               try {
@@ -106,7 +106,7 @@ const Register = () => {
           <CustomButton 
             image={google}
             imageStyles="h-[25] w-[25] mr-2"
-            containerStyles="bg-tertiary w-5/6" 
+            containerStyles="bg-tertiary w-5/6 min-h-[50px]" 
             title="Log In with Google" 
             handlePress={() => {loginWithGoogle().then(() => router.push("//index"))}}
           />

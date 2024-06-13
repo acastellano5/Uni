@@ -9,7 +9,7 @@ export default function Clubs() {
   return (
     <SafeAreaView className="h-full bg-black">
       {/* Header */}
-      <Header title="Clubs" textStyles="right-2" />
+      <Header title="Clubs" />
 
       <View className="bg-white mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView showsVerticalScrollIndicator={false}>

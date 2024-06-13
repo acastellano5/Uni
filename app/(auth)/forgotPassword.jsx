@@ -59,7 +59,7 @@ const forgotPassword = () => {
         <View className="mt-9 items-center">
           <CustomButton
             title="Log In"
-            containerStyles="bg-secondary w-5/6"
+            containerStyles="bg-secondary w-5/6 min-h-[50px]"
             textStyles="text-white font-bold"
             handlePress={()=> resetPass(form.email)}
           />

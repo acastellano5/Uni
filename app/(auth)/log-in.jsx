@@ -17,6 +17,7 @@ const LogIn = () => {
   async function verifyEmail(email) {
     router.push("/(auth)/needsEmail")
   }
+  // if (1==1) return <Redirect href="/home" />;
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
@@ -71,7 +72,7 @@ const LogIn = () => {
         <View className="mt-9 items-center">
           <CustomButton
             title="Log In"
-            containerStyles="bg-secondary w-5/6"
+            containerStyles="bg-secondary w-5/6 min-h-[50px]"
             textStyles="text-white font-bold"
             handlePress={() => {
               loginWithEmail(form.email,form.password)
@@ -83,7 +84,7 @@ const LogIn = () => {
           <CustomButton 
             image={google}
             imageStyles="h-[25] w-[25] mr-2"
-            containerStyles="bg-tertiary w-5/6" 
+            containerStyles="bg-tertiary w-5/6 min-h-[50px]" 
             title="Log In with Google" 
             handlePress={() => {loginWithGoogle().then(() => router.push("/(tabs)/home"))}}
 
