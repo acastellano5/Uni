@@ -8,7 +8,7 @@ import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import { router, Redirect } from "expo-router";
 import { loginWithEmail } from "../../lib/firebase";
-import { loginWithGoogle } from "../../lib/firebase";
+
 const LogIn = () => {
   const [form, setForm] = useState({
     email: "",
@@ -75,8 +75,7 @@ const LogIn = () => {
             containerStyles="bg-secondary w-5/6 min-h-[50px]"
             textStyles="text-white font-bold"
             handlePress={() => {
-
-              loginWithEmail(form.email,form.password);
+              loginWithEmail(form.email,form.password)
               }}
           />
 

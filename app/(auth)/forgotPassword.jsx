@@ -7,7 +7,6 @@ import google from "../../assets/icons/google.webp";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
-import { resetPass } from "../../lib/firebase";
 const forgotPassword = () => {
   const [form, setForm] = useState({
     email: "",
