@@ -53,14 +53,14 @@ if (!loading && isLogged && isVerified) router.replace("/(tabs)/home");
         {/* Buttons */}
         <View className="mt-5 items-center">
           <CustomButton
-            containerStyles="bg-secondary w-9/12"
+            containerStyles="bg-secondary w-9/12 min-h-[50px]"
             textStyles="text-white"
             title="Log In"
             handlePress={() => router.push("/(auth)/log-in")}
           />
 
           <CustomButton 
-            containerStyles="bg-tertiary mt-5 w-9/12" 
+            containerStyles="bg-tertiary mt-5 w-9/12 min-h-[50px]" 
             title="Sign Up" 
             handlePress={() => router.push("/(auth)/register")}
 
@@ -69,7 +69,7 @@ if (!loading && isLogged && isVerified) router.replace("/(tabs)/home");
           <CustomButton 
             image={google}
             imageStyles="h-[25] w-[25] mr-2"
-            containerStyles="bg-tertiary mt-5 w-9/12" 
+            containerStyles="bg-tertiary mt-5 w-9/12 min-h-[50px]" 
             title="Log In with Google" 
             handlePress={() => {loginWithGoogle().then(() => router.push("/(tabs)/home"))}}
 
