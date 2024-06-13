@@ -3,7 +3,6 @@ import React from "react";
 import { Stack } from "expo-router";
 import GlobalProvider from "../context/globalProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useGlobalContext } from "../context/globalProvider";
 const RootLayout = () => {
   return (
     <GlobalProvider>
@@ -12,7 +11,7 @@ const RootLayout = () => {
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
-    </GlobalProvider>
+      </GlobalProvider>
   );
 };
 

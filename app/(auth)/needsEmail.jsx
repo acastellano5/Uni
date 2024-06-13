@@ -7,7 +7,7 @@ import google from "../../assets/icons/google.webp";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
-import { sendResetEmail } from "../../lib/firebase";
+import { getCurrentUser } from "../../lib/firebase";
 const needsEmail = () => {
   const [form, setForm] = useState({
     email: "",
@@ -33,6 +33,28 @@ const needsEmail = () => {
           <Text className="text-primary text-5xl font-bold mt-5">Uni</Text>
           <Text className="text-tertiary text-lg">Verify Email to continue</Text>
         </View>
+        <CustomButton
+            title="Sign Up"
+            containerStyles="bg-secondary w-5/6"
+            textStyles="text-white font-bold"
+            handlePress={async () => {
+              try {
+                const stuff = await getCurrentUser();
+                console.log(stuff);
+                if (stuff) {
+                  router.push("/(tabs)/home/index")
+                }
+
+
+
+              } catch (error) {
+                console.log("HEE");
+
+              }
+
+            
+            }}
+            />
 
 
 

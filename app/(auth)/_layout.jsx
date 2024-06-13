@@ -3,11 +3,9 @@ import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import Loader from "../../components/Loader";
-import GlobalProvider, { useGlobalContext } from "../../context/globalProvider";
 
 
 const AuthLayout = () => {
-    const { loading, isLogged } = useGlobalContext();
   
   return (
     <>

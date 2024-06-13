@@ -9,13 +9,13 @@ import FormField from "../../components/FormField";
 import auth from '@react-native-firebase/auth';
 import { Redirect, router } from "expo-router";
 import db from '@react-native-firebase/database';
-import {createUserWithEmailAndPassword,loginWithGoogle} from '../../lib/firebase'
 import {
   GoogleOneTapSignIn,
   statusCodes,
   isErrorWithCode,
   GoogleSignin,
 } from "@react-native-google-signin/google-signin";
+import { signUpWithEmail } from "../../lib/firebase";
 GoogleSignin.configure({
   webClientId: '571895727465-ip6t1dtiqdmabqnlrp9brb2tc1uujg83.apps.googleusercontent.com',
 });
@@ -82,9 +82,22 @@ const Register = () => {
             title="Sign Up"
             containerStyles="bg-secondary w-5/6"
             textStyles="text-white font-bold"
-            handlePress={() => {
+            handlePress={async () => {
+              try {
+                const stuff = await signUpWithEmail(form.email,form.password);
+                console.log(stuff);
+                if (stuff) {
+                  router.push("/(auth)/needsEmail")
+                }
 
-            createUserWithEmailAndPassword(form.email,form.password).then(() => router.push("/(auth)/needsEmail"));
+
+
+              } catch (error) {
+                console.log("HEE");
+
+              }
+
+            
             }}
             />
 

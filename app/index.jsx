@@ -10,21 +10,17 @@ import { Redirect, router } from "expo-router";
 import { loginWithGoogle } from "../lib/firebase";
 import Loader from "../components/Loader";
 import { useGlobalContext } from "../context/globalProvider";
-import { getCurrentUser, isReal } from "../lib/firebase";
-import GlobalProvider from "../context/globalProvider";
 const Onboarding = () => {
 
-  const { loading, isLogged, isVerified } = useGlobalContext();
   
-  if (!loading && isLogged && !isVerified) console.log("NV");
 /*Writing this for testing vars
 
 console.log(loading);
 console.log(isVerified);
 console.log(isLogged);*/
-if (!loading && isLogged && isVerified) router.replace("/(tabs)/home");
 
   return (
+    
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
         <Text className="text-primary text-4xl font-bold">Uni</Text>
