@@ -8,6 +8,7 @@ import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import auth from '@react-native-firebase/auth';
 import { Redirect, router } from "expo-router";
+import { loginWithGoogle } from "../../lib/firebase";
 import db from '@react-native-firebase/database';
 import {
   GoogleOneTapSignIn,

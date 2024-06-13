@@ -18,7 +18,7 @@ const GlobalProvider = ({children}) => {
         getCurrentUser().then((res) => {
             if (res) {
                 //console.log(res);
-                if (res=="nV") {
+                if (res) {
                     setIsLogged(false)
                     setIsVerified(false)
                     setUser(res)
