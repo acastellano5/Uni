@@ -22,6 +22,8 @@ const Onboarding = () => {
 console.log(loading);
 console.log(isVerified);
 console.log(isLogged);*/
+
+if (1==1) return <Redirect href="/profile" />;
 if (!loading && isLogged && isVerified) router.replace("/(tabs)/home");
 
   return (
@@ -30,7 +32,7 @@ if (!loading && isLogged && isVerified) router.replace("/(tabs)/home");
         <Text className="text-primary text-4xl font-bold">Uni</Text>
       </View>
 
-      <View className="bg-white mt-5 h-full rounded-t-3xl pt-5">
+      <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5">
         {/* Heading */}
         <>
           <Image
