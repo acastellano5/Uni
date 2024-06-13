@@ -12,14 +12,13 @@ import Loader from "../components/Loader";
 import { useGlobalContext } from "../context/globalProvider";
 const Onboarding = () => {
 
-  
+const {loading, isLogged, isVerified} = useGlobalContext();
 /*Writing this for testing vars
 
 console.log(loading);
 console.log(isVerified);
 console.log(isLogged);*/
 
-if (1==1) return <Redirect href="/profile" />;
 if (!loading && isLogged && isVerified) router.replace("/(tabs)/home");
 
   return (
