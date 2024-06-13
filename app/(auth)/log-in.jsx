@@ -17,7 +17,6 @@ const LogIn = () => {
   async function verifyEmail(email) {
     router.push("/(auth)/needsEmail")
   }
-  if (1==1) return <Redirect href="/home" />;
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
@@ -74,8 +73,30 @@ const LogIn = () => {
             title="Log In"
             containerStyles="bg-secondary w-5/6 min-h-[50px]"
             textStyles="text-white font-bold"
-            handlePress={() => {
-              loginWithEmail(form.email,form.password)
+            handlePress={async () => {
+              try {
+                const stuff = await loginWithEmail(form.email,form.password);
+                console.log(stuff,"is the Resuly");
+                if (stuff=="nV") {
+                  router.push("/(auth)/needsEmail")
+
+                }
+                else{
+                  if (!stuff) {
+                    
+                  } else {
+                    router.push("/(tabs)/home")
+                  }
+                }
+                
+
+
+
+              } catch (error) {
+                console.log("HEE");
+
+              }
+              
               }}
           />
 
