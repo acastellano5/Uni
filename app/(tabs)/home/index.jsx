@@ -7,7 +7,7 @@ import Post from "../../../components/home/Post"
 
 export default function Home() {
   return (
-    <SafeAreaView className="h-full bg-black">
+    <SafeAreaView className="h-full bg-secondary">
 
       {/* Header */}
       <Header
@@ -16,12 +16,12 @@ export default function Home() {
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Post/>
+          <Post containerStyles="w-10/12 mx-auto mb-10"/>
 
-          <Post/>
+          <Post containerStyles="w-10/12 mx-auto mb-10"/>
 
-          <Post/>
-          <Post/>
+          <Post containerStyles="w-10/12 mx-auto mb-10"/>
+          <Post containerStyles="w-10/12 mx-auto mb-10"/>
 
         </ScrollView>
       </View>

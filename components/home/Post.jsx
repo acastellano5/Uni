@@ -4,13 +4,11 @@ import { FontAwesome } from "@expo/vector-icons";
 import schoolImage from "../../assets/images/school.png";
 import Comments from "./CommentsSection";
 
-const Post = () => {
+const PostContent = () => {
   const [ isModalVisible, setIsModalVisible ] = useState(false)
-
   return (
-    <View className="w-10/12 mx-auto mb-10">
-      {/* User info */}
-      <View className="flex-row justify-between mb-3">
+    <>
+    <View className="flex-row justify-between mb-3">
         <View className="flex-row items-center">
           <FontAwesome name="user-circle" size={30} color="black" />
 
@@ -78,8 +76,18 @@ const Post = () => {
         animationType="slide"
         presentationStyle="formSheet"
       />
+
+</>
+  )
+}
+
+const PostContainer = ({containerStyles}) => {
+
+  return (
+    <View className={containerStyles}>
+      <PostContent/>
     </View>
   );
 };
 
-export default Post;
+export default PostContainer;

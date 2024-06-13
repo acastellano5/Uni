@@ -3,7 +3,7 @@ import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-const ProfileLayout = () => {
+const PostLayout = () => {
   return (
     <>
       <Stack>
@@ -15,9 +15,9 @@ const ProfileLayout = () => {
           }}
         />
       </Stack>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
     </>
   );
 };
 
-export default ProfileLayout;
+export default PostLayout;

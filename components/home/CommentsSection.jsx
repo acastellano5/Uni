@@ -1,7 +1,15 @@
-import { StyleSheet, Text, View, Modal, Image, ScrollView, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 
 const Comment = ({ name }) => {
   return (
@@ -37,37 +45,63 @@ const CommentsSection = ({
       animationType={animationType}
       presentationStyle={presentationStyle}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        {/* comments header */}
+        <View style={styles.header}>
+          {/* close button */}
+          <View style={styles.closeButtonContainer}>
+            <TouchableOpacity onPress={onRequestClose}>
+              <AntDesign name="close" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
 
-      {/* close button */}
-      <View className="w-11/12 mx-auto flex-row justify-end pt-5">
-        <TouchableOpacity onPress={onRequestClose}>
-          <AntDesign name="close" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-
-
-
-
-      <View>
-        <Text className="text-2xl font-semibold text-center mb-5">
-          Comments
-        </Text>
-
-        <View className="w-11/12 mx-auto">
-          <Comment name="Nathan Reid" />
-
-          <Comment name="Nathan Reid" />
-
-          <Comment name="Nathan Reid" />
-
-          <Comment name="Nathan Reid" />
-
-          <Comment name="Nathan Reid" />
+          <Text style={styles.headerText}>Comments</Text>
         </View>
-      </View>
-      </ScrollView>
 
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <View className="w-11/12 mx-auto pt-5">
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+
+            <Comment name="Nathan Reid" />
+          </View>
+        </ScrollView>
+      </View>
     </Modal>
   );
 };
@@ -75,6 +109,33 @@ const CommentsSection = ({
 export default CommentsSection;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    borderBottomWidth: 1,
+    borderColor: '#dcdcdc',
+    paddingVertical: 15,
+    backgroundColor: '#fff',
+    zIndex: 1
+  },
+  closeButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  scrollViewContent: {
+    paddingTop: 80, // Adjust this value based on the header height
+  },
   roundedBorders: {
     height: 50,
     width: 50,

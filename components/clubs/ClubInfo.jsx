@@ -8,7 +8,7 @@ const ClubInfo = () => {
       <Text className="text-base font-semibold mb-2">Description</Text>
 
 
-      <View className="bg-[#ddf5e2b2] mb-3">
+      <View className="bg-lightGreen mb-3">
         <Text className="text-[#5e5e5e] p-2 rounded-lg">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.</Text>
       </View>
 

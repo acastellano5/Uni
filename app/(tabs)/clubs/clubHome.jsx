@@ -3,20 +3,17 @@ import {
   Text,
   ScrollView,
   ImageBackground,
-  Image,
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import React, { useState, useEffect } from "react";
-import { router, useLocalSearchParams } from "expo-router";
+import React, { useState } from "react";
+import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import background from "../../../assets/images/pingpongbg.png";
-import { Ionicons } from "@expo/vector-icons";
-import CustomButton from "../../../components/CustomButton";
 import ClubTabs from "../../../components/clubs/ClubTabs";
 import ClubInfo from "../../../components/clubs/ClubInfo";
 import ClubMembers from "../../../components/clubs/ClubMembers";
-import logo from "../../../assets/images/logo.png"
+import BackHeader from "../../../components/BackHeader";
 
 
 const tabs = ["Info", "Members"];
@@ -47,22 +44,7 @@ const clubHome = () => {
       <ImageBackground className="w-full h-[40vh] pb-5" source={background}>
         <SafeAreaView className="w-11/12 mx-auto h-full justify-between z-10">
           {/* back button and ai btn */}
-          <View className="flex-row items-center justify-between">
-            <TouchableOpacity
-              className="bg-tertiary w-8 py-1 flex items-center rounded"
-              activeOpacity={0.8}
-              onPress={() => router.back()}
-            >
-              <Ionicons name="chevron-back" size={24} color="white" />
-            </TouchableOpacity>
-
-            <TouchableOpacity activeOpacity={0.8}>
-                <Image
-                  source={logo}
-                  className="h-[4vh] w-[4vh]"
-                />
-            </TouchableOpacity>
-          </View>
+          <BackHeader/>
 
           {/* club name and join button */}
           <View className="flex-row justify-between items-center">

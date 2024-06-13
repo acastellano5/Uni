@@ -4,7 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,8 +13,10 @@ import { router, Link } from "expo-router";
 import logo from "../../assets/images/logo.png";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
 import CustomButton from "../../components/CustomButton";
+import InfoBox from "../../components/profile/InfoBox";
+import PostSection from "../../components/profile/PostSection";
 
-const index = () => {
+const Profile = () => {
   return (
     <SafeAreaView className="h-full bg-black">
       <View className="w-11/12 mx-auto flex-row justify-between items-center">
@@ -37,18 +39,52 @@ const index = () => {
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView showsVerticalScrollIndicator={false}>
 
-        <View className="items-center justify-center">
-            <Image source={ProfilePic} style={styles.profilePic} className="mb-2"/>
+        {/* profile image with edit and settings buttons */}
+          <View className="items-center justify-center">
+            <Image
+              source={ProfilePic}
+              style={styles.profilePic}
+              className="mb-2"
+            />
             <Text className="text-lg font-medium">Nathan Reid</Text>
 
             <View className="flex-row">
-                
-                <CustomButton title="Edit" textStyles="text-primary text-sm font-semibold"/>
+              <CustomButton
+                title="Edit"
+                textStyles="text-primary text-sm font-semibold"
+              />
 
-                <CustomButton title="Settings" containerStyles="ml-2" textStyles="text-darkGray text-sm font-semibold"/>
-                
+              <CustomButton
+                title="Settings"
+                containerStyles="ml-2"
+                textStyles="text-darkGray text-sm font-semibold"
+              />
             </View>
-        </View>
+          </View>
+
+
+
+            {/* bio section */}
+          <View className="bg-white w-11/12 mx-auto mt-5 px-3 py-2 rounded-lg">
+            <Text className="text-lg font-medium mb-1">Bio</Text>
+            <View className="bg-lightGreen mb-3 rounded-lg">
+              <Text className="text-[#5e5e5e] p-2">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever.
+              </Text>
+            </View>
+
+            {/* interests section */}
+            <InfoBox title="Interests"/>
+
+            {/* groups section */}
+            <InfoBox title="Groups"/>
+
+            
+            <PostSection/>
+
+          </View>
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -63,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default index;
+export default Profile;
