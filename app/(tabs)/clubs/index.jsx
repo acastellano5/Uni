@@ -11,7 +11,7 @@ export default function Clubs() {
       {/* Header */}
       <Header title="Clubs" />
 
-      <View className="bg-white mt-5 h-full rounded-t-3xl pt-5 pb-10">
+      <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Search bar */}
           <SearchBar />

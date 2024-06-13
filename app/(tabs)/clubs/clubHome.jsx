@@ -85,7 +85,7 @@ const clubHome = () => {
       </ImageBackground>
 
       {/* club info */}
-      <View className="bg-[#f3f3f3] mt-5 h-full rounded-t-3xl pt-5 pb-11 bottom-10">
+      <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-11 bottom-10">
         {/* info and member tabs */}
 
         {/* <View className="flex flex-row w-10/12 bg-white mx-auto rounded-lg p-2">
@@ -108,7 +108,7 @@ const clubHome = () => {
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "rgba(0,0,0,0.2)",
   },
 });
 

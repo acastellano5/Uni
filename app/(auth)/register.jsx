@@ -38,7 +38,7 @@ const Register = () => {
 
 
       {/* Heading */}
-      <View className="bg-white mt-5 h-full rounded-t-3xl pt-5">
+      <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5">
         <View className="items-center">
           <Image
             source={logo}
