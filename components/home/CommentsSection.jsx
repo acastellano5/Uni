@@ -26,7 +26,7 @@ const Comment = ({ name }) => {
           <Text className="text-sm ml-2 text-darkGray">2h</Text>
         </View>
 
-        <Text>skibbidi ohio rizzler</Text>
+        <Text>Awesome post!</Text>
       </View>
     </View>
   );
@@ -60,45 +60,45 @@ const CommentsSection = ({
 
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View className="w-11/12 mx-auto pt-5">
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
 
-            <Comment name="Nathan Reid" />
+            <Comment name="Walter White" />
           </View>
         </ScrollView>
       </View>

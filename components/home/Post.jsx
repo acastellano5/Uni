@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import schoolImage from "../../assets/images/school.png";
 import Comments from "./CommentsSection";
+import { router } from "expo-router";
 
 const PostContent = () => {
   const [ isModalVisible, setIsModalVisible ] = useState(false)
@@ -10,12 +11,15 @@ const PostContent = () => {
     <>
     <View className="flex-row justify-between mb-3">
         <View className="flex-row items-center">
-          <FontAwesome name="user-circle" size={30} color="black" />
+          
+          <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile')}>
+            <FontAwesome name="user-circle" size={30} color="black" />
+          </TouchableOpacity>
 
-          <View className="ml-5">
-            <Text>Andrew Castellano</Text>
+          <TouchableOpacity className="ml-5" activeOpacity={0.8} onPress={() => router.push('/profile')}>
+            <Text>John Doe</Text>
             <Text>Class of 2024</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <FontAwesome name="ellipsis-v" size={24} color="black" />

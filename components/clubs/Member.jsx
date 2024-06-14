@@ -1,9 +1,10 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { router } from 'expo-router'
 
 const Member = ({ role, name, profileImg }) => {
   return (
-    <View className="w-1/3 items-center p-1 pb-3">
+    <TouchableOpacity className="w-1/3 items-center p-1 pb-3" activeOpacity={0.8} onPress={() => router.push('/profile')}>
         <Image
             source={profileImg}
             resizeMode='cover'
@@ -11,7 +12,7 @@ const Member = ({ role, name, profileImg }) => {
         />
         <Text className="font-semibold mb-1">{role}</Text>
       <Text>{name}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 

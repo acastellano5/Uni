@@ -10,6 +10,8 @@ import { router, Redirect } from "expo-router";
 import { loginWithEmail } from "../../lib/firebase";
 
 const LogIn = () => {
+
+  if (1==1) return <Redirect href="/home" />;
   const [form, setForm] = useState({
     email: "",
     password: "",

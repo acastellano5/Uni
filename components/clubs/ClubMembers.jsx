@@ -7,13 +7,13 @@ const ClubMembers = () => {
   return (
     <View className="bg-white w-11/12 mx-auto rounded-lg px-3 py-2">
       <View className="flex-row flex-wrap">
-        <Member role="Member" name="Nathan Reid" profileImg={ProfilePic} />
+        <Member role="Member" name="John Doe" profileImg={ProfilePic} />
 
-        <Member role="Member" name="Nathan Reid" profileImg={ProfilePic} />
+        <Member role="Member" name="John Doe" profileImg={ProfilePic} />
 
-        <Member role="Member" name="Nathan Reid" profileImg={ProfilePic} />
+        <Member role="Member" name="John Doe" profileImg={ProfilePic} />
 
-        <Member role="Member" name="Nathan Reid" profileImg={ProfilePic} />
+        <Member role="Member" name="John Doe" profileImg={ProfilePic} />
       </View>
     </View>
   );

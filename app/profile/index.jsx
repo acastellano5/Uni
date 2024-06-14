@@ -46,7 +46,7 @@ const Profile = () => {
               style={styles.profilePic}
               className="mb-2"
             />
-            <Text className="text-lg font-medium">Nathan Reid</Text>
+            <Text className="text-lg font-medium">John Doe</Text>
 
             <View className="flex-row">
               <CustomButton
