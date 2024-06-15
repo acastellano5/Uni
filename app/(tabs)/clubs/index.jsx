@@ -4,6 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
 import SearchBar from "../../../components/SearchBar";
 import ClubSection from "../../../components/clubs/ClubSection";
+import firestore from "@react-native-firebase/firestore";
+const clubsCollection = firestore().collection("Clubs");
 
 export default function Clubs() {
   return (
