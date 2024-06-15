@@ -4,7 +4,7 @@ import logo from "../assets/images/logo.png";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-const Header = ({ title, textStyles }) => {
+const Header = ({ textStyles }) => {
   return (
     <View className="flex-row justify-between w-11/12 mx-auto items-center">
       <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile')}>

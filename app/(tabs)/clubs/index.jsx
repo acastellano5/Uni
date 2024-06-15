@@ -14,7 +14,7 @@ export default function Clubs() {
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Search bar */}
-          <SearchBar />
+          <SearchBar placeholder="Search clubs and activites"/>
 
           {/* clubs */}
           <View className="w-10/12 mx-auto mt-5">

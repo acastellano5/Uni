@@ -6,18 +6,7 @@ import {
   StyleSheet,
 } from "react-native";
 import React from "react";
-
-function TabButton({ name, activeTab, onHandleSearchType }) {
-  return (
-    <TouchableOpacity
-      style={styles.btn(name, activeTab)}
-      onPress={onHandleSearchType}
-      className="rounded-lg w-3/6 py-3"
-    >
-      <Text style={styles.btnText(name, activeTab)} className="text-lg font-bold text-center">{name}</Text>
-    </TouchableOpacity>
-  );
-}
+import TabButton from "../TabButton";
 
 const ClubTabs = ({ tabs, activeTab, setActiveTab }) => {
   return (
@@ -27,20 +16,17 @@ const ClubTabs = ({ tabs, activeTab, setActiveTab }) => {
           key={item}
           name={item}
           activeTab={activeTab}
+          containerStyles="rounded-lg w-3/6 py-3"
+          textStyles="text-lg font-bold text-center"
           onHandleSearchType={() => setActiveTab(item)}
+          activeBackground="#000"
+          background="#FFF"
+          activeText="#FFF"
+          text="#AAA9B8"
         />
       ))}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  btn: (name, activeTab) => ({
-    backgroundColor: name === activeTab ? "#000" : "#FFF",
-  }),
-  btnText: (name, activeTab) => ({
-    color: name === activeTab ? "#FFF" : "#AAA9B8",
-  }),
-});
 
 export default ClubTabs;
