@@ -4,7 +4,7 @@ import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
 import Post from "../../../components/post/Post"
-
+import { useGlobalContext } from "../../../context/globalProvider";
 export default function Home() {
 
 
