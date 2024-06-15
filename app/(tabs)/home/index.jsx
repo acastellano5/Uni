@@ -1,44 +1,57 @@
-import { Text, View, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
-import Post from "../../../components/post/Post"
+import Post from "../../../components/post/Post";
+import { Feather } from "@expo/vector-icons";
 import { useGlobalContext } from "../../../context/globalProvider";
+
 export default function Home() {
-
-
-  const {loading, isLogged, isVerified} = useGlobalContext();
-  console.log("Loading: ",loading);
-  console.log("Logged In: ",isLogged);
-  console.log("Verified: ",isVerified);
-  if (!loading && isLogged && isVerified){
-  
+  const { loading, isLogged, isVerified } = useGlobalContext();
+  console.log("Loading: ", loading);
+  console.log("Logged In: ", isLogged);
+  console.log("Verified: ", isVerified);
+  if (!loading && isLogged && isVerified) {
   } else {
     router.replace("//index");
-
-  
   }
   return (
     <SafeAreaView className="h-full bg-secondary">
-
       {/* Header */}
-      <Header
-        title="Home"
-      />
+      <Header title="Home" />
 
-      <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
+      <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5">
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Post containerStyles="w-10/12 mx-auto mb-10"/>
-
-          <Post containerStyles="w-10/12 mx-auto mb-10"/>
-
-          <Post containerStyles="w-10/12 mx-auto mb-10"/>
-          <Post containerStyles="w-10/12 mx-auto mb-10"/>
-
+          <Post containerStyles="w-10/12 mx-auto mb-10" />
+          <Post containerStyles="w-10/12 mx-auto mb-10" />
+          <Post containerStyles="w-10/12 mx-auto mb-10" />
+          <Post containerStyles="w-10/12 mx-auto mb-10" />
         </ScrollView>
-      </View>
 
+        <TouchableOpacity style={styles.addBtn} activeOpacity={0.8}>
+          <Feather name="plus" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  addBtn: {
+    position: "absolute",
+    bottom: 40,
+    right: 20,
+    backgroundColor: "#22c55e",
+    padding: 10,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
