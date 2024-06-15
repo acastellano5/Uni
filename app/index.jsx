@@ -7,19 +7,30 @@ import logo from "../assets/images/logo.png";
 import google from "../assets/icons/google.webp"
 import CustomButton from "../components/CustomButton";
 import { Redirect, router } from "expo-router";
-import { loginWithGoogle } from "../lib/firebase";
+import { loginWithGoogle, getClubs } from "../lib/firebase";
 import Loader from "../components/Loader";
 import { useGlobalContext } from "../context/globalProvider";
 const Onboarding = () => {
-
+/*if (1==1) {
+  router.push("/(tabs)/home");
+}*/
 const {loading, isLogged, isVerified} = useGlobalContext();
+console.log("Loading: ",loading);
+console.log("Logged In: ",isLogged);
+console.log("Verified: ",isVerified);
+
 /*Writing this for testing vars
 
 console.log(loading);
 console.log(isVerified);
 console.log(isLogged);*/
 
-if (!loading && isLogged && isVerified) router.replace("/(tabs)/home");
+if (!loading && isLogged && isVerified){
+  router.replace("/(tabs)/home");
+
+} else {
+
+}
 
   return (
     
