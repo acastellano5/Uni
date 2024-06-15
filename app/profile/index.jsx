@@ -15,26 +15,12 @@ import ProfilePic from "../../assets/images/profilepic.jpeg";
 import CustomButton from "../../components/CustomButton";
 import InfoBox from "../../components/profile/InfoBox";
 import PostSection from "../../components/profile/PostSection";
+import BackHeader from "../../components/BackHeader";
 
 const Profile = () => {
   return (
     <SafeAreaView className="h-full bg-black">
-      <View className="w-11/12 mx-auto flex-row justify-between items-center">
-        {/* back button */}
-        <TouchableOpacity
-          className="bg-tertiary w-8 py-1 flex items-center rounded"
-          activeOpacity={0.8}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="chevron-back" size={24} color="white" />
-        </TouchableOpacity>
-
-        <Text className="text-2xl text-white font-semibold">My Profile</Text>
-
-        <TouchableOpacity activeOpacity={0.8}>
-          <Image source={logo} className="h-[4vh] w-[4vh]" />
-        </TouchableOpacity>
-      </View>
+      <BackHeader title="My Profile" containerStyles="w-11/12 mx-auto"/>
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView showsVerticalScrollIndicator={false}>

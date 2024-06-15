@@ -35,7 +35,7 @@ export default function Home() {
           <Post containerStyles="w-10/12 mx-auto mb-10" />
         </ScrollView>
 
-        <TouchableOpacity style={styles.addBtn} activeOpacity={0.8}>
+        <TouchableOpacity style={styles.addBtn} activeOpacity={0.9} onPress={() => router.push('/post/create')} className="shadow-lg">
           <Feather name="plus" size={24} color="white" />
         </TouchableOpacity>
       </View>

@@ -11,7 +11,12 @@ const PostLayout = () => {
           name="index"
           options={{
             headerShown: false,
-            animation: "none",
+          }}
+        />
+        <Stack.Screen
+          name="create"
+          options={{
+            headerShown: false,
           }}
         />
       </Stack>
