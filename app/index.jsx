@@ -11,18 +11,26 @@ import { loginWithGoogle, getClubs } from "../lib/firebase";
 import Loader from "../components/Loader";
 import { useGlobalContext } from "../context/globalProvider";
 const Onboarding = () => {
-if (1==1) {
-  getClubs(null)
-  //router.replace("/(tabs)/home");
-}
-//const {loading, isLogged, isVerified} = useGlobalContext();
+/*if (1==1) {
+  router.push("/(tabs)/home");
+}*/
+const {loading, isLogged, isVerified} = useGlobalContext();
+console.log("Loading: ",loading);
+console.log("Logged In: ",isLogged);
+console.log("Verified: ",isVerified);
+
 /*Writing this for testing vars
 
 console.log(loading);
 console.log(isVerified);
 console.log(isLogged);*/
 
-//if (!loading && isLogged && isVerified) router.replace("/(tabs)/home");
+if (!loading && isLogged && isVerified){
+  router.replace("/(tabs)/home");
+
+} else {
+
+}
 
   return (
     

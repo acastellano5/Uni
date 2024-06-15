@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { Redirect, Tabs } from "expo-router";
+import { router } from "expo-router";
 import { Image, Text, View } from "react-native";
+import { useGlobalContext } from "../../context/globalProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
 // import { icons } from "../../constants";
 // import { Loader } from "../../components";
@@ -8,6 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const TabIcon = ({ icon, color, name, focused }) => {
+
   return (
     <View className="flex items-center justify-center gap-2">
       <Ionicons name={`${icon}`} size={24} color={`${color}`} />
@@ -23,6 +26,14 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const TabLayout = () => {
+  const {loading, isLogged, isVerified} = useGlobalContext();
+  if (!loading && isLogged && isVerified){
+  
+  } else {
+    router.replace("//index");
+
+  
+  }
 
   // if (!loading && !isLogged) router.replace('//index');
 

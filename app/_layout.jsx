@@ -1,9 +1,11 @@
 import { View, Text } from "react-native";
 import React from "react";
+import { router } from "expo-router";
 import { Stack } from "expo-router";
 import GlobalProvider from "../context/globalProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
 const RootLayout = () => {
+
   return (
     <GlobalProvider>
       <Stack>

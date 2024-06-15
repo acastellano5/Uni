@@ -5,9 +5,12 @@ import Header from "../../../components/Header";
 import SearchBar from "../../../components/SearchBar";
 import ClubSection from "../../../components/clubs/ClubSection";
 import firestore from "@react-native-firebase/firestore";
+import { getClubs } from "../../../lib/firebase";
 const clubsCollection = firestore().collection("Clubs");
 
 export default function Clubs() {
+  getClubs(null)
+
   return (
     <SafeAreaView className="h-full bg-black">
       {/* Header */}
