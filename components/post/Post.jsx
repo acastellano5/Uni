@@ -12,11 +12,11 @@ const PostContent = () => {
     <View className="flex-row justify-between mb-3">
         <View className="flex-row items-center">
           
-          <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile')}>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile/profileShow')}>
             <FontAwesome name="user-circle" size={30} color="black" />
           </TouchableOpacity>
 
-          <TouchableOpacity className="ml-5" activeOpacity={0.8} onPress={() => router.push('/profile')}>
+          <TouchableOpacity className="ml-5" activeOpacity={0.8} onPress={() => router.push('/profile/profileShow')}>
             <Text>John Doe</Text>
             <Text>Class of 2024</Text>
           </TouchableOpacity>

@@ -10,19 +10,36 @@ import {
 import React from "react";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
 import { AntDesign } from "@expo/vector-icons";
+import { router } from "expo-router";
 
-const Comment = ({ name }) => {
+const Comment = ({ name, onRequestClose }) => {
   return (
     <View className="flex-row items-start mb-5">
-      <Image
-        source={ProfilePic}
-        style={styles.roundedBorders}
-        className="mr-3"
-      />
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          onRequestClose();
+          router.push("/profile/profileShow");
+        }}
+      >
+        <Image
+          source={ProfilePic}
+          style={styles.roundedBorders}
+          className="mr-3"
+        />
+      </TouchableOpacity>
 
       <View className="justify-center">
         <View className="flex-row items-center">
-          <Text className="font-semibold">{name}</Text>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              onRequestClose();
+              router.push("/profile/profileShow");
+            }}
+          >
+            <Text className="font-semibold">{name}</Text>
+          </TouchableOpacity>
           <Text className="text-sm ml-2 text-darkGray">2h</Text>
         </View>
 
@@ -60,45 +77,21 @@ const CommentsSection = ({
 
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View className="w-11/12 mx-auto pt-5">
-            <Comment name="Walter White" />
+            <Comment name="Walter White" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" />
+            <Comment name="Walter White" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" />
+            <Comment name="Walter White" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" />
+            <Comment name="Walter White" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" />
+            <Comment name="Walter White" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" />
+            <Comment name="Walter White" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" />
+            <Comment name="Walter White" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
-
-            <Comment name="Walter White" />
+            <Comment name="Walter White" onRequestClose={onRequestClose} />
           </View>
         </ScrollView>
       </View>
@@ -113,25 +106,25 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     borderBottomWidth: 1,
-    borderColor: '#dcdcdc',
+    borderColor: "#dcdcdc",
     paddingVertical: 15,
-    backgroundColor: '#fff',
-    zIndex: 1
+    backgroundColor: "#fff",
+    zIndex: 1,
   },
   closeButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     paddingHorizontal: 20,
   },
   headerText: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   scrollViewContent: {
     paddingTop: 80, // Adjust this value based on the header height

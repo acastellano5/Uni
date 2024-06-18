@@ -8,10 +8,16 @@ const ProfileLayout = () => {
     <>
       <Stack>
         <Stack.Screen
-          name="index"
+          name="myProfile"
           options={{
             headerShown: false,
-            animation: "none",
+          }}
+        />
+
+        <Stack.Screen
+          name="profileShow"
+          options={{
+            headerShown: false,
           }}
         />
       </Stack>

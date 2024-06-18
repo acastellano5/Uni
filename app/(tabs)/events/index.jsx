@@ -37,7 +37,7 @@ const EventsPage = () => {
           setActiveTab={setActiveTab}
           containerStyles="py-2"
           textStyles="text-base"
-          // tabBarStyles="mb-2"
+          tabBarStyles="w-10/12"
         />
 
         {displayTabContent()}

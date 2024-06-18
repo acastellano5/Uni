@@ -1,13 +1,14 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import ProfilePic from "../../assets/images/profilepic.jpeg"
 import React from "react";
+import { router } from "expo-router";
 
 const AttendeeCard = ({isFirst}) => {
   return (
-    <View className="flex-row items-center py-3" style={styles.containerStyle(isFirst)}>
+    <TouchableOpacity className="flex-row items-center py-3" style={styles.containerStyle(isFirst)} activeOpacity={0.8} onPress={() => router.push('/profile/profileShow')}>
       <Image source={ProfilePic} style={styles.profilePic} className="mr-3"/>
       <Text className="text-base">Dwight Schrute</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

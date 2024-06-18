@@ -1,7 +1,7 @@
 import { Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 
-const CustomButton = ({title, handlePress, containerStyles, textStyles, isLoading, image, imageStyles}) => {
+const CustomButton = ({title, handlePress, containerStyles, textStyles, image, imageStyles}) => {
   return (
     <TouchableOpacity
         onPress={handlePress}

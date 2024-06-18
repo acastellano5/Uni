@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
+import Member from "./Member"
 
 const ClubMembers = () => {
   return (
