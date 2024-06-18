@@ -10,11 +10,10 @@ import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import background from "../../../assets/images/pingpongbg.png";
-import ClubTabs from "../../../components/clubs/ClubTabs";
+import TabsDisplay from "../../../components/TabsDisplay";
 import ClubInfo from "../../../components/clubs/ClubInfo";
 import ClubMembers from "../../../components/clubs/ClubMembers";
 import BackHeader from "../../../components/BackHeader";
-
 
 const tabs = ["Info", "Members"];
 
@@ -44,7 +43,7 @@ const clubHome = () => {
       <ImageBackground className="w-full h-[40vh] pb-5" source={background}>
         <SafeAreaView className="w-11/12 mx-auto h-full justify-between z-10">
           {/* back button and ai btn */}
-          <BackHeader/>
+          <BackHeader />
 
           {/* club name and join button */}
           <View className="flex-row justify-between items-center">
@@ -75,10 +74,13 @@ const clubHome = () => {
           <CustomButton title="Members" containerStyles="bg-white" textStyles="text-base text-tertiary font-semibold w-3/6 text-center"/>
         </View> */}
 
-        <ClubTabs
+        <TabsDisplay
           tabs={tabs}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          containerStyles="py-3"
+          textStyles="text-lg"
+          tabBarStyles="mb-6"
         />
 
         {displayTabContent()}
