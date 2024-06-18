@@ -15,9 +15,9 @@ const Onboarding = () => {
   router.push("/(tabs)/home");
 }*/
 const {loading, isLogged, isVerified} = useGlobalContext();
-console.log("Loading: ",loading);
+/*console.log("Loading: ",loading);
 console.log("Logged In: ",isLogged);
-console.log("Verified: ",isVerified);
+console.log("Verified: ",isVerified);/*
 
 /*Writing this for testing vars
 

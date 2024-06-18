@@ -16,11 +16,11 @@ const GlobalProvider = ({children}) => {
 
     useEffect(() => {
         getCurrentUser().then((res) => {
-            console.log(res);
+            //console.log(res);
 
             if (res) {
 
-                console.log(res);
+                //console.log(res);
                 if (!res.emailVerified) {
                     setIsLogged(false)
                     setIsVerified(false)
