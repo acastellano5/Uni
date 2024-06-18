@@ -10,7 +10,7 @@ import TabButton from "./TabButton";
 
 const TabsDisplay = ({ tabs, activeTab, setActiveTab, containerStyles, textStyles, tabBarStyles }) => {
   return (
-    <View className={`w-11/12 mx-auto bg-white flex-row rounded-lg py-2 px-3 ${tabBarStyles}`}>
+    <View className={`mx-auto bg-white flex-row rounded-lg py-2 px-3 ${tabBarStyles}`}>
       {tabs.map((item) => (
         <TabButton
           key={item}

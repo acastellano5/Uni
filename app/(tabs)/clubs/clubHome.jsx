@@ -80,7 +80,7 @@ const clubHome = () => {
           setActiveTab={setActiveTab}
           containerStyles="py-3"
           textStyles="text-lg"
-          tabBarStyles="mb-6"
+          tabBarStyles="mb-6 w-11/12"
         />
 
         {displayTabContent()}
