@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Agenda } from "react-native-calendars";
@@ -6,17 +7,20 @@ const Calendar = () => {
   const [items, setItems] = useState({
     "2024-06-18": [
       {
-        name: "Football Practice",
+        name: "Saint Marks v. Sallies",
+        group: "Soccer",
         time: "3:00pm - 3:30pm",
       },
     ],
     "2024-06-20": [
       {
         name: "Hackathon",
+        group: "Computer Science Honor Society",
         time: "8:00am - 4:00pm",
       },
       {
         name: "Prom",
+        group: "Class of 2024",
         time: "7:00pm - 11:00pm",
       },
     ],
@@ -47,11 +51,15 @@ const Calendar = () => {
           activeOpacity={0.8}
           style={styles.item}
           className="bg-primary"
+          onPress={() => router.push('./events/eventsShow')}
         >
-          <Text style={styles.itemName} className="text-white font-semibold">
+          <Text className="text-white font-bold">
             {item.name}
           </Text>
-          <Text style={styles.itemData} className="text-white font-semibold">
+          <Text className="text-darkWhite font-medium">
+            {item.group}
+          </Text>
+          <Text style={styles.itemData} className="text-white">
             {item.time}
           </Text>
         </TouchableOpacity>
