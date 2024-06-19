@@ -50,6 +50,7 @@ const LogIn = () => {
             otherStyles="mt-5 w-5/6"
             keyboardType="email-address"
             labelStyles="text-m"
+            isEditable={true}
           />
 
           <FormField
@@ -58,6 +59,7 @@ const LogIn = () => {
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-3 w-5/6"
             labelStyles="text-m"
+            isEditable={true}
           />
         </View>
 

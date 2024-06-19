@@ -2,20 +2,21 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
   Image,
   StyleSheet,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
 import CustomButton from "../../components/CustomButton";
 import InfoBox from "../../components/profile/InfoBox";
 import PostSection from "../../components/profile/PostSection";
 import BackHeader from "../../components/BackHeader";
-import { router } from "expo-router";
+import Settings from "../../components/profile/settings/Settings";
 
 const Profile = () => {
+
+  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   return (
     <SafeAreaView className="h-full bg-black">
       <BackHeader title="My Profile" containerStyles="w-11/12 mx-auto"/>
@@ -42,7 +43,7 @@ const Profile = () => {
                 title="Settings"
                 containerStyles="ml-2"
                 textStyles="text-darkGray text-sm font-semibold"
-                handlePress={() => router.push('/settings')}
+                handlePress={() => setIsSettingsVisible(true)}
               />
             </View>
           </View>
@@ -71,6 +72,14 @@ const Profile = () => {
 
             
             <PostSection/>
+
+
+            <Settings
+            visible={isSettingsVisible}
+            onRequestClose={() => {setIsSettingsVisible(false)}}
+            animationType="slide"
+            presentationStyle="formSheet"
+          />
 
           </View>
         </ScrollView>

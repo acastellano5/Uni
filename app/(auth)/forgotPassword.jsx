@@ -44,6 +44,7 @@ const forgotPassword = () => {
             otherStyles="mt-5 w-5/6"
             keyboardType="email-address"
             labelStyles="text-m"
+            isEditable={true}
           />
 
           

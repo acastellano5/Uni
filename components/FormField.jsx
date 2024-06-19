@@ -11,6 +11,7 @@ const FormField = ({
   handleChangeText,
   otherStyles,
   labelStyles,
+  isEditable,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,18 +20,19 @@ const FormField = ({
     <View className={`space-y-1 ${otherStyles}`}>
       <Text className={`text-base text-secondary ${labelStyles}`}>{title}</Text>
 
-      <View className="w-full px-4 py-2 bg-black-100 rounded-lg border border-black-200 focus:border-secondary flex flex-row items-center">
+      <View className={`w-full px-4 py-2 bg-black-100 rounded-lg border border-black-200 focus:border-secondary flex flex-row items-center ${!isEditable ? 'bg-darkWhite' : null} `}>
         <TextInput
-          className="flex-1 font-psemibold text-base"
+          className={`flex-1 font-psemibold text-base ${!isEditable ? "text-[#AFAFAF]" : null}`}
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"
           onChangeText={handleChangeText}
-          secureTextEntry={title === "Password" && !showPassword}
+          editable={isEditable}
+          secureTextEntry={(title === "Password" || title === "Current Password" || title === "New Password") && !showPassword}
           {...props}
         />
 
-        {title === "Password" && (
+        {(title === "Password" || title === "Current Password" || title === "New Password") && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
               source={!showPassword ? eyeIcon : eyeHideIcon}

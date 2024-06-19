@@ -68,7 +68,7 @@ const CommentsSection = ({
           {/* close button */}
           <View style={styles.closeButtonContainer}>
             <TouchableOpacity onPress={onRequestClose}>
-              <AntDesign name="close" size={24} color="black" />
+              <AntDesign name="close" size={24} color="#545454" />
             </TouchableOpacity>
           </View>
 
