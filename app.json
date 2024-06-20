@@ -20,7 +20,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
+        "backgroundColor": "#ffffff"
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.uni.uniapp"
@@ -29,21 +29,29 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      
       "expo-router",
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
-      "@react-native-firebase/crashlytics",      [
+      "@react-native-firebase/crashlytics",
+      [
         "expo-build-properties",
         {
           "ios": {
             "useFrameworks": "static"
           }
         }
-
       ],
-      ["@react-native-google-signin/google-signin"]
-
-    ]
+      [
+        "@react-native-google-signin/google-signin"
+      ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "65b5f053-8fdb-4bbf-9570-e473bd9d599b"
+      }
+    }
   }
 }
