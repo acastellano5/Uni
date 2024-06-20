@@ -20,9 +20,10 @@ const tabs = ["Following", "School"];
 export default function Home() {
   // auth stuff
   const { loading, isLogged, isVerified } = useGlobalContext();
-  console.log("Loading: ", loading);
+  /*console.log("Loading: ", loading);
   console.log("Logged In: ", isLogged);
   console.log("Verified: ", isVerified);
+  */
   if (!loading && isLogged && isVerified) {
   } else {
     router.replace("//index");
