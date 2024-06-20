@@ -14,6 +14,7 @@ const RootLayout = () => {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="profile" options={{ headerShown: false }} />
         <Stack.Screen name="post" options={{ headerShown: false }} />
+        <Stack.Screen name="aiChat" options={{ headerShown: false }} />
       </Stack>
       </GlobalProvider>
   );
