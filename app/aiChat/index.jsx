@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 const aiChat = () => {
   return (
     <SafeAreaView>
-      <Text>aiChat</Text>
+      <Text>AI Assistant</Text>
     </SafeAreaView>
   )
 }
