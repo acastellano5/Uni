@@ -4,7 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-const ChatHeader = ({ chatName }) => {
+const ChatHeader = ({ title }) => {
   return (
     <View>
       <View className="flex-row justify-between w-11/12 mx-auto items-center">
@@ -16,7 +16,7 @@ const ChatHeader = ({ chatName }) => {
           <Ionicons name="chevron-back" size={24} color="white" />
         </TouchableOpacity>
 
-        <Text className="text-2xl font-semibold text-white">{chatName}</Text>
+        <Text className="text-2xl font-semibold text-white">{title}</Text>
 
         <TouchableOpacity activeOpacity={0.8} onPress={() => router.push("/profile/myProfile")}>
           <FontAwesome name="user-circle" size={27} color="white" />
