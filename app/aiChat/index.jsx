@@ -1,5 +1,5 @@
 import { ScrollView, KeyboardAvoidingView } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import ChatHeader from "../../components/chat/ChatHeader";
