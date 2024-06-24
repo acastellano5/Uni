@@ -4,10 +4,11 @@ import { FontAwesome } from "@expo/vector-icons";
 // yeah we gotta use axios so fetch doesn't be mean to me
 import axios from 'axios';
 
-const ChatInput = ({ addMessage }) => {
+const ChatInput = ({ addMessage, addr, model, apiKey }) => {
   
   const [input, setInput] = useState("");
   const sendMessage = async () => {
+    console.log(addr, model, apiKey)
     if (!input.trim()) return;
     addMessage("right", input);
     setInput("");
@@ -25,6 +26,7 @@ const ChatInput = ({ addMessage }) => {
       addMessage("left", data);
     } catch (err) {
       addMessage("left", "Error fetching response.");
+      console.error(err);
     }
   };
   return (

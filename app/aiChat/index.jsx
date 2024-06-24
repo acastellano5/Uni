@@ -38,7 +38,7 @@ const aiChat = () => {
           }
         </ScrollView>
 
-        <ChatInput addMessage={addMessage} />
+        <ChatInput addMessage={addMessage} addr="https://server.benti.dev:9443/api/get_answer" model="salesianum" apiKey="key1" />
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
