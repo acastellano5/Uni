@@ -1,5 +1,5 @@
 import { ScrollView, KeyboardAvoidingView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import ChatHeader from "../../components/chat/ChatHeader";
@@ -9,6 +9,16 @@ import ChatInput from "../../components/chat/ChatInput";
 
 
 const aiChat = () => {
+  const scrollViewRef = useRef();
+  useEffect(() => {
+    scrollViewRef.current.scrollToEnd({ animated: true });
+  });
+  const [messages, setMessages] = useState([
+    { type: "left", value: "Hello! How can I help you today?" },
+  ]);
+  const addMessage = (type, message) => {
+    setMessages((prevMessages) => [...prevMessages, { type: type, value: message }]);
+  };
   return (
     <SafeAreaView className="h-full bg-black">
       <ChatHeader title="AI Chat" />
@@ -16,18 +26,19 @@ const aiChat = () => {
         <ChatName name="AI Assistant" profileName="aiChat" />
         
         {/* Chat contents */}
-        <ScrollView className="mt-5 pl-5 pr-5">
-          <ChatMessageLeft message="Hello! How can I help you today?" />
-          <ChatMessageRight message="Does Salesianum offer scholarships?" />
-          <ChatMessageLeft message="Yes, Salesianum offers scholarships. You can visit the school's website for more information. Dummy text dummy text dummy text dummy text dummy text alsdkfjlkasdfjlasdjflkasdjflasdkjlaskdjflasdkjflkdsjflksdjflksdjflksdjflksdjfklsdfjlksfjlskdjflksdfjlkfalkdsfjlkasdfjksd" />
-          <ChatMessageLeft message="Yes, Salesianum offers scholarships. You can visit the school's website for more information. Dummy text dummy text dummy text dummy text dummy text alsdkfjlkasdfjlasdjflkasdjflasdkjlaskdjflasdkjflkdsjflksdjflksdjflksdjflksdjfklsdfjlksfjlskdjflksdfjlkfalkdsfjlkasdfjksd" />
-          <ChatMessageLeft message="Yes, Salesianum offers scholarships. You can visit the school's website for more information. Dummy text dummy text dummy text dummy text dummy text alsdkfjlkasdfjlasdjflkasdjflasdkjlaskdjflasdkjflkdsjflksdjflksdjflksdjflksdjfklsdfjlksfjlskdjflksdfjlkfalkdsfjlkasdfjksd" />
-          <ChatMessageLeft message="Yes, Salesianum offers scholarships. You can visit the school's website for more information. Dummy text dummy text dummy text dummy text dummy text alsdkfjlkasdfjlasdjflkasdjflasdkjlaskdjflasdkjflkdsjflksdjflksdjflksdjflksdjfklsdfjlksfjlskdjflksdfjlkfalkdsfjlkasdfjksd" />
-          <ChatMessageRight message="Does Salesianum offer scholarshipsDoes Salesianum offer scholarDoes Salesianum offer scholarDoes Salesianum offer scholarDoes Salesianum offer scholarDoes Salesianum offer scholar?" />
-          <ChatMessageLeft message="Yes, Salesianum offers scholarships. You can visit the school's website for more information. Dummy text dummy text dummy text dummy text dummy text alsdkfjlkasdfjlasdjflkasdjflasdkjlaskdjflasdkjflkdsjflksdjflksdjflksdjflksdjfklsdfjlksfjlskdjflksdfjlkfalkdsfjlkasdfjksd" />
+        <ScrollView className="mt-5 pl-5 pr-5" ref={scrollViewRef}>
+          {
+            messages.map((message, index) => {
+              if (message.type == "left") {
+                return <ChatMessageLeft message={message.value} />;
+              } else {
+                return <ChatMessageRight message={message.value} />;
+              }
+            })
+          }
         </ScrollView>
 
-        <ChatInput />
+        <ChatInput addMessage={addMessage} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
@@ -38,8 +49,6 @@ export default aiChat;
 /*
 
 TODO:
-
-Wire it up to the API
-(Maybe?) Make <enter> send the message
+Maybe make chat persistent? (idk how to do that...)
 
 */

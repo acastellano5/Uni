@@ -38,6 +38,9 @@
         {
           "ios": {
             "useFrameworks": "static"
+          },
+          "android": {
+            "usesClearTextTraffic": true
           }
         }
       ],
