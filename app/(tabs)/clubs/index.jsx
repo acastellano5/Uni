@@ -12,6 +12,7 @@ import SearchBar from "../../../components/SearchBar";
 import ClubSection from "../../../components/clubs/ClubSection";
 import { getClubsByType, getClubsByName } from "../../../lib/firebase";
 import Club from "../../../components/clubs/Club";
+import BackButton from "../../../components/BackButton";
 
 export default function Clubs() {
   // set state of clubs
@@ -71,7 +72,7 @@ export default function Clubs() {
     if (!searchValue.trim()) {
       return;
     }
-    
+
     // fetch club result
     const clubsResult = await getClubsByName(searchValue);
     setIsSearchResult(true);
@@ -103,30 +104,55 @@ export default function Clubs() {
               textValue={searchValue}
               handleChangeText={(e) => setSearchValue(e)}
               handleSubmitEditing={onSubmitSearch}
+              onClearSearch={() => {
+                setSearchValue("");
+                setIsSearchResult(false);
+                setSearchResults([]);
+              }}
             />
 
             {/* clubs */}
             <View className="w-10/12 mx-auto mt-5 mb-20">
               {/* if the user didn't search anything, render all the clubs as normal */}
-              {!isSearchResult
-                ? Object.keys(clubs).map((category) =>
-                    clubs[category].length > 0 ? (
-                      <ClubSection
-                        key={category}
-                        category={category}
-                        clubs={clubs[category]}
-                      />
-                    ) : null
-                  ) // if the user did search for a club, render the club here
-                : searchResults.length > 0 ? ( // checks if club was found
-                    // if club was found it will render
-                    searchResults.map((club) => (
-                      <Club key={club.id} name={club.name} id={club.id}/>
-                    ))
-                  ) : (
-                    // if club wasn't found, this will render
-                    <Text style={styles.noResultsText}>No clubs found</Text>
-                  )}
+              {!isSearchResult ? (
+                Object.keys(clubs).map((category) =>
+                  clubs[category].length > 0 ? (
+                    <ClubSection
+                      key={category}
+                      category={category}
+                      clubs={clubs[category]}
+                    />
+                  ) : null
+                ) // if the user did search for a club, render the club here
+              ) : searchResults.length > 0 ? ( // checks if club was found
+                <>
+                  {/* back to all clubs */}
+                  <BackButton
+                    handlePress={() => {
+                      setSearchValue("");
+                      setIsSearchResult(false);
+                      setSearchResults([]);
+                    }}
+                  />
+                  {/* if club was found it will render */}
+                  {searchResults.map((club) => (
+                    <Club key={club.id} name={club.name} id={club.id} />
+                  ))}
+                </>
+              ) : (
+                // if club wasn't found, this will render
+                <>
+                  {/* back to all clubs */}
+                  <BackButton
+                    handlePress={() => {
+                      setSearchValue("");
+                      setIsSearchResult(false);
+                      setSearchResults([]);
+                    }}
+                  />
+                  <Text style={styles.noResultsText}>No clubs found</Text>
+                </>
+              )}
             </View>
           </ScrollView>
         )}
