@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import background from "../../../assets/images/pingpongbg.png";
@@ -14,33 +14,71 @@ import TabsDisplay from "../../../components/TabsDisplay";
 import ClubInfo from "../../../components/clubs/ClubInfo";
 import ClubMembers from "../../../components/clubs/ClubMembers";
 import BackHeader from "../../../components/BackHeader";
+import { getClubById } from "../../../lib/firebase";
 
 const tabs = ["Info", "Members"];
 
-const clubHome = () => {
+const ClubHome = () => {
   // retrieve params from request
   const params = useLocalSearchParams();
-  const { name } = params;
+  const { name, id } = params;
 
   // setting tabs state
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
+  // setting club state
+  const [club, setClub] = useState(null);
+
+  // fetching club data
+  useEffect(() => {
+    const fetchClub = async () => {
+      if (!id) {
+        console.log("ID is not available");
+        return;
+      }
+
+      console.log("Fetching club data for ID:", id);
+      try {
+        const clubData = await getClubById(id);
+        if (clubData) {
+          console.log("Club data fetched:", clubData);
+          setClub(clubData);
+        } else {
+          console.log("No club data found");
+        }
+      } catch (error) {
+        console.error("Error fetching club data:", error);
+      }
+    };
+
+    fetchClub();
+  }, [id]);
+
   const displayTabContent = () => {
     switch (activeTab) {
       case "Info":
-        return <ClubInfo />;
+        return <ClubInfo club={club} />;
 
       case "Members":
-        return <ClubMembers />;
+        return <ClubMembers club={club} />;
 
       default:
         return null;
     }
   };
+
+  if (!club) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+        <Text className="text-lg font-semibold">Loading...</Text>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} className="bg-white">
       {/* club background image */}
-      <ImageBackground className="w-full h-[40vh] pb-5" source={background}>
+      <ImageBackground className="w-full h-[40vh] pb-5" source={{uri: `${club.image}`}}>
         <SafeAreaView className="w-11/12 mx-auto h-full justify-between z-10">
           {/* back button and ai btn */}
           <BackHeader />
@@ -48,9 +86,7 @@ const clubHome = () => {
           {/* club name and join button */}
           <View className="flex-row justify-between items-center">
             <View className="bg-tertiary py-2 px-4 rounded">
-              <Text className="text-white text-lg font-semibold">
-                Ping Pong Club
-              </Text>
+              <Text className="text-white text-lg font-semibold">{club.name}</Text>
             </View>
 
             <TouchableOpacity
@@ -67,13 +103,6 @@ const clubHome = () => {
 
       {/* club info */}
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-11 bottom-10">
-        {/* info and member tabs */}
-
-        {/* <View className="flex flex-row w-10/12 bg-white mx-auto rounded-lg p-2">
-          <CustomButton title="Info" containerStyles="bg-black" textStyles="text-base text-white font-semibold w-3/6 text-center"/>
-          <CustomButton title="Members" containerStyles="bg-white" textStyles="text-base text-tertiary font-semibold w-3/6 text-center"/>
-        </View> */}
-
         <TabsDisplay
           tabs={tabs}
           activeTab={activeTab}
@@ -96,4 +125,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default clubHome;
+export default ClubHome;
