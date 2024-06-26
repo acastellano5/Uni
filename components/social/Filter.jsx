@@ -46,7 +46,7 @@ const Filter = ({
       <SafeAreaView>
         <ScrollView showsHorizontalScrollIndicator={false}>
           <View className="mt-5 w-11/12 mx-auto items-end">
-            <TouchableOpacity onPress={onRequestClose}>
+            <TouchableOpacity onPress={onRequestClose} activeOpacity={0.8}>
               <AntDesign name="close" size={24} color="black" />
             </TouchableOpacity>
           </View>

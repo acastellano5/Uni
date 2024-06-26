@@ -13,6 +13,7 @@ import ClubSection from "../../../components/clubs/ClubSection";
 import { getClubsByType, getClubsByName } from "../../../lib/firebase";
 import Club from "../../../components/clubs/Club";
 import BackButton from "../../../components/BackButton";
+import ClubFilter from "../../../components/clubs/ClubFilter";
 
 export default function Clubs() {
   // set state of clubs
@@ -64,6 +65,7 @@ export default function Clubs() {
   // state for if there are search results it will display them
   const [isSearchResult, setIsSearchResult] = useState(false);
 
+  // state for the search results themselves (the clubs)
   const [searchResults, setSearchResults] = useState([]);
 
   // executes when search is submitted
@@ -79,9 +81,40 @@ export default function Clubs() {
     setSearchResults(clubsResult ? clubsResult : []);
   };
 
-  useEffect(() => {
-    console.log(searchResults);
-  }, [searchResults]);
+  // state for filter visibility
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+  
+  // state for whether a filter is applied
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
+
+  // callback function to update clubs state when a filter is selected
+  const handleFilterSelect = async (selectedCategory) => {
+    const filteredClubs = await getClubsByType(selectedCategory); // get clubs by selected category
+    setClubs({ [selectedCategory]: filteredClubs }); // update state with filtered clubs
+    setIsFilterApplied(true); // indicate that a filter is applied
+  };
+
+  // function to reset filter and show all clubs
+  const resetFilter = async () => {
+    setLoading(true); // show loading indicator
+    const clubTypes = [
+      "Technology",
+      "Arts",
+      "Athletic",
+      "Academic",
+      "Service",
+    ];
+    const clubData = {};
+
+    for (const type of clubTypes) {
+      const clubsByType = await getClubsByType(type); // get clubs by each type
+      clubData[type] = clubsByType; // update state with clubs by type
+    }
+
+    setClubs(clubData); // set state of clubs
+    setLoading(false); // hide loading indicator
+    setIsFilterApplied(false); // indicate that the filter is reset
+  };
 
   return (
     <SafeAreaView className="h-full bg-black">
@@ -109,11 +142,17 @@ export default function Clubs() {
                 setIsSearchResult(false);
                 setSearchResults([]);
               }}
+              filterOnPress={() => setIsFilterVisible(true)}
             />
 
             {/* clubs */}
             <View className="w-10/12 mx-auto mt-5 mb-20">
-              {/* if the user didn't search anything, render all the clubs as normal */}
+              {/* BackButton appears when a filter is applied */}
+              {isFilterApplied && (
+                <BackButton
+                  handlePress={resetFilter} // reset filter to show all clubs
+                />
+              )}
               {!isSearchResult ? (
                 Object.keys(clubs).map((category) =>
                   clubs[category].length > 0 ? (
@@ -123,8 +162,8 @@ export default function Clubs() {
                       clubs={clubs[category]}
                     />
                   ) : null
-                ) // if the user did search for a club, render the club here
-              ) : searchResults.length > 0 ? ( // checks if club was found
+                )
+              ) : searchResults.length > 0 ? (
                 <>
                   {/* back to all clubs */}
                   <BackButton
@@ -154,6 +193,15 @@ export default function Clubs() {
                 </>
               )}
             </View>
+
+            {/* club filter */}
+            <ClubFilter
+              visible={isFilterVisible}
+              onRequestClose={() => setIsFilterVisible(false)}
+              animationType="slide"
+              presentationStyle="formSheet"
+              onFilterSelect={handleFilterSelect} // pass handleFilterSelect to ClubFilter
+            />
           </ScrollView>
         )}
       </View>

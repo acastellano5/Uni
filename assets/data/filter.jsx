@@ -475,3 +475,10 @@ export const departmentsData = [
   { label: "Special Education", value: "special_education" },
 ];
 
+
+export const clubCategories = [
+  { label: "Technology", value: "Technology" },
+  { label: "Arts", value: "Arts" },
+  { label: "Athletic", value: "Athletic" },
+  { label: "Academic", value: "Academic" }
+]

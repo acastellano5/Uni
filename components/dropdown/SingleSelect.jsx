@@ -10,7 +10,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 //   { label: "2028", value: "2028" },
 // ];
 
-const DropdownComponent = ({filterCategory, data}) => {
+const DropdownComponent = ({filterCategory, data, onItemSelect}) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -40,6 +40,7 @@ const DropdownComponent = ({filterCategory, data}) => {
         onChange={(item) => {
           setValue(item.value);
           setIsFocus(false);
+          onItemSelect(item)
         }}
       />
     </View>
