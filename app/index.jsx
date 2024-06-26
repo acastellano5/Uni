@@ -7,7 +7,7 @@ import logo from "../assets/images/logo.png";
 import google from "../assets/icons/google.webp"
 import CustomButton from "../components/CustomButton";
 import { Redirect, router } from "expo-router";
-import { loginWithGoogle, getClubs } from "../lib/firebase";
+import { loginWithGoogle, getClubs, sendPost } from "../lib/firebase";
 import Loader from "../components/Loader";
 import { useGlobalContext } from "../context/globalProvider";
 const Onboarding = () => {
