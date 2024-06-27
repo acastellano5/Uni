@@ -4,11 +4,11 @@ import ProfilePic from "../../assets/images/profilepic.jpeg";
 import Member from "./Member";
 import { getUserAttributes } from "../../lib/firebase";
 
-const ClubMembers = ({ members }) => {
-  const [fetchedMembers, setFetchedMembers] = useState([]);
+const ClubMembers = ({ members, moderators }) => {
   const [loading, setLoading] = useState(true);
 
-  // make requests to fetch user info from database
+  // make requests to fetch members from database
+  const [fetchedMembers, setFetchedMembers] = useState([]);
   useEffect(() => {
     const fetchMembers = async () => {
       setLoading(true);
@@ -22,12 +22,32 @@ const ClubMembers = ({ members }) => {
     fetchMembers();
   }, [members]);
 
+
+  // make requests to fetch moderators from database
+  const [fetchedModerators, setFetchedModerators] = useState([]);
+  useEffect(() => {
+    const fetchModerators = async () => {
+      setLoading(true);
+      const fetchedUsers = await Promise.all(
+        moderators.map((uid) => getUserAttributes(uid))
+      );
+      setFetchedModerators(fetchedUsers.filter((user) => user !== null));
+      setLoading(false);
+    };
+
+    fetchModerators();
+  }, [moderators]);
+
   return (
     <View className="bg-white w-11/12 mx-auto rounded-lg px-3 py-2">
       {loading ? (
         <ActivityIndicator size="large" color="#22c55e" />
       ) : (
         <View className="flex-row flex-wrap">
+          {fetchedModerators.map((moderator, index) => (
+            <Member key={index} role="Moderator" name={`${moderator.firstName} ${moderator.lastName}`} profileImg={ProfilePic} uid={moderator.uid} />
+          ))}
+
           {fetchedMembers.map((member, index) => (
             <Member key={index} role="Member" name={`${member.firstName} ${member.lastName}`} profileImg={ProfilePic} uid={member.uid} />
           ))}

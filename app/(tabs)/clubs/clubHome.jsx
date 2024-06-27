@@ -60,7 +60,7 @@ const ClubHome = () => {
         return <ClubInfo club={club} />;
 
       case "Members":
-        return <ClubMembers members={club.members} />;
+        return <ClubMembers members={club.members} moderators={club.moderators} />;
 
       default:
         return null;
