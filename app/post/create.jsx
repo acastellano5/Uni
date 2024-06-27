@@ -7,7 +7,7 @@ import CustomButton from "../../components/CustomButton";
 import { sendPost } from "../../lib/firebase";
 import { useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
-
+import { seedDatabase } from "../../lib/seed";
 const pickImage = async () => {
   // No permissions request is necessary for launching the image library
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -16,7 +16,6 @@ const pickImage = async () => {
     aspect: [4, 3],
     quality: 1,
   });
-
   console.log(result);
 
   if (!result.canceled) {
