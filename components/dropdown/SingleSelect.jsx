@@ -10,13 +10,13 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 //   { label: "2028", value: "2028" },
 // ];
 
-const DropdownComponent = ({filterCategory, data, onItemSelect}) => {
+const DropdownComponent = ({title, data, onItemSelect, focusedColor, placeholder}) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
   const renderLabel = () => {
     return (
-      <Text style={[styles.label, isFocus && { color: "#22c55e" }]}>{filterCategory}</Text>
+      <Text style={[styles.label, isFocus && { color: {focusedColor} }]} className="text-base mb-1">{title}</Text>
     );
 
     return null;
@@ -26,21 +26,21 @@ const DropdownComponent = ({filterCategory, data, onItemSelect}) => {
     <View style={styles.container}>
       {renderLabel()}
       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: "#22c55e" }]}
-        placeholderStyle={[styles.placeholderStyle, isFocus && { color: "#22c55e" }]}
+        style={[styles.dropdown, isFocus && { borderColor: {focusedColor} }]}
+        placeholderStyle={[styles.placeholderStyle, isFocus && { color: {focusedColor} }]}
         selectedTextStyle={styles.selectedTextStyle}
         iconStyle={styles.iconStyle}
         data={data}
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? `Filter by ${filterCategory}` : "..."}
+        placeholder={!isFocus ? `${placeholder}` : "..."}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
           setValue(item.value);
           setIsFocus(false);
-          onItemSelect(item)
+          // onItemSelect(item)
         }}
       />
     </View>
@@ -50,14 +50,14 @@ const DropdownComponent = ({filterCategory, data, onItemSelect}) => {
 export default DropdownComponent;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    padding: 16,
-  },
+  // container: {
+  //   backgroundColor: "white",
+  //   padding: 16,
+  // },
   dropdown: {
     height: 40,
-    borderColor: "gray",
-    borderWidth: 0.5,
+    borderColor: "black",
+    borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 8,
     paddingLeft: 12,
@@ -66,16 +66,17 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   label: {
-    position: "absolute",
-    backgroundColor: "white",
-    left: 22,
-    top: 8,
+    // position: "absolute",
+    // backgroundColor: "white",
+    // left: 22,
+    // top: 8,
     zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
+    // paddingHorizontal: 8,
+    // fontSize: 14,
   },
   placeholderStyle: {
     fontSize: 16,
+    color: "#7B7B8B"
   },
   selectedTextStyle: {
     fontSize: 16,

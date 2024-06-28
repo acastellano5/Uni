@@ -83,6 +83,16 @@ if (!loading && isLogged && isVerified){
             handlePress={() => {loginWithGoogle().then(() => router.push("/(tabs)/home"))}}
 
           />
+
+
+<CustomButton 
+            image={google}
+            imageStyles="h-[25] w-[25] mr-2"
+            containerStyles="bg-tertiary mt-5 w-9/12 min-h-[50px]" 
+            title="go to account creation" 
+            handlePress={() => router.push("/(auth)/accountSetUp")}
+
+          />
         </View>
       </View>
 

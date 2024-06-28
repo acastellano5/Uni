@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { MultiSelect } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { interestsData } from "../../assets/data/filter"
 
-const MultiSelectComponent = ({filterCategory, data}) => {
+const MultiSelectComponent = ({filterCategory, data, focusedColor}) => {
   const [selected, setSelected] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
 
   const renderLabel = () => {
     return (
-      <Text style={[styles.label, isFocus && { color: "#22c55e" }]}>{filterCategory}</Text>
+      <Text style={[styles.label, isFocus && { color: {focusedColor} }]} className="mb-1 text-base">{filterCategory}</Text>
     );
 
     return null;
@@ -19,8 +20,8 @@ const MultiSelectComponent = ({filterCategory, data}) => {
     <View style={styles.container}>
     {renderLabel()}
       <MultiSelect
-        style={[styles.dropdown, isFocus && { borderColor: "#22c55e" }]}
-        placeholderStyle={[styles.placeholderStyle, isFocus && { color: "#22c55e" }]}
+        style={[styles.dropdown, isFocus && { borderColor: {focusedColor} }]}
+        placeholderStyle={[styles.placeholderStyle, isFocus && { color: {focusedColor} }]}
         selectedTextStyle={styles.selectedTextStyle}
         iconStyle={styles.iconStyle}
         data={data}
@@ -42,17 +43,17 @@ const MultiSelectComponent = ({filterCategory, data}) => {
 export default MultiSelectComponent;
 
 const styles = StyleSheet.create({
-  container: { padding: 16 },
   dropdown: {
     height: 40,
-    borderColor: "gray",
-    borderWidth: 0.5,
+    borderColor: "black",
+    borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 8,
     paddingLeft: 12,
   },
   placeholderStyle: {
     fontSize: 16,
+    color: "#7B7B8B"
   },
   selectedTextStyle: {
     fontSize: 14,
@@ -70,12 +71,6 @@ const styles = StyleSheet.create({
     borderColor: "#22c55e"
   },
   label: {
-    position: "absolute",
-    backgroundColor: "white",
-    left: 22,
-    top: 8,
     zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
   }
 });

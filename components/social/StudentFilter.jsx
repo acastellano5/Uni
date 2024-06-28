@@ -16,7 +16,7 @@ const StudentFilter = () => {
       </View>
     
     <View className="w-11/12 mx-auto mb-5">
-        <SingleSelectDropdown filterCategory="Class" data={classData.slice(0, 4)}/>
+        <SingleSelectDropdown data={classData.slice(0, 4)} focusedColor="#22c55e" title="Class" placeholder="Filter By Class"/>
         <MultiSelectDropDown filterCategory="Interests" data={interestsData}/>
         <MultiSelectDropDown filterCategory="Clubs/Activites" data={activitiesData}/>  
     </View>

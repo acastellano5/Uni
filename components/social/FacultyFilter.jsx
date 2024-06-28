@@ -16,7 +16,7 @@ const FacultyFilter = () => {
       </View>
     
     <View className="w-11/12 mx-auto mb-5">
-        <SingleSelectDropdown filterCategory="Department" data={departmentsData}/>
+        <SingleSelectDropdown data={departmentsData} focusedColor="#22c55e" title="Department" placeholder="Filter by Department"/>
         <MultiSelectDropDown filterCategory="Interests" data={interestsData}/>
         <MultiSelectDropDown filterCategory="Clubs/Activites" data={activitiesData}/>   
     </View>
