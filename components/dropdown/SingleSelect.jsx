@@ -1,46 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-// const data = [
-//   { label: "2025", value: "2025" },
-//   { label: "2026", value: "2026" },
-//   { label: "2027", value: "2027" },
-//   { label: "2028", value: "2028" },
-// ];
-
-const DropdownComponent = ({title, data, onItemSelect, focusedColor, placeholder}) => {
+const DropdownComponent = ({ title, data, onItemSelect, focusedColor, placeholder, containerStyles, isSearchable }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
   const renderLabel = () => {
     return (
-      <Text style={[styles.label, isFocus && { color: {focusedColor} }]} className="text-base mb-1">{title}</Text>
+      <Text style={[styles.label, isFocus && { color: focusedColor }]} className="text-base mb-1">
+        {title}
+      </Text>
     );
-
-    return null;
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]} className={containerStyles}>
       {renderLabel()}
       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: {focusedColor} }]}
-        placeholderStyle={[styles.placeholderStyle, isFocus && { color: {focusedColor} }]}
+        style={[styles.dropdown, isFocus && { borderColor: focusedColor }]}
+        placeholderStyle={[styles.placeholderStyle, isFocus && { color: focusedColor }]}
         selectedTextStyle={styles.selectedTextStyle}
         iconStyle={styles.iconStyle}
         data={data}
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? `${placeholder}` : "..."}
+        placeholder={!isFocus ? placeholder : "..."}
+        search={isSearchable}
+        searchPlaceholder="Search..."
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
           setValue(item.value);
           setIsFocus(false);
-          // onItemSelect(item)
+          onItemSelect ? onItemSelect(item) : null;
         }}
       />
     </View>
@@ -50,10 +45,9 @@ const DropdownComponent = ({title, data, onItemSelect, focusedColor, placeholder
 export default DropdownComponent;
 
 const styles = StyleSheet.create({
-  // container: {
-  //   backgroundColor: "white",
-  //   padding: 16,
-  // },
+  container: {
+    // Your existing styles
+  },
   dropdown: {
     height: 40,
     borderColor: "black",
@@ -66,17 +60,11 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   label: {
-    // position: "absolute",
-    // backgroundColor: "white",
-    // left: 22,
-    // top: 8,
     zIndex: 999,
-    // paddingHorizontal: 8,
-    // fontSize: 14,
   },
   placeholderStyle: {
     fontSize: 16,
-    color: "#7B7B8B"
+    color: "#7B7B8B",
   },
   selectedTextStyle: {
     fontSize: 16,

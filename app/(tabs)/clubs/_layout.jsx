@@ -4,7 +4,7 @@ import { Stack } from 'expo-router'
 
 const ClubsLayout = () => {
   return (
-    <Stack>
+    <Stack screenOptions={{gestureEnabled: false}}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="clubHome" options={{ headerShown: false }} />
 

@@ -3,7 +3,7 @@ import React from "react";
 import CustomButton from "../CustomButton";
 import FormField from "../FormField";
 import MultiSelect from "../dropdown/MultiSelect";
-import { interestsData } from "../../assets/data/filter";
+import { interestsData } from "../../assets/data";
 
 const Interests = ({ handleNextPress, handleSkipPress }) => {
   return (
@@ -23,7 +23,7 @@ const Interests = ({ handleNextPress, handleSkipPress }) => {
         otherStyles="mb-3"
       />
 
-      <MultiSelect filterCategory="Interests" data={interestsData} />
+      <MultiSelect title="Interests" placeholder="Select interest(s)" data={interestsData} />
 
       {/* Next and Skip Buttons */}
       <View className="flex-row justify-center mt-10">

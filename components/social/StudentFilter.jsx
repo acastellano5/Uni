@@ -3,7 +3,7 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import SingleSelectDropdown from "../dropdown/SingleSelect";
 import MultiSelectDropDown from "../dropdown/MultiSelect";
-import { interestsData, classData, activitiesData } from "../../assets/data/filter"
+import { interestsData, classData, activitiesData } from "../../assets/data"
 import CustomButton from "../CustomButton";
 
 const StudentFilter = () => {
@@ -17,8 +17,8 @@ const StudentFilter = () => {
     
     <View className="w-11/12 mx-auto mb-5">
         <SingleSelectDropdown data={classData.slice(0, 4)} focusedColor="#22c55e" title="Class" placeholder="Filter By Class"/>
-        <MultiSelectDropDown filterCategory="Interests" data={interestsData}/>
-        <MultiSelectDropDown filterCategory="Clubs/Activites" data={activitiesData}/>  
+        <MultiSelectDropDown title="Interests" placeholder="Filter by Interests" data={interestsData}/>
+        <MultiSelectDropDown title="Clubs/Activites" placeholder="Filter by Clubs/Activities" data={activitiesData}/>  
     </View>
 
     <CustomButton title="Apply" containerStyles="bg-primary py-3 w-4/12 mx-auto" textStyles="text-white font-semibold"/>  
