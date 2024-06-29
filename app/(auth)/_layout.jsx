@@ -4,9 +4,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import Loader from "../../components/Loader";
 
-
 const AuthLayout = () => {
-  
   return (
     <>
       <Stack>
@@ -15,24 +13,29 @@ const AuthLayout = () => {
           options={{
             headerShown: false,
           }}
-          
         />
         <Stack.Screen
           name="register"
           options={{
             headerShown: false,
           }}
-          />
-          <Stack.Screen
+        />
+        <Stack.Screen
           name="forgotPassword"
           options={{
             headerShown: false,
           }}
-          />
+        />
+
+        <Stack.Screen
+          name="accountSetUp"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
       <StatusBar backgroundColor="#000" style="light" />
     </>
-    
   );
 };
 

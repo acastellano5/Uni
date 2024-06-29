@@ -16,11 +16,11 @@ const AlumniFilter = () => {
       </View>
     
     <View className="w-11/12 mx-auto mb-5">
-        <SingleSelectDropdown filterCategory="Class" data={classData}/>
+        <SingleSelectDropdown data={classData} focusedColor="#22c55e" title="Class" placeholder="Filter by Class"/>
         <MultiSelectDropDown filterCategory="Interests" data={interestsData}/>
-        <SingleSelectDropdown filterCategory="State" data={statesData}/>
-        <SingleSelectDropdown filterCategory="Field" data={jobFieldsData}/>
-        <SingleSelectDropdown filterCategory="College" data={collegesData}/>
+        <SingleSelectDropdown data={statesData} focusedColor="#22c55e" title="State" placeholder="Filter by State"/>
+        <SingleSelectDropdown data={jobFieldsData} focusedColor="#22c55e" title="Field" placeholder="Filter by Field"/>
+        <SingleSelectDropdown data={collegesData} focusedColor="#22c55e" title="College" placeholder="Filter by College"/>
     </View>
 
 

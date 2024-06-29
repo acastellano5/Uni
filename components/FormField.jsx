@@ -12,6 +12,7 @@ const FormField = ({
   otherStyles,
   labelStyles,
   isEditable,
+  isMultiLine,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +29,7 @@ const FormField = ({
           placeholderTextColor="#7B7B8B"
           onChangeText={handleChangeText}
           editable={isEditable}
+          multiline={isMultiLine}
           secureTextEntry={(title === "Password" || title === "Current Password" || title === "New Password") && !showPassword}
           {...props}
         />
