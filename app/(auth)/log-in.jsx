@@ -7,7 +7,7 @@ import google from "../../assets/icons/google.webp";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import { router, Redirect } from "expo-router";
-import { loginWithEmail } from "../../lib/firebase";
+import { loginWithEmail, loginWithGoogle } from "../../lib/firebase";
 
 const LogIn = () => {
 
