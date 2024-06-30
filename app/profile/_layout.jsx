@@ -6,7 +6,7 @@ import { StatusBar } from "expo-status-bar";
 const ProfileLayout = () => {
   return (
     <>
-      <Stack>
+      <Stack screenOptions={{gestureEnabled: false}}>
         <Stack.Screen
           name="myProfile"
           options={{

@@ -33,6 +33,7 @@ const PersonalInfo = ({ handleNextPress }) => {
             data={genderOptions}
             title="Gender"
             placeholder="Select Gender"
+            isSearchable={false}
           />
 
           {/* Next Button */}

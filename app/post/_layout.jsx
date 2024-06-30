@@ -6,7 +6,7 @@ import { StatusBar } from "expo-status-bar";
 const PostLayout = () => {
   return (
     <>
-      <Stack>
+      <Stack screenOptions={{gestureEnabled: false}}>
         <Stack.Screen
           name="index"
           options={{

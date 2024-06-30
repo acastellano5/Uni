@@ -21,7 +21,7 @@ const tabs = ["Info", "Members"];
 const ClubHome = () => {
   // retrieve params from request
   const params = useLocalSearchParams();
-  const { name, id } = params;
+  const { id } = params;
 
   // setting tabs state
   const [activeTab, setActiveTab] = useState(tabs[0]);

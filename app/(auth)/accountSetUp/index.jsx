@@ -4,12 +4,11 @@ import React, { useState, useEffect } from "react";
 import PersonalInfo from "../../../components/accountSetUp/PersonalInfo";
 import ProfilePic from "../../../components/accountSetUp/ProfilePic";
 import Interests from "../../../components/accountSetUp/Interests";
-import SchoolSearch from "../../../components/accountSetUp/SchoolSearch";
-import SearchBar from "../../../components/SearchBar";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 
 const AccountSetUp = () => {
   const [currentPage, setCurrentPage] = useState("Personal Info");
+  const router = useRouter();
 
   const displayContent = () => {
     switch (currentPage) {
@@ -29,15 +28,10 @@ const AccountSetUp = () => {
       case "Interests":
         return (
           <Interests
-            handleNextPress={() => setCurrentPage("Org Search")}
-            handleSkipPress={() => setCurrentPage("Org Search")}
+            handleNextPress={() => router.push("./accountSetUp/schoolsIndex")}
+            handleSkipPress={() => router.push("./accountSetUp/schoolsIndex")}
           />
         );
-      
-      case "Org Search": 
-        return (
-          <SchoolSearch/>
-        )
 
       default:
         return null;
@@ -51,9 +45,6 @@ const AccountSetUp = () => {
       </View>
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-10">
-        { currentPage === "Org Search" ? (
-          <SearchBar placeholder="Search high schools" containerStyles="mb-5"/>
-        ) : (null)}
         <View className="w-10/12 mx-auto">{displayContent()}</View>
       </View>
     </SafeAreaView>

@@ -7,7 +7,7 @@ import Loader from "../../components/Loader";
 const AuthLayout = () => {
   return (
     <>
-      <Stack>
+      <Stack screenOptions={{gestureEnabled: false}}>
         <Stack.Screen
           name="log-in"
           options={{

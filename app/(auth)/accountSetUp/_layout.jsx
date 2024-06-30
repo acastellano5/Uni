@@ -2,12 +2,39 @@ import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-const AuthLayout = () => {
+const SetUpLayout = () => {
   return (
     <>
-      <Stack>
+      <Stack screenOptions={{ gestureEnabled: false }}>
         <Stack.Screen
           name="index"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="schoolsIndex"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="schoolShow"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="verifyEmail"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="processReq"
           options={{
             headerShown: false,
           }}
@@ -18,4 +45,4 @@ const AuthLayout = () => {
   );
 };
 
-export default AuthLayout;
+export default SetUpLayout;

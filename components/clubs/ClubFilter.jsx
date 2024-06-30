@@ -11,7 +11,7 @@ import {
   import { AntDesign } from "@expo/vector-icons";
   import { Ionicons } from "@expo/vector-icons";
   import SingleSelectDropDown from "../dropdown/SingleSelect";
-  import { clubCategories } from "../../assets/data/filter";
+  import { clubCategories } from "../../assets/data";
   
   const ClubFilter = ({
     visible,

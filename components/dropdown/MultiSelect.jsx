@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { MultiSelect } from "react-native-element-dropdown";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { interestsData } from "../../assets/data/filter"
 
-const MultiSelectComponent = ({filterCategory, data, focusedColor}) => {
+const MultiSelectComponent = ({title, placeholder, data, focusedColor}) => {
   const [selected, setSelected] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
 
   const renderLabel = () => {
     return (
-      <Text style={[styles.label, isFocus && { color: {focusedColor} }]} className="mb-1 text-base">{filterCategory}</Text>
+      <Text style={[styles.label, isFocus && { color: {focusedColor} }]} className="mb-1 text-base">{title}</Text>
     );
 
     return null;
@@ -27,7 +25,7 @@ const MultiSelectComponent = ({filterCategory, data, focusedColor}) => {
         data={data}
         labelField="label"
         valueField="value"
-        placeholder={`Filter by ${filterCategory}`}
+        placeholder={placeholder}
         value={selected}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
