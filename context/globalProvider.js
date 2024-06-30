@@ -10,6 +10,7 @@ const GlobalProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isVerified, setIsVerified] = useState(false);
+    const [orgId, setOrgId] = useState(20030049);
 
 
     
@@ -19,6 +20,7 @@ const GlobalProvider = ({children}) => {
             //console.log(res);
 
             if (res) {
+                
 
                 //console.log(res);
                 if (!res.emailVerified) {
@@ -53,6 +55,8 @@ const GlobalProvider = ({children}) => {
     return (
         <GlobalContext.Provider
         value={{
+            orgId,
+            setOrgId,
             isLogged,
             setIsLogged,
             user,
