@@ -10,12 +10,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
 import SearchBar from "../../../components/SearchBar";
 import ClubSection from "../../../components/clubs/ClubSection";
-import { getClubsByType, getClubsByName } from "../../../lib/firebase";
+import { getGroupsByCategory, getGroupsByName } from "../../../lib/useFirebase";
 import Club from "../../../components/clubs/Club";
 import BackButton from "../../../components/BackButton";
 import ClubFilter from "../../../components/clubs/ClubFilter";
+import { useGlobalContext } from "../../../context/globalProvider";
 
 export default function Clubs() {
+  // getting orgId from global context
+  const { orgId } = useGlobalContext();
+
   // set state of clubs
   const [clubs, setClubs] = useState({
     Technology: [],
@@ -41,7 +45,7 @@ export default function Clubs() {
 
       for (const type of clubTypes) {
         // returns array of clubs based on type passed in
-        const clubsByType = await getClubsByType(type);
+        const clubsByType = await getGroupsByCategory(type, orgId);
         // assigns the type key (ex. Technology) to club data
         // will look something like this:
         //      Technology: [array]
@@ -76,20 +80,20 @@ export default function Clubs() {
     }
 
     // fetch club result
-    const clubsResult = await getClubsByName(searchValue);
+    const clubsResult = await getGroupsByName(searchValue, orgId);
     setIsSearchResult(true);
     setSearchResults(clubsResult ? clubsResult : []);
   };
 
   // state for filter visibility
   const [isFilterVisible, setIsFilterVisible] = useState(false);
-  
+
   // state for whether a filter is applied
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
   // callback function to update clubs state when a filter is selected
   const handleFilterSelect = async (selectedCategory) => {
-    const filteredClubs = await getClubsByType(selectedCategory); // get clubs by selected category
+    const filteredClubs = await getGroupsByCategory(selectedCategory, orgId); // get clubs by selected category
     setClubs({ [selectedCategory]: filteredClubs }); // update state with filtered clubs
     setIsFilterApplied(true); // indicate that a filter is applied
   };
@@ -97,17 +101,11 @@ export default function Clubs() {
   // function to reset filter and show all clubs
   const resetFilter = async () => {
     setLoading(true); // show loading indicator
-    const clubTypes = [
-      "Technology",
-      "Arts",
-      "Athletic",
-      "Academic",
-      "Service",
-    ];
+    const clubTypes = ["Technology", "Arts", "Athletic", "Academic", "Service"];
     const clubData = {};
 
     for (const type of clubTypes) {
-      const clubsByType = await getClubsByType(type); // get clubs by each type
+      const clubsByType = await getGroupsByCategory(type, orgId); // get clubs by each type
       clubData[type] = clubsByType; // update state with clubs by type
     }
 
@@ -174,9 +172,11 @@ export default function Clubs() {
                     }}
                   />
                   {/* if club was found it will render */}
-                  {searchResults.map((club) => (
-                    <Club key={club.id} name={club.name} id={club.id} />
-                  ))}
+                  <View className="flex-row flex-wrap">
+                    {searchResults.map((club) => (
+                      <Club key={club.id} name={club.name} id={club.id} />
+                    ))}
+                  </View>
                 </>
               ) : (
                 // if club wasn't found, this will render

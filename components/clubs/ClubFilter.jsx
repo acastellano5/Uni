@@ -44,7 +44,8 @@ import {
   
             <View className="w-11/12 mx-auto mb-5">
               <SingleSelectDropDown
-                filterCategory="Categories"
+                title="Category"
+                placeholder="Filter by Category"
                 data={clubCategories}
                 onItemSelect={async (item) => {
                   await onFilterSelect(item.value); // call onFilterSelect with selected category
