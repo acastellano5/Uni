@@ -16,6 +16,7 @@ const GlobalProvider = ({children}) => {
     
 
     function onAuthStateChanged(user) {
+        setLoading(false)
         setUser(user);
         if (initializing) setInitializing(false);
         if (user) {
