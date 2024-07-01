@@ -14,11 +14,15 @@ import TabsDisplay from "../../../components/TabsDisplay";
 import ClubInfo from "../../../components/clubs/ClubInfo";
 import ClubMembers from "../../../components/clubs/ClubMembers";
 import BackHeader from "../../../components/BackHeader";
-import { getClubById } from "../../../lib/firebase";
+import { getGroupById } from "../../../lib/useFirebase";
+import { useGlobalContext } from "../../../context/globalProvider";
 
 const tabs = ["Info", "Members"];
 
 const ClubHome = () => {
+   // getting orgId from global context
+   const { orgId } = useGlobalContext();
+
   // retrieve params from request
   const params = useLocalSearchParams();
   const { id } = params;
@@ -37,11 +41,11 @@ const ClubHome = () => {
         return;
       }
 
-      console.log("Fetching club data for ID:", id);
+      // console.log("Fetching club data for ID:", id);
       try {
-        const clubData = await getClubById(id);
+        const clubData = await getGroupById(id, orgId);
         if (clubData) {
-          console.log("Club data fetched:", clubData);
+          // console.log("Club data fetched:", clubData);
           setClub(clubData);
         } else {
           console.log("No club data found");
@@ -53,6 +57,10 @@ const ClubHome = () => {
 
     fetchClub();
   }, [id]);
+
+  useEffect(() => {
+    console.log(club)
+  }, [club])
 
   const displayTabContent = () => {
     switch (activeTab) {
