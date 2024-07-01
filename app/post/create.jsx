@@ -4,10 +4,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { getGroupById, sendPost } from "../../lib/firebase";
 import { useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { seedDatabase, seedGroups } from "../../lib/seed";
+import { followUser, getGroupByCategory, getGroupById, getUserByGroup } from "../../lib/useFirebase";
 const pickImage = async () => {
   // No permissions request is necessary for launching the image library
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -24,7 +24,9 @@ const pickImage = async () => {
 };
 
 const create = () => {
-  seedGroups()
+followUser(
+"a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6",
+'20030049')
   const [image, setImage] = useState(null);
 
   const [form, setForm] = useState({

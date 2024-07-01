@@ -39,7 +39,6 @@ const GlobalProvider = ({children}) => {
       }
     
       useEffect(() => {
-        console.log("WHYY");
         const subscriber = auth().onUserChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
       }, []);
