@@ -5,18 +5,16 @@ import { FontAwesome } from "@expo/vector-icons";
 import axios from 'axios';
 
 const ChatInput = ({ addMessage, addr, model, apiKey }) => {
-  
   const [input, setInput] = useState("");
   const sendMessage = async () => {
-    console.log(addr, model, apiKey)
     if (!input.trim()) return;
     addMessage("right", input);
     setInput("");
     try {
-      const { data } = await axios.post("http://10.0.0.189:8080/api/get_answer", {
+      const { data } = await axios.post(addr, {
         question: input,
-        model: "salesianum",
-        key: "key1"
+        model: model,
+        key: apiKey
       },
       {
         headers: {
