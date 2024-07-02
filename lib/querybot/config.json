@@ -11,6 +11,6 @@
   "feedback": "./feedback",
   "trainer": {
     "data": "./data",
-    "defaults": ["Sorry, I don't understand.", "I don't know the answer to that.", "Sorry, I'm not sure. Maybe try rephrasing your question."]
+    "defaults": ["Sorry, I don't understand.", "I don't know the answer to that.", "Sorry, I'm not sure. Maybe try rephrasing your question.", "I'm not quite sure about that."]
   }
 }
