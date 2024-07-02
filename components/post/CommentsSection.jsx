@@ -19,7 +19,10 @@ const Comment = ({ name, onRequestClose }) => {
         activeOpacity={0.8}
         onPress={() => {
           onRequestClose();
-          router.push("/profile/profileShow");
+          router.push({
+            pathname: "/profile/profileShow",
+            params: { uid: "a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6" },
+          });
         }}
       >
         <Image
@@ -35,7 +38,10 @@ const Comment = ({ name, onRequestClose }) => {
             activeOpacity={0.8}
             onPress={() => {
               onRequestClose();
-              router.push("/profile/profileShow");
+              router.push({
+                pathname: "/profile/profileShow",
+                params: { uid: "a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6" },
+              });
             }}
           >
             <Text className="font-semibold">{name}</Text>
@@ -77,21 +83,21 @@ const CommentsSection = ({
 
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View className="w-11/12 mx-auto pt-5">
-            <Comment name="Walter White" onRequestClose={onRequestClose} />
+            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" onRequestClose={onRequestClose} />
+            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" onRequestClose={onRequestClose} />
+            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" onRequestClose={onRequestClose} />
+            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" onRequestClose={onRequestClose} />
+            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" onRequestClose={onRequestClose} />
+            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" onRequestClose={onRequestClose} />
+            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
 
-            <Comment name="Walter White" onRequestClose={onRequestClose} />
+            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
           </View>
         </ScrollView>
       </View>
