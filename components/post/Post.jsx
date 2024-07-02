@@ -6,18 +6,34 @@ import Comments from "./CommentsSection";
 import { router } from "expo-router";
 
 const PostContent = () => {
-  const [ isModalVisible, setIsModalVisible ] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false);
   return (
     <>
-    <View className="flex-row justify-between mb-3">
+      <View className="flex-row justify-between mb-3">
         <View className="flex-row items-center">
-          
-          <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile/profileShow')}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              router.push({
+                pathname: "/profile/profileShow",
+                params: { uid: "a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6" },
+              });
+            }}
+          >
             <FontAwesome name="user-circle" size={30} color="black" />
           </TouchableOpacity>
 
-          <TouchableOpacity className="ml-5" activeOpacity={0.8} onPress={() => router.push('/profile/profileShow')}>
-            <Text>John Doe</Text>
+          <TouchableOpacity
+            className="ml-5"
+            activeOpacity={0.8}
+            onPress={() => {
+              router.push({
+                pathname: "/profile/profileShow",
+                params: { uid: "a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6" },
+              });
+            }}
+          >
+            <Text>Jerry Smith</Text>
             <Text>Class of 2024</Text>
           </TouchableOpacity>
         </View>
@@ -50,28 +66,27 @@ const PostContent = () => {
           </View>
         </View>
 
-
         {/* Save */}
         <FontAwesome name="bookmark-o" size={24} color="black" />
       </View>
 
-
-
       {/* caption */}
-      <Text className="mt-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.</Text>
-
+      <Text className="mt-3">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry's standard dummy text ever.
+      </Text>
 
       {/* View comments button */}
 
-      <TouchableOpacity className="mt-3" onPress={() => setIsModalVisible(true)}>
+      <TouchableOpacity
+        className="mt-3"
+        onPress={() => setIsModalVisible(true)}
+      >
         <Text className="font-semibold text-darkGray">View Comments</Text>
       </TouchableOpacity>
 
       {/* time */}
       <Text className="font-semibold mt-3">45 minutes ago</Text>
-
-
-
 
       {/* comments section modal */}
       <Comments
@@ -80,16 +95,14 @@ const PostContent = () => {
         animationType="slide"
         presentationStyle="formSheet"
       />
+    </>
+  );
+};
 
-</>
-  )
-}
-
-const PostContainer = ({containerStyles}) => {
-
+const PostContainer = ({ containerStyles }) => {
   return (
     <View className={containerStyles}>
-      <PostContent/>
+      <PostContent />
     </View>
   );
 };

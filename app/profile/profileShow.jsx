@@ -14,9 +14,13 @@ import InfoBox from "../../components/profile/InfoBox";
 import PostSection from "../../components/profile/PostSection";
 import BackHeader from "../../components/BackHeader";
 import { useLocalSearchParams } from "expo-router";
-import { getUserAttributes } from "../../lib/firebase";
+import { getUserAttributes } from "../../lib/useFirebase";
+import { useGlobalContext } from "../../context/globalProvider";
 
 const ProfileShow = () => {
+  // getting orgId from global context
+  const { orgId } = useGlobalContext();
+
   const params = useLocalSearchParams();
   const { uid } = params;
 
@@ -26,7 +30,7 @@ const ProfileShow = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userResult = await getUserAttributes(uid);
+      const userResult = await getUserAttributes(uid, orgId);
       setUser(userResult);
       setLoading(false); // Set loading to false once data is fetched
     };
@@ -84,7 +88,7 @@ const ProfileShow = () => {
               <InfoBox title="Interests" info={user.interests} />
 
               {/* groups section */}
-              <InfoBox title="Groups" info={user.orgs[0].groups}/>
+              {/* <InfoBox title="Groups" info={user.orgs[0].groups}/> */}
 
               {/* classes section */}
               {/* <InfoBox title="Classes" /> */}
