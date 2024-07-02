@@ -26,7 +26,7 @@ console.log(isVerified);
 console.log(isLogged);*/
 
 if (!loading && isLogged && isVerified){
-  router.replace("/(tabs)/home");
+  return <Redirect href={"/(tabs)/home"}/>
 
 } else {
 
