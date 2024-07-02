@@ -1,0 +1,2435 @@
+{
+  "settings": {
+    "languages": [
+      "en"
+    ],
+    "forceNER": true,
+    "nlu": {
+      "log": false
+    },
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "autoSave": true,
+    "modelFileName": "model.nlp",
+    "executeActionsBeforeAnswers": false,
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager",
+      "log": false
+    },
+    "locales": [
+      "en"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "en": {
+        "settings": {
+          "locale": "en",
+          "trainByDomain": false,
+          "tag": "domain-manager-en",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "are,hour,school,the,what": {
+            "intent": "0",
+            "domain": "default"
+          },
+          "and,day,doe,end,school,start,the,when": {
+            "intent": "0",
+            "domain": "default"
+          },
+          "can,hour,me,school,tell,the,you": {
+            "intent": "0",
+            "domain": "default"
+          },
+          "and,begin,doe,finish,school,time,what": {
+            "intent": "0",
+            "domain": "default"
+          },
+          "address,is,of,salesianum,school,the,what": {
+            "intent": "1",
+            "domain": "default"
+          },
+          "is,locat,salesianum,school,where": {
+            "intent": "1",
+            "domain": "default"
+          },
+          "address,can,for,provid,salesianum,school,the,you": {
+            "intent": "1",
+            "domain": "default"
+          },
+          "is,locat,of,salesianum,school,the,what": {
+            "intent": "1",
+            "domain": "default"
+          },
+          "are,at,offer,salesianum,school,sport,what": {
+            "intent": "2",
+            "domain": "default"
+          },
+          "at,can,play,salesianum,sport,student,which": {
+            "intent": "2",
+            "domain": "default"
+          },
+          "at,avail,can,list,salesianum,sport,the,you": {
+            "intent": "2",
+            "domain": "default"
+          },
+          "athlet,doe,have,program,salesianum,what": {
+            "intent": "2",
+            "domain": "default"
+          },
+          "admiss,can,contact,how,i,offic,the": {
+            "intent": "3",
+            "domain": "default"
+          },
+          "admiss,for,is,number,offic,phone,the,what": {
+            "intent": "3",
+            "domain": "default"
+          },
+          "admiss,do,get,how,i,in,touch,with": {
+            "intent": "3",
+            "domain": "default"
+          },
+          "admiss,can,contact,detail,for,provid,the,you": {
+            "intent": "3",
+            "domain": "default"
+          },
+          "fee,for,is,salesianum,school,the,tuition,what": {
+            "intent": "4",
+            "domain": "default"
+          },
+          "at,how,is,much,salesianum,school,the,tuition": {
+            "intent": "4",
+            "domain": "default"
+          },
+          "at,can,cost,me,of,salesianum,tell,the,tuition,you": {
+            "intent": "4",
+            "domain": "default"
+          },
+          "are,at,fee,salesianum,school,the,tuition,what": {
+            "intent": "4",
+            "domain": "default"
+          },
+          "advanc,are,avail,for,program,student,what": {
+            "intent": "5",
+            "domain": "default"
+          },
+          "advanc,cours,doe,provid,salesianum,what": {
+            "intent": "5",
+            "domain": "default"
+          },
+          "advanc,doe,for,have,program,salesianum,student": {
+            "intent": "5",
+            "domain": "default"
+          },
+          "advanc,ani,are,at,learn,option,salesianum,there": {
+            "intent": "5",
+            "domain": "default"
+          },
+          "a,at,code,dress,is,salesianum,school,there": {
+            "intent": "6",
+            "domain": "default"
+          },
+          "at,is,polici,salesianum,school,the,uniform,what": {
+            "intent": "6",
+            "domain": "default"
+          },
+          "a,doe,requir,salesianum,school,uniform": {
+            "intent": "6",
+            "domain": "default"
+          },
+          "are,at,code,dress,requir,salesianum,the,what": {
+            "intent": "6",
+            "domain": "default"
+          },
+          "activ,ani,doe,extracurricular,offer,salesianum,school": {
+            "intent": "7",
+            "domain": "default"
+          },
+          "at,can,extracurricular,in,particip,salesianum,student,what": {
+            "intent": "7",
+            "domain": "default"
+          },
+          "activ,after-school,are,at,avail,salesianum,what": {
+            "intent": "7",
+            "domain": "default"
+          },
+          "doe,extracurricular,have,kind,of,program,salesianum,what": {
+            "intent": "7",
+            "domain": "default"
+          },
+          "at,is,ratio,salesianum,school,student-to-teach,the,what": {
+            "intent": "8",
+            "domain": "default"
+          },
+          "are,at,how,mani,per,salesianum,student,teacher,there": {
+            "intent": "8",
+            "domain": "default"
+          },
+          "at,averag,class,is,salesianum,school,size,the,what": {
+            "intent": "8",
+            "domain": "default"
+          },
+          "at,can,me,ratio,salesianum,student-to-teach,tell,the,you": {
+            "intent": "8",
+            "domain": "default"
+          },
+          "are,colleg,counsel,kind,of,provid,servic,what": {
+            "intent": "9",
+            "domain": "default"
+          },
+          "applic,colleg,doe,help,offer,salesianum,with": {
+            "intent": "9",
+            "domain": "default"
+          },
+          "colleg,doe,how,plan,salesianum,student,support,with": {
+            "intent": "9",
+            "domain": "default"
+          },
+          "colleg,counsel,doe,offer,salesianum,school,servic,what": {
+            "intent": "9",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "0": "default",
+          "1": "default",
+          "2": "default",
+          "3": "default",
+          "4": "default",
+          "5": "default",
+          "6": "default",
+          "7": "default",
+          "8": "default",
+          "9": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "What are the school hours?",
+            "intent": "0"
+          },
+          {
+            "domain": "default",
+            "utterance": "When does the school day start and end?",
+            "intent": "0"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you tell me the school hours?",
+            "intent": "0"
+          },
+          {
+            "domain": "default",
+            "utterance": "What time does school begin and finish?",
+            "intent": "0"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the address of Salesianum School?",
+            "intent": "1"
+          },
+          {
+            "domain": "default",
+            "utterance": "Where is Salesianum School located?",
+            "intent": "1"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you provide the address for Salesianum School?",
+            "intent": "1"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the location of Salesianum School?",
+            "intent": "1"
+          },
+          {
+            "domain": "default",
+            "utterance": "What sports are offered at Salesianum School?",
+            "intent": "2"
+          },
+          {
+            "domain": "default",
+            "utterance": "Which sports can students play at Salesianum?",
+            "intent": "2"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you list the sports available at Salesianum?",
+            "intent": "2"
+          },
+          {
+            "domain": "default",
+            "utterance": "What athletic programs does Salesianum have?",
+            "intent": "2"
+          },
+          {
+            "domain": "default",
+            "utterance": "How can I contact the admissions office?",
+            "intent": "3"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the phone number for the admissions office?",
+            "intent": "3"
+          },
+          {
+            "domain": "default",
+            "utterance": "How do I get in touch with admissions?",
+            "intent": "3"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you provide the contact details for admissions?",
+            "intent": "3"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the tuition fee for Salesianum School?",
+            "intent": "4"
+          },
+          {
+            "domain": "default",
+            "utterance": "How much is the tuition at Salesianum School?",
+            "intent": "4"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you tell me the cost of tuition at Salesianum?",
+            "intent": "4"
+          },
+          {
+            "domain": "default",
+            "utterance": "What are the tuition fees at Salesianum School?",
+            "intent": "4"
+          },
+          {
+            "domain": "default",
+            "utterance": "What programs are available for advanced students?",
+            "intent": "5"
+          },
+          {
+            "domain": "default",
+            "utterance": "What advanced courses does Salesianum provide?",
+            "intent": "5"
+          },
+          {
+            "domain": "default",
+            "utterance": "Does Salesianum have programs for advanced students?",
+            "intent": "5"
+          },
+          {
+            "domain": "default",
+            "utterance": "Are there any advanced learning options at Salesianum?",
+            "intent": "5"
+          },
+          {
+            "domain": "default",
+            "utterance": "Is there a dress code at Salesianum School?",
+            "intent": "6"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the uniform policy at Salesianum School?",
+            "intent": "6"
+          },
+          {
+            "domain": "default",
+            "utterance": "Does Salesianum School require a uniform?",
+            "intent": "6"
+          },
+          {
+            "domain": "default",
+            "utterance": "What are the dress code requirements at Salesianum?",
+            "intent": "6"
+          },
+          {
+            "domain": "default",
+            "utterance": "Does Salesianum School offer any extracurricular activities?",
+            "intent": "7"
+          },
+          {
+            "domain": "default",
+            "utterance": "What extracurriculars can students participate in at Salesianum?",
+            "intent": "7"
+          },
+          {
+            "domain": "default",
+            "utterance": "What after-school activities are available at Salesianum?",
+            "intent": "7"
+          },
+          {
+            "domain": "default",
+            "utterance": "What kind of extracurricular programs does Salesianum have?",
+            "intent": "7"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the student-to-teacher ratio at Salesianum School?",
+            "intent": "8"
+          },
+          {
+            "domain": "default",
+            "utterance": "How many students are there per teacher at Salesianum?",
+            "intent": "8"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the average class size at Salesianum School?",
+            "intent": "8"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you tell me the student-to-teacher ratio at Salesianum?",
+            "intent": "8"
+          },
+          {
+            "domain": "default",
+            "utterance": "What kind of college counseling services are provided?",
+            "intent": "9"
+          },
+          {
+            "domain": "default",
+            "utterance": "Does Salesianum offer help with college applications?",
+            "intent": "9"
+          },
+          {
+            "domain": "default",
+            "utterance": "How does Salesianum support students with college planning?",
+            "intent": "9"
+          },
+          {
+            "domain": "default",
+            "utterance": "What college counseling services does Salesianum School offer?",
+            "intent": "9"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "en",
+              "tag": "nlu-en",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "what": 1,
+              "are": 1,
+              "the": 1,
+              "school": 1,
+              "hour": 1,
+              "when": 1,
+              "doe": 1,
+              "day": 1,
+              "start": 1,
+              "and": 1,
+              "end": 1,
+              "can": 1,
+              "you": 1,
+              "tell": 1,
+              "me": 1,
+              "time": 1,
+              "begin": 1,
+              "finish": 1,
+              "is": 1,
+              "address": 1,
+              "of": 1,
+              "salesianum": 1,
+              "where": 1,
+              "locat": 1,
+              "provid": 1,
+              "for": 1,
+              "sport": 1,
+              "offer": 1,
+              "at": 1,
+              "which": 1,
+              "student": 1,
+              "play": 1,
+              "list": 1,
+              "avail": 1,
+              "athlet": 1,
+              "program": 1,
+              "have": 1,
+              "how": 1,
+              "i": 1,
+              "contact": 1,
+              "admiss": 1,
+              "offic": 1,
+              "phone": 1,
+              "number": 1,
+              "do": 1,
+              "get": 1,
+              "in": 1,
+              "touch": 1,
+              "with": 1,
+              "detail": 1,
+              "tuition": 1,
+              "fee": 1,
+              "much": 1,
+              "cost": 1,
+              "advanc": 1,
+              "cours": 1,
+              "there": 1,
+              "ani": 1,
+              "learn": 1,
+              "option": 1,
+              "a": 1,
+              "dress": 1,
+              "code": 1,
+              "uniform": 1,
+              "polici": 1,
+              "requir": 1,
+              "extracurricular": 1,
+              "activ": 1,
+              "particip": 1,
+              "after-school": 1,
+              "kind": 1,
+              "student-to-teach": 1,
+              "ratio": 1,
+              "mani": 1,
+              "per": 1,
+              "teacher": 1,
+              "averag": 1,
+              "class": 1,
+              "size": 1,
+              "colleg": 1,
+              "counsel": 1,
+              "servic": 1,
+              "help": 1,
+              "applic": 1,
+              "support": 1,
+              "plan": 1
+            },
+            "intents": {
+              "0": 1,
+              "1": 1,
+              "2": 1,
+              "3": 1,
+              "4": 1,
+              "5": 1,
+              "6": 1,
+              "7": 1,
+              "8": 1,
+              "9": 1
+            },
+            "intentFeatures": {
+              "0": {
+                "what": 1,
+                "are": 1,
+                "the": 1,
+                "school": 1,
+                "hour": 1,
+                "when": 1,
+                "doe": 1,
+                "day": 1,
+                "start": 1,
+                "and": 1,
+                "end": 1,
+                "can": 1,
+                "you": 1,
+                "tell": 1,
+                "me": 1,
+                "time": 1,
+                "begin": 1,
+                "finish": 1
+              },
+              "1": {
+                "what": 1,
+                "is": 1,
+                "the": 1,
+                "address": 1,
+                "of": 1,
+                "salesianum": 1,
+                "school": 1,
+                "where": 1,
+                "locat": 1,
+                "can": 1,
+                "you": 1,
+                "provid": 1,
+                "for": 1
+              },
+              "2": {
+                "what": 1,
+                "sport": 1,
+                "are": 1,
+                "offer": 1,
+                "at": 1,
+                "salesianum": 1,
+                "school": 1,
+                "which": 1,
+                "can": 1,
+                "student": 1,
+                "play": 1,
+                "you": 1,
+                "list": 1,
+                "the": 1,
+                "avail": 1,
+                "athlet": 1,
+                "program": 1,
+                "doe": 1,
+                "have": 1
+              },
+              "3": {
+                "how": 1,
+                "can": 1,
+                "i": 1,
+                "contact": 1,
+                "the": 1,
+                "admiss": 1,
+                "offic": 1,
+                "what": 1,
+                "is": 1,
+                "phone": 1,
+                "number": 1,
+                "for": 1,
+                "do": 1,
+                "get": 1,
+                "in": 1,
+                "touch": 1,
+                "with": 1,
+                "you": 1,
+                "provid": 1,
+                "detail": 1
+              },
+              "4": {
+                "what": 1,
+                "is": 1,
+                "the": 1,
+                "tuition": 1,
+                "fee": 1,
+                "for": 1,
+                "salesianum": 1,
+                "school": 1,
+                "how": 1,
+                "much": 1,
+                "at": 1,
+                "can": 1,
+                "you": 1,
+                "tell": 1,
+                "me": 1,
+                "cost": 1,
+                "of": 1,
+                "are": 1
+              },
+              "5": {
+                "what": 1,
+                "program": 1,
+                "are": 1,
+                "avail": 1,
+                "for": 1,
+                "advanc": 1,
+                "student": 1,
+                "cours": 1,
+                "doe": 1,
+                "salesianum": 1,
+                "provid": 1,
+                "have": 1,
+                "there": 1,
+                "ani": 1,
+                "learn": 1,
+                "option": 1,
+                "at": 1
+              },
+              "6": {
+                "is": 1,
+                "there": 1,
+                "a": 1,
+                "dress": 1,
+                "code": 1,
+                "at": 1,
+                "salesianum": 1,
+                "school": 1,
+                "what": 1,
+                "the": 1,
+                "uniform": 1,
+                "polici": 1,
+                "doe": 1,
+                "requir": 1,
+                "are": 1
+              },
+              "7": {
+                "doe": 1,
+                "salesianum": 1,
+                "school": 1,
+                "offer": 1,
+                "ani": 1,
+                "extracurricular": 1,
+                "activ": 1,
+                "what": 1,
+                "can": 1,
+                "student": 1,
+                "particip": 1,
+                "in": 1,
+                "at": 1,
+                "after-school": 1,
+                "are": 1,
+                "avail": 1,
+                "kind": 1,
+                "of": 1,
+                "program": 1,
+                "have": 1
+              },
+              "8": {
+                "what": 1,
+                "is": 1,
+                "the": 1,
+                "student-to-teach": 1,
+                "ratio": 1,
+                "at": 1,
+                "salesianum": 1,
+                "school": 1,
+                "how": 1,
+                "mani": 1,
+                "student": 1,
+                "are": 1,
+                "there": 1,
+                "per": 1,
+                "teacher": 1,
+                "averag": 1,
+                "class": 1,
+                "size": 1,
+                "can": 1,
+                "you": 1,
+                "tell": 1,
+                "me": 1
+              },
+              "9": {
+                "what": 1,
+                "kind": 1,
+                "of": 1,
+                "colleg": 1,
+                "counsel": 1,
+                "servic": 1,
+                "are": 1,
+                "provid": 1,
+                "doe": 1,
+                "salesianum": 1,
+                "offer": 1,
+                "help": 1,
+                "with": 1,
+                "applic": 1,
+                "how": 1,
+                "support": 1,
+                "student": 1,
+                "plan": 1,
+                "school": 1
+              }
+            },
+            "featuresToIntent": {
+              "what": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "are": [
+                "0",
+                "2",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "the": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "6",
+                "8"
+              ],
+              "school": [
+                "0",
+                "1",
+                "2",
+                "4",
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "hour": [
+                "0"
+              ],
+              "when": [
+                "0"
+              ],
+              "doe": [
+                "0",
+                "2",
+                "5",
+                "6",
+                "7",
+                "9"
+              ],
+              "day": [
+                "0"
+              ],
+              "start": [
+                "0"
+              ],
+              "and": [
+                "0"
+              ],
+              "end": [
+                "0"
+              ],
+              "can": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "7",
+                "8"
+              ],
+              "you": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "8"
+              ],
+              "tell": [
+                "0",
+                "4",
+                "8"
+              ],
+              "me": [
+                "0",
+                "4",
+                "8"
+              ],
+              "time": [
+                "0"
+              ],
+              "begin": [
+                "0"
+              ],
+              "finish": [
+                "0"
+              ],
+              "is": [
+                "1",
+                "3",
+                "4",
+                "6",
+                "8"
+              ],
+              "address": [
+                "1"
+              ],
+              "of": [
+                "1",
+                "4",
+                "7",
+                "9"
+              ],
+              "salesianum": [
+                "1",
+                "2",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "where": [
+                "1"
+              ],
+              "locat": [
+                "1"
+              ],
+              "provid": [
+                "1",
+                "3",
+                "5",
+                "9"
+              ],
+              "for": [
+                "1",
+                "3",
+                "4",
+                "5"
+              ],
+              "sport": [
+                "2"
+              ],
+              "offer": [
+                "2",
+                "7",
+                "9"
+              ],
+              "at": [
+                "2",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8"
+              ],
+              "which": [
+                "2"
+              ],
+              "student": [
+                "2",
+                "5",
+                "7",
+                "8",
+                "9"
+              ],
+              "play": [
+                "2"
+              ],
+              "list": [
+                "2"
+              ],
+              "avail": [
+                "2",
+                "5",
+                "7"
+              ],
+              "athlet": [
+                "2"
+              ],
+              "program": [
+                "2",
+                "5",
+                "7"
+              ],
+              "have": [
+                "2",
+                "5",
+                "7"
+              ],
+              "how": [
+                "3",
+                "4",
+                "8",
+                "9"
+              ],
+              "i": [
+                "3"
+              ],
+              "contact": [
+                "3"
+              ],
+              "admiss": [
+                "3"
+              ],
+              "offic": [
+                "3"
+              ],
+              "phone": [
+                "3"
+              ],
+              "number": [
+                "3"
+              ],
+              "do": [
+                "3"
+              ],
+              "get": [
+                "3"
+              ],
+              "in": [
+                "3",
+                "7"
+              ],
+              "touch": [
+                "3"
+              ],
+              "with": [
+                "3",
+                "9"
+              ],
+              "detail": [
+                "3"
+              ],
+              "tuition": [
+                "4"
+              ],
+              "fee": [
+                "4"
+              ],
+              "much": [
+                "4"
+              ],
+              "cost": [
+                "4"
+              ],
+              "advanc": [
+                "5"
+              ],
+              "cours": [
+                "5"
+              ],
+              "there": [
+                "5",
+                "6",
+                "8"
+              ],
+              "ani": [
+                "5",
+                "7"
+              ],
+              "learn": [
+                "5"
+              ],
+              "option": [
+                "5"
+              ],
+              "a": [
+                "6"
+              ],
+              "dress": [
+                "6"
+              ],
+              "code": [
+                "6"
+              ],
+              "uniform": [
+                "6"
+              ],
+              "polici": [
+                "6"
+              ],
+              "requir": [
+                "6"
+              ],
+              "extracurricular": [
+                "7"
+              ],
+              "activ": [
+                "7"
+              ],
+              "particip": [
+                "7"
+              ],
+              "after-school": [
+                "7"
+              ],
+              "kind": [
+                "7",
+                "9"
+              ],
+              "student-to-teach": [
+                "8"
+              ],
+              "ratio": [
+                "8"
+              ],
+              "mani": [
+                "8"
+              ],
+              "per": [
+                "8"
+              ],
+              "teacher": [
+                "8"
+              ],
+              "averag": [
+                "8"
+              ],
+              "class": [
+                "8"
+              ],
+              "size": [
+                "8"
+              ],
+              "colleg": [
+                "9"
+              ],
+              "counsel": [
+                "9"
+              ],
+              "servic": [
+                "9"
+              ],
+              "help": [
+                "9"
+              ],
+              "applic": [
+                "9"
+              ],
+              "support": [
+                "9"
+              ],
+              "plan": [
+                "9"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "locale": "en",
+                "tag": "nlu-en",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true
+              },
+              "features": [
+                "what",
+                "are",
+                "the",
+                "school",
+                "hour",
+                "when",
+                "doe",
+                "day",
+                "start",
+                "and",
+                "end",
+                "can",
+                "you",
+                "tell",
+                "me",
+                "time",
+                "begin",
+                "finish",
+                "is",
+                "address",
+                "of",
+                "salesianum",
+                "where",
+                "locat",
+                "provid",
+                "for",
+                "sport",
+                "offer",
+                "at",
+                "which",
+                "student",
+                "play",
+                "list",
+                "avail",
+                "athlet",
+                "program",
+                "have",
+                "how",
+                "i",
+                "contact",
+                "admiss",
+                "offic",
+                "phone",
+                "number",
+                "do",
+                "get",
+                "in",
+                "touch",
+                "with",
+                "detail",
+                "tuition",
+                "fee",
+                "much",
+                "cost",
+                "advanc",
+                "cours",
+                "there",
+                "ani",
+                "learn",
+                "option",
+                "a",
+                "dress",
+                "code",
+                "uniform",
+                "polici",
+                "requir",
+                "extracurricular",
+                "activ",
+                "particip",
+                "after-school",
+                "kind",
+                "student-to-teach",
+                "ratio",
+                "mani",
+                "per",
+                "teacher",
+                "averag",
+                "class",
+                "size",
+                "colleg",
+                "counsel",
+                "servic",
+                "help",
+                "applic",
+                "support",
+                "plan"
+              ],
+              "intents": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "perceptrons": [
+                [
+                  1.395189642906189,
+                  1.5152974128723145,
+                  2.024658203125,
+                  3.214754343032837,
+                  5.066568851470947,
+                  1.0448206663131714,
+                  1.477739691734314,
+                  1.0448206663131714,
+                  1.0448206663131714,
+                  2.679356813430786,
+                  1.0448206663131714,
+                  -0.058680370450019836,
+                  0.42996034026145935,
+                  1.5124757289886475,
+                  1.5124757289886475,
+                  1.634333848953247,
+                  1.634333848953247,
+                  1.634333848953247,
+                  -1.5853595733642578,
+                  -1.1789753437042236,
+                  -1.3343253135681152,
+                  -5.1178879737854,
+                  -0.22919180989265442,
+                  -0.6171225309371948,
+                  -1.0107344388961792,
+                  -1.523523211479187,
+                  -0.37238025665283203,
+                  -0.8888756036758423,
+                  -1.6669282913208008,
+                  0,
+                  -0.44180992245674133,
+                  0,
+                  -0.06276606023311615,
+                  -0.5673343539237976,
+                  -0.10315356403589249,
+                  -0.5727725625038147,
+                  -0.10315356403589249,
+                  -0.4449906647205353,
+                  -0.4449906647205353,
+                  -0.6722474098205566,
+                  -0.7950507998466492,
+                  -0.5488250255584717,
+                  -0.06972956657409668,
+                  -0.06972956657409668,
+                  -0.00856074970215559,
+                  -0.00856074970215559,
+                  -0.00856074970215559,
+                  -0.00856074970215559,
+                  -0.00856074970215559,
+                  -0.1738450676202774,
+                  -1.0327194929122925,
+                  -0.9186639189720154,
+                  0,
+                  -0.08130158483982086,
+                  -0.44180992245674133,
+                  0,
+                  0,
+                  -0.21474769711494446,
+                  0,
+                  0,
+                  -0.3908521831035614,
+                  0,
+                  0,
+                  -0.3908521831035614,
+                  0,
+                  -0.3908521831035614,
+                  -0.21474769711494446,
+                  -0.21474769711494446,
+                  0,
+                  0,
+                  -0.05392490699887276,
+                  -0.19379787147045135,
+                  -0.19379787147045135,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -0.37926411628723145,
+                  -0.37926411628723145,
+                  -0.37926411628723145,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.6411323037800919
+                ],
+                [
+                  -1.6919699907302856,
+                  -1.3583000898361206,
+                  0.23734615743160248,
+                  2.720036745071411,
+                  -1.2319042682647705,
+                  -0.1298491358757019,
+                  -2.0193052291870117,
+                  -0.1298491358757019,
+                  -0.1298491358757019,
+                  -0.1298491358757019,
+                  -0.1298491358757019,
+                  0.4134996235370636,
+                  0.9729212522506714,
+                  -1.2952721118927002,
+                  -1.2952721118927002,
+                  0,
+                  0,
+                  0,
+                  1.9355806112289429,
+                  5.942905426025391,
+                  3.7852110862731934,
+                  2.3530702590942383,
+                  3.068984270095825,
+                  5.057193756103516,
+                  1.9722615480422974,
+                  0.09118971228599548,
+                  -1.4337092638015747,
+                  -1.2803949117660522,
+                  -4.558440685272217,
+                  -0.14908385276794434,
+                  -0.2241259664297104,
+                  -0.14908385276794434,
+                  -0.36679312586784363,
+                  -0.36679312586784363,
+                  -0.2968643307685852,
+                  -0.5188295841217041,
+                  -0.5188295841217041,
+                  -1.017056941986084,
+                  -0.1840348243713379,
+                  -0.921393871307373,
+                  -1.47295343875885,
+                  -0.7195566892623901,
+                  -0.4517110586166382,
+                  -0.4517110586166382,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -0.6601321697235107,
+                  -3.076288938522339,
+                  -2.11055588722229,
+                  -0.7519046664237976,
+                  -0.03837636113166809,
+                  -0.2431575059890747,
+                  -0.24056605994701385,
+                  -0.6778809428215027,
+                  -0.4534219801425934,
+                  0,
+                  0,
+                  -1.2799338102340698,
+                  -0.6778809428215027,
+                  -0.6778809428215027,
+                  -1.0826263427734375,
+                  -0.5024028420448303,
+                  -0.5019357800483704,
+                  -0.5534265637397766,
+                  -0.4534219801425934,
+                  0,
+                  0,
+                  -0.6095040440559387,
+                  -0.35539916157722473,
+                  -0.35539916157722473,
+                  0,
+                  0,
+                  0,
+                  -0.2216675728559494,
+                  -0.2216675728559494,
+                  -0.2216675728559494,
+                  -0.5287783741950989,
+                  -0.5287783741950989,
+                  -0.5287783741950989,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -0.5177061810828603
+                ],
+                [
+                  0.9944241642951965,
+                  0.34655269980430603,
+                  -1.4179959297180176,
+                  0.0786837562918663,
+                  0,
+                  0,
+                  -0.10161930322647095,
+                  0,
+                  0,
+                  -0.17926032841205597,
+                  0,
+                  1.2192829847335815,
+                  0.9770009517669678,
+                  -1.2639081478118896,
+                  -1.2639081478118896,
+                  -0.17926032841205597,
+                  -0.17926032841205597,
+                  -0.17926032841205597,
+                  -1.6728436946868896,
+                  0,
+                  -2.58148455619812,
+                  1.087425708770752,
+                  0,
+                  0,
+                  -0.7232696413993835,
+                  -2.530940294265747,
+                  8.28727912902832,
+                  1.9176461696624756,
+                  1.355365514755249,
+                  1.9358142614364624,
+                  -1.287558913230896,
+                  1.9358142614364624,
+                  2.5291106700897217,
+                  0.3298012614250183,
+                  5.9841628074646,
+                  2.699361562728882,
+                  3.0638427734375,
+                  -0.7752744555473328,
+                  -0.24641725420951843,
+                  -0.3497408926486969,
+                  -0.6178332567214966,
+                  -0.30997925996780396,
+                  -0.09531351178884506,
+                  -0.09531351178884506,
+                  -0.03175150230526924,
+                  -0.03175150230526924,
+                  -1.2607277631759644,
+                  -0.03175150230526924,
+                  -0.6048442125320435,
+                  -0.1350751519203186,
+                  -1.8989368677139282,
+                  -0.6091212630271912,
+                  -0.17759931087493896,
+                  -0.743514895439148,
+                  -2.7813374996185303,
+                  -0.47000372409820557,
+                  -0.8151575922966003,
+                  -0.639235258102417,
+                  -0.31421610713005066,
+                  -0.31421610713005066,
+                  -0.6881952881813049,
+                  -0.7683100700378418,
+                  -0.7683100700378418,
+                  -0.6433494091033936,
+                  -0.22290579974651337,
+                  -0.8008720278739929,
+                  -3.2994682788848877,
+                  -2.108456611633301,
+                  -1.1982169151306152,
+                  -1.8278210163116455,
+                  -1.6273988485336304,
+                  -0.3112686574459076,
+                  -0.3112686574459076,
+                  -0.04723374545574188,
+                  -0.04723374545574188,
+                  -0.04723374545574188,
+                  -0.10243970900774002,
+                  -0.10243970900774002,
+                  -0.10243970900774002,
+                  -1.6433154344558716,
+                  -1.0400679111480713,
+                  -1.0400679111480713,
+                  -0.5130232572555542,
+                  -0.5130232572555542,
+                  -0.01589355245232582,
+                  -0.01589355245232582,
+                  -0.14906797572976313
+                ],
+                [
+                  0.0005641178577207029,
+                  -0.769889771938324,
+                  1.1016113758087158,
+                  -2.208198070526123,
+                  -0.3268382251262665,
+                  -0.07245589047670364,
+                  -0.37582966685295105,
+                  -0.07245589047670364,
+                  -0.07245589047670364,
+                  -0.07245589047670364,
+                  -0.07245589047670364,
+                  0.7202703952789307,
+                  0.42662227153778076,
+                  -0.5970531105995178,
+                  -0.5970531105995178,
+                  0,
+                  0,
+                  0,
+                  0.6345073580741882,
+                  -0.6646456122398376,
+                  -0.32289496064186096,
+                  -2.5235748291015625,
+                  0,
+                  0,
+                  0.8341853022575378,
+                  1.6437584161758423,
+                  -0.001263410784304142,
+                  -0.002075606258586049,
+                  -0.9285320043563843,
+                  0,
+                  -0.6749343872070312,
+                  0,
+                  -0.001263410784304142,
+                  -0.37963593006134033,
+                  0,
+                  -0.41747239232063293,
+                  -0.03299348056316376,
+                  1.1212948560714722,
+                  1.6006783246994019,
+                  2.126716375350952,
+                  4.9799370765686035,
+                  1.993913173675537,
+                  1.6232670545578003,
+                  1.6232670545578003,
+                  1.2289435863494873,
+                  1.2289435863494873,
+                  1.1520006656646729,
+                  1.2289435863494873,
+                  1.066733479499817,
+                  1.7523562908172607,
+                  -1.1276087760925293,
+                  -0.5053369998931885,
+                  -0.23354429006576538,
+                  -0.15621350705623627,
+                  -0.4990200996398926,
+                  -0.03902516886591911,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -0.03203855827450752,
+                  -0.03203855827450752,
+                  -0.03919049724936485,
+                  -0.03919049724936485,
+                  -0.03203855827450752,
+                  -0.043179452419281006,
+                  0,
+                  -0.043179452419281006,
+                  0,
+                  -0.11439846456050873,
+                  -0.11162546277046204,
+                  -0.11162546277046204,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -0.28874439001083374,
+                  -0.11439846456050873,
+                  -0.11439846456050873,
+                  -0.002075606258586049,
+                  -0.002075606258586049,
+                  -0.1130366399884224,
+                  -0.1130366399884224,
+                  0.6804252688429272
+                ],
+                [
+                  -1.1174259185791016,
+                  0.5122267007827759,
+                  1.2422401905059814,
+                  -0.2458004653453827,
+                  -1.011582612991333,
+                  -0.15732383728027344,
+                  -1.0979341268539429,
+                  -0.15732383728027344,
+                  -0.15732383728027344,
+                  -0.15732383728027344,
+                  -0.15732383728027344,
+                  -0.6691215634346008,
+                  -0.11539139598608017,
+                  0.5977157950401306,
+                  0.5977157950401306,
+                  0,
+                  0,
+                  0,
+                  -0.2551952600479126,
+                  -1.14295494556427,
+                  1.0698322057724,
+                  0.42000818252563477,
+                  -0.04962823539972305,
+                  -0.49491575360298157,
+                  -0.7774924635887146,
+                  1.4918160438537598,
+                  -0.181796133518219,
+                  -0.09770821034908295,
+                  0.5870679020881653,
+                  0,
+                  -0.7538653016090393,
+                  0,
+                  -0.181796133518219,
+                  -0.38254618644714355,
+                  0,
+                  -0.3869832456111908,
+                  -0.2247452288866043,
+                  1.755281925201416,
+                  -0.4478265345096588,
+                  -0.42187997698783875,
+                  -0.5233919024467468,
+                  -0.4507439434528351,
+                  -0.025989344343543053,
+                  -0.025989344343543053,
+                  -0.03177119791507721,
+                  -0.03177119791507721,
+                  -0.14863598346710205,
+                  -0.03177119791507721,
+                  -0.1277945637702942,
+                  -0.012523939833045006,
+                  9.139177322387695,
+                  4.4676971435546875,
+                  2.4495139122009277,
+                  2.22864031791687,
+                  -1.1139070987701416,
+                  -0.1562090814113617,
+                  -1.4272243976593018,
+                  -0.5791438221931458,
+                  -0.35854998230934143,
+                  -0.35854998230934143,
+                  -0.82061767578125,
+                  -1.2317062616348267,
+                  -1.2317062616348267,
+                  -1.4234428405761719,
+                  -1.1837564706802368,
+                  -0.5481858849525452,
+                  -0.25036028027534485,
+                  -0.13786913454532623,
+                  -0.08278258144855499,
+                  -0.01487298309803009,
+                  -0.010781265795230865,
+                  -1.4032129049301147,
+                  -1.4032129049301147,
+                  -0.10550877451896667,
+                  -0.10550877451896667,
+                  -0.10550877451896667,
+                  -0.5681885480880737,
+                  -0.5681885480880737,
+                  -0.5681885480880737,
+                  -0.08114192634820938,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -0.08114192634820938,
+                  -0.08114192634820938,
+                  -0.786016481823008
+                ],
+                [
+                  -0.37356045842170715,
+                  1.0084798336029053,
+                  -1.5169156789779663,
+                  -1.8031307458877563,
+                  0,
+                  0,
+                  1.2312402725219727,
+                  0,
+                  0,
+                  -0.003090025158599019,
+                  0,
+                  -1.075445532798767,
+                  -0.6064572334289551,
+                  0,
+                  0,
+                  -0.003090025158599019,
+                  -0.003090025158599019,
+                  -0.003090025158599019,
+                  -0.7553801536560059,
+                  -0.11037489771842957,
+                  -1.0595546960830688,
+                  0.04580467939376831,
+                  0,
+                  0,
+                  2.1060800552368164,
+                  2.453136682510376,
+                  0,
+                  -0.5943147540092468,
+                  -1.053117036819458,
+                  0,
+                  1.5905648469924927,
+                  0,
+                  0,
+                  0.596988320350647,
+                  -1.4715968370437622,
+                  0.86255943775177,
+                  -0.2910197377204895,
+                  -1.0581834316253662,
+                  0,
+                  -0.46590346097946167,
+                  -0.559842050075531,
+                  -0.06028296798467636,
+                  -0.06028296798467636,
+                  -0.06028296798467636,
+                  0,
+                  0,
+                  -0.30404847860336304,
+                  0,
+                  -0.5416786670684814,
+                  -0.46590346097946167,
+                  0,
+                  0,
+                  0,
+                  0,
+                  8.10406494140625,
+                  3.0383126735687256,
+                  0.7984616160392761,
+                  1.4106004238128662,
+                  1.9021433591842651,
+                  1.9021433591842651,
+                  -0.6403446793556213,
+                  -0.6413567066192627,
+                  -0.6413567066192627,
+                  -0.6317715644836426,
+                  -0.18921703100204468,
+                  -0.7304134368896484,
+                  -1.5620259046554565,
+                  -0.9731495976448059,
+                  -0.30404847860336304,
+                  -0.4902142584323883,
+                  -1.0595546960830688,
+                  0,
+                  0,
+                  -0.6426280736923218,
+                  -0.6426280736923218,
+                  -0.6426280736923218,
+                  0,
+                  0,
+                  0,
+                  -0.8908247351646423,
+                  -0.2746241092681885,
+                  -0.2746241092681885,
+                  -0.1445087194442749,
+                  -0.1445087194442749,
+                  -0.3296380043029785,
+                  -0.3296380043029785,
+                  0.15383286405926577
+                ],
+                [
+                  -0.1485416293144226,
+                  -0.3296864628791809,
+                  0.7991876006126404,
+                  0.1449781060218811,
+                  -0.4350857436656952,
+                  -0.3314245045185089,
+                  -0.03698260337114334,
+                  -0.3314245045185089,
+                  -0.3314245045185089,
+                  -0.384750634431839,
+                  -0.3314245045185089,
+                  -0.9469358325004578,
+                  -0.24470892548561096,
+                  -0.11476035416126251,
+                  -0.11476035416126251,
+                  -0.0013046832755208015,
+                  -0.0013046832755208015,
+                  -0.0013046832755208015,
+                  0.6135886907577515,
+                  -0.5727330446243286,
+                  -0.9368715882301331,
+                  0.2888997793197632,
+                  -0.6330901384353638,
+                  -0.7184457182884216,
+                  -0.05394729599356651,
+                  -0.3809996545314789,
+                  -0.1599847823381424,
+                  -1.1228657960891724,
+                  1.4957118034362793,
+                  0,
+                  -1.2398393154144287,
+                  0,
+                  -0.03803212568163872,
+                  -0.915820837020874,
+                  0,
+                  -0.27664557099342346,
+                  -0.27664557099342346,
+                  -1.3452939987182617,
+                  0,
+                  0,
+                  -0.12845291197299957,
+                  -0.12845291197299957,
+                  -0.12845291197299957,
+                  -0.12845291197299957,
+                  0,
+                  0,
+                  -0.4782961905002594,
+                  0,
+                  -0.043194521218538284,
+                  0,
+                  -1.245168685913086,
+                  -0.5232394933700562,
+                  -0.675811767578125,
+                  0,
+                  -0.3369424045085907,
+                  0,
+                  0.5790367722511292,
+                  -1.0983521938323975,
+                  -0.3369424045085907,
+                  -0.3369424045085907,
+                  3.4101991653442383,
+                  4.0930867195129395,
+                  4.0930867195129395,
+                  6.607911586761475,
+                  4.794904708862305,
+                  4.274495601654053,
+                  -1.6981216669082642,
+                  -1.4798225164413452,
+                  -0.4782961905002594,
+                  -0.7290066480636597,
+                  -0.27664557099342346,
+                  -1.8494175672531128,
+                  -1.8494175672531128,
+                  -0.5515942573547363,
+                  -0.5515942573547363,
+                  -0.5515942573547363,
+                  -1.3572827577590942,
+                  -1.3572827577590942,
+                  -1.3572827577590942,
+                  -0.23187094926834106,
+                  -0.16465671360492706,
+                  -0.16465671360492706,
+                  -0.043194521218538284,
+                  -0.043194521218538284,
+                  0,
+                  0,
+                  -0.35852926337752333
+                ],
+                [
+                  1.186975359916687,
+                  0.04341527819633484,
+                  -2.42976450920105,
+                  -1.4466181993484497,
+                  -0.005345422308892012,
+                  0,
+                  0.2954263687133789,
+                  0,
+                  0,
+                  -0.27316534519195557,
+                  0,
+                  0.7205989360809326,
+                  -0.7388110756874084,
+                  -0.4299089312553406,
+                  -0.4299089312553406,
+                  -0.27316534519195557,
+                  -0.27316534519195557,
+                  -0.27316534519195557,
+                  -1.588941216468811,
+                  -0.04060177877545357,
+                  2.0693843364715576,
+                  1.1485071182250977,
+                  -0.0018834612565115094,
+                  -0.01475453469902277,
+                  -0.975320041179657,
+                  -0.8955618739128113,
+                  -1.949295163154602,
+                  0.11819058656692505,
+                  0.5619309544563293,
+                  -0.6199446320533752,
+                  -0.5757983326911926,
+                  -0.6199446320533752,
+                  -0.26131778955459595,
+                  2.4931113719940186,
+                  -2.173234224319458,
+                  -0.2609001100063324,
+                  0.46915099024772644,
+                  -1.1765055656433105,
+                  -0.03716036677360535,
+                  0,
+                  -0.03716036677360535,
+                  0,
+                  0,
+                  0,
+                  -0.03716036677360535,
+                  -0.03716036677360535,
+                  2.194488763809204,
+                  -0.03716036677360535,
+                  -0.8947033286094666,
+                  0,
+                  -0.0873527079820633,
+                  0,
+                  0,
+                  -0.0873527079820633,
+                  -1.6610673666000366,
+                  -0.3481113612651825,
+                  -1.1511445045471191,
+                  1.7314683198928833,
+                  -0.32540711760520935,
+                  -0.32540711760520935,
+                  -0.07232551276683807,
+                  -0.044342439621686935,
+                  -0.044342439621686935,
+                  -0.07232551276683807,
+                  0,
+                  -0.1277599334716797,
+                  7.1897292137146,
+                  5.632965087890625,
+                  2.244034767150879,
+                  3.523845672607422,
+                  2.268826484680176,
+                  -1.0786725282669067,
+                  -1.0786725282669067,
+                  -0.6858519315719604,
+                  -0.6858519315719604,
+                  -0.6858519315719604,
+                  -0.47086766362190247,
+                  -0.47086766362190247,
+                  -0.47086766362190247,
+                  -1.9898511171340942,
+                  -1.1224358081817627,
+                  -1.1224358081817627,
+                  -0.4049317240715027,
+                  -0.4049317240715027,
+                  -0.25876542925834656,
+                  -0.25876542925834656,
+                  -0.3080309581158314
+                ],
+                [
+                  0.5348393321037292,
+                  -0.528073787689209,
+                  0.9147999882698059,
+                  -1.5300638675689697,
+                  -0.9568600058555603,
+                  -0.08583720773458481,
+                  -1.2564009428024292,
+                  -0.08583720773458481,
+                  -0.08583720773458481,
+                  -0.13519293069839478,
+                  -0.08583720773458481,
+                  -1.789650321006775,
+                  -0.05064540356397629,
+                  1.1535015106201172,
+                  1.1535015106201172,
+                  -0.006437120959162712,
+                  -0.006437120959162712,
+                  -0.006437120959162712,
+                  1.212816834449768,
+                  -1.037192702293396,
+                  -2.048274278640747,
+                  -0.407829225063324,
+                  -0.39582109451293945,
+                  -0.8547136187553406,
+                  -0.4462680518627167,
+                  -0.8209972381591797,
+                  -2.6474180221557617,
+                  -1.3127667903900146,
+                  3.0810065269470215,
+                  -0.8637949824333191,
+                  1.1469568014144897,
+                  -0.8637949824333191,
+                  -0.706143856048584,
+                  -1.0653373003005981,
+                  -0.013558036647737026,
+                  -0.013558036647737026,
+                  -0.013558036647737026,
+                  1.0700786113739014,
+                  -0.08661112934350967,
+                  -0.08661112934350967,
+                  -0.4564463794231415,
+                  -0.4564463794231415,
+                  -0.33514678478240967,
+                  -0.33514678478240967,
+                  0,
+                  0,
+                  -0.5417496562004089,
+                  0,
+                  -0.6981022357940674,
+                  0,
+                  -2.5734057426452637,
+                  -0.38196706771850586,
+                  -1.432754397392273,
+                  -0.46821361780166626,
+                  -0.9162657856941223,
+                  0,
+                  1.3140661716461182,
+                  -0.9162657856941223,
+                  -0.9162657856941223,
+                  -0.9162657856941223,
+                  -0.7367533445358276,
+                  -1.292344093322754,
+                  -1.292344093322754,
+                  -1.284881591796875,
+                  -1.284881591796875,
+                  -0.426548570394516,
+                  -0.5417496562004089,
+                  -0.23148034512996674,
+                  -0.5417496562004089,
+                  -0.23148034512996674,
+                  -0.11387912929058075,
+                  5.741860389709473,
+                  5.741860389709473,
+                  3.2589190006256104,
+                  3.2589190006256104,
+                  3.2589190006256104,
+                  3.9281227588653564,
+                  3.9281227588653564,
+                  3.9281227588653564,
+                  -1.210045576095581,
+                  -0.3167095184326172,
+                  -0.3167095184326172,
+                  -0.15116943418979645,
+                  -0.15116943418979645,
+                  -0.4146595597267151,
+                  -0.4146595597267151,
+                  -1.210706149624124
+                ],
+                [
+                  -0.022918708622455597,
+                  0.3014356791973114,
+                  -1.0352803468704224,
+                  -1.219803810119629,
+                  -0.18860891461372375,
+                  -0.1588398665189743,
+                  1.238892912864685,
+                  -0.1588398665189743,
+                  -0.1588398665189743,
+                  -0.554214596748352,
+                  -0.1588398665189743,
+                  -0.45814287662506104,
+                  -0.19897185266017914,
+                  -0.046740710735321045,
+                  -0.046740710735321045,
+                  -0.2762448489665985,
+                  -0.2762448489665985,
+                  -0.2762448489665985,
+                  -0.4461745321750641,
+                  -0.2642652988433838,
+                  0.6504501700401306,
+                  0.16147935390472412,
+                  -0.117833711206913,
+                  -0.22364702820777893,
+                  0.3566584885120392,
+                  -0.4277946352958679,
+                  -0.7151409983634949,
+                  2.0407941341400146,
+                  -1.0263066291809082,
+                  -0.19272206723690033,
+                  0.7142577767372131,
+                  -0.19272206723690033,
+                  -0.00688445707783103,
+                  -0.020660806447267532,
+                  -0.5090652108192444,
+                  -1.2178254127502441,
+                  -1.1954257488250732,
+                  0.6997699737548828,
+                  -0.5550980567932129,
+                  0,
+                  -0.5550980567932129,
+                  0,
+                  0,
+                  0,
+                  -0.5550980567932129,
+                  -0.5550980567932129,
+                  -0.5550980567932129,
+                  -0.5550980567932129,
+                  2.2968499660491943,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -1.0826894044876099,
+                  -0.697928249835968,
+                  -0.2434554547071457,
+                  -0.5988097786903381,
+                  0,
+                  0,
+                  -0.17281152307987213,
+                  0,
+                  0,
+                  -0.17281152307987213,
+                  0,
+                  -0.17281152307987213,
+                  -0.8682497143745422,
+                  -0.5988097786903381,
+                  0,
+                  0,
+                  0.998559296131134,
+                  0,
+                  0,
+                  -0.2434554547071457,
+                  -0.2434554547071457,
+                  -0.2434554547071457,
+                  0,
+                  0,
+                  0,
+                  6.031965255737305,
+                  3.0647695064544678,
+                  3.0647695064544678,
+                  1.3373117446899414,
+                  1.3373117446899414,
+                  1.637221336364746,
+                  1.637221336364746,
+                  -0.12533084678077233
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "en",
+        "What are the school hours?"
+      ],
+      [
+        "en",
+        "When does the school day start and end?"
+      ],
+      [
+        "en",
+        "Can you tell me the school hours?"
+      ],
+      [
+        "en",
+        "What time does school begin and finish?"
+      ],
+      [
+        "en",
+        "What is the address of Salesianum School?"
+      ],
+      [
+        "en",
+        "Where is Salesianum School located?"
+      ],
+      [
+        "en",
+        "Can you provide the address for Salesianum School?"
+      ],
+      [
+        "en",
+        "What is the location of Salesianum School?"
+      ],
+      [
+        "en",
+        "What sports are offered at Salesianum School?"
+      ],
+      [
+        "en",
+        "Which sports can students play at Salesianum?"
+      ],
+      [
+        "en",
+        "Can you list the sports available at Salesianum?"
+      ],
+      [
+        "en",
+        "What athletic programs does Salesianum have?"
+      ],
+      [
+        "en",
+        "How can I contact the admissions office?"
+      ],
+      [
+        "en",
+        "What is the phone number for the admissions office?"
+      ],
+      [
+        "en",
+        "How do I get in touch with admissions?"
+      ],
+      [
+        "en",
+        "Can you provide the contact details for admissions?"
+      ],
+      [
+        "en",
+        "What is the tuition fee for Salesianum School?"
+      ],
+      [
+        "en",
+        "How much is the tuition at Salesianum School?"
+      ],
+      [
+        "en",
+        "Can you tell me the cost of tuition at Salesianum?"
+      ],
+      [
+        "en",
+        "What are the tuition fees at Salesianum School?"
+      ],
+      [
+        "en",
+        "What programs are available for advanced students?"
+      ],
+      [
+        "en",
+        "What advanced courses does Salesianum provide?"
+      ],
+      [
+        "en",
+        "Does Salesianum have programs for advanced students?"
+      ],
+      [
+        "en",
+        "Are there any advanced learning options at Salesianum?"
+      ],
+      [
+        "en",
+        "Is there a dress code at Salesianum School?"
+      ],
+      [
+        "en",
+        "What is the uniform policy at Salesianum School?"
+      ],
+      [
+        "en",
+        "Does Salesianum School require a uniform?"
+      ],
+      [
+        "en",
+        "What are the dress code requirements at Salesianum?"
+      ],
+      [
+        "en",
+        "Does Salesianum School offer any extracurricular activities?"
+      ],
+      [
+        "en",
+        "What extracurriculars can students participate in at Salesianum?"
+      ],
+      [
+        "en",
+        "What after-school activities are available at Salesianum?"
+      ],
+      [
+        "en",
+        "What kind of extracurricular programs does Salesianum have?"
+      ],
+      [
+        "en",
+        "What is the student-to-teacher ratio at Salesianum School?"
+      ],
+      [
+        "en",
+        "How many students are there per teacher at Salesianum?"
+      ],
+      [
+        "en",
+        "What is the average class size at Salesianum School?"
+      ],
+      [
+        "en",
+        "Can you tell me the student-to-teacher ratio at Salesianum?"
+      ],
+      [
+        "en",
+        "What kind of college counseling services are provided?"
+      ],
+      [
+        "en",
+        "Does Salesianum offer help with college applications?"
+      ],
+      [
+        "en",
+        "How does Salesianum support students with college planning?"
+      ],
+      [
+        "en",
+        "What college counseling services does Salesianum School offer?"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {}
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {
+      "en": {
+        "0": [
+          {
+            "answer": "Salesianum School operates from 8:00 AM to 3:00 PM, Monday through Friday."
+          },
+          {
+            "answer": "School hours at Salesianum School are from 8:00 AM to 3:00 PM on weekdays."
+          },
+          {
+            "answer": "Salesianum runs from 8:00 AM to 3:00 PM, Monday to Friday."
+          },
+          {
+            "answer": "The school day at Salesianum is from 8:00 AM to 3:00 PM, Monday through Friday."
+          }
+        ],
+        "1": [
+          {
+            "answer": "The address of Salesianum School is 1801 N Broom St, Wilmington, DE 19802."
+          },
+          {
+            "answer": "Salesianum School is located at 1801 N Broom St, Wilmington, DE 19802."
+          },
+          {
+            "answer": "Salesianum School is at 1801 N Broom St, Wilmington, DE 19802."
+          },
+          {
+            "answer": "You can find Salesianum School at 1801 N Broom St, Wilmington, DE 19802."
+          }
+        ],
+        "2": [
+          {
+            "answer": "Salesianum School offers a variety of sports including football, basketball, soccer, swimming, and lacrosse."
+          },
+          {
+            "answer": "Students can participate in sports such as football, basketball, soccer, swimming, and lacrosse at Salesianum School."
+          },
+          {
+            "answer": "Sports available at Salesianum School include football, basketball, soccer, swimming, and lacrosse."
+          },
+          {
+            "answer": "Salesianum School provides athletic programs in football, basketball, soccer, swimming, and lacrosse."
+          }
+        ],
+        "3": [
+          {
+            "answer": "You can contact the admissions office at Salesianum School by calling (302) 654-2495 or emailing admissions@salesianum.org."
+          },
+          {
+            "answer": "Contact the Salesianum School admissions office at (302) 654-2495 or admissions@salesianum.org."
+          },
+          {
+            "answer": "To reach the Salesianum School admissions office, call (302) 654-2495 or email admissions@salesianum.org."
+          },
+          {
+            "answer": "You can contact Salesianum School admissions at (302) 654-2495 or admissions@salesianum.org."
+          }
+        ],
+        "4": [
+          {
+            "answer": "The tuition fee for Salesianum School for the 2023-2024 academic year is $18,500."
+          },
+          {
+            "answer": "Tuition for Salesianum School for 2023-2024 is $18,500."
+          },
+          {
+            "answer": "The cost of tuition at Salesianum School for the 2023-2024 year is $18,500."
+          },
+          {
+            "answer": "Tuition fees for Salesianum School for 2023-2024 are $18,500."
+          }
+        ],
+        "5": [
+          {
+            "answer": "Salesianum School offers advanced programs including Advanced Placement (AP) courses, honors classes, and dual enrollment opportunities."
+          },
+          {
+            "answer": "Advanced courses at Salesianum School include AP courses, honors classes, and dual enrollment."
+          },
+          {
+            "answer": "Salesianum School provides advanced programs like AP courses, honors classes, and dual enrollment."
+          },
+          {
+            "answer": "Salesianum School offers advanced learning options such as AP courses, honors classes, and dual enrollment."
+          }
+        ],
+        "6": [
+          {
+            "answer": "Yes, Salesianum School has a dress code that includes wearing a uniform consisting of khaki pants and a Salesianum polo shirt or sweater."
+          },
+          {
+            "answer": "The uniform policy at Salesianum School requires khaki pants and a Salesianum polo shirt or sweater."
+          },
+          {
+            "answer": "Students at Salesianum School must wear a uniform of khaki pants and a Salesianum polo shirt or sweater."
+          },
+          {
+            "answer": "Salesianum School's dress code requires students to wear khaki pants and a Salesianum polo shirt or sweater."
+          }
+        ],
+        "7": [
+          {
+            "answer": "Salesianum School offers a wide range of extracurricular activities, including clubs, student government, and community service opportunities."
+          },
+          {
+            "answer": "Students at Salesianum School can join various clubs, student government, and engage in community service."
+          },
+          {
+            "answer": "After-school activities at Salesianum School include clubs, student government, and community service."
+          },
+          {
+            "answer": "Salesianum School has extracurricular programs like clubs, student government, and community service opportunities."
+          }
+        ],
+        "8": [
+          {
+            "answer": "The student-to-teacher ratio at Salesianum School is approximately 12:1."
+          },
+          {
+            "answer": "At Salesianum School, the student-to-teacher ratio is around 12:1."
+          },
+          {
+            "answer": "Salesianum School has an average class size with a student-to-teacher ratio of 12:1."
+          },
+          {
+            "answer": "The student-to-teacher ratio at Salesianum School is about 12:1."
+          }
+        ],
+        "9": [
+          {
+            "answer": "Salesianum School provides comprehensive college counseling services including college planning, application assistance, and financial aid guidance."
+          },
+          {
+            "answer": "Salesianum School offers help with college applications, planning, and financial aid through its counseling services."
+          },
+          {
+            "answer": "Salesianum School supports students with college planning, application assistance, and financial aid guidance through its counseling services."
+          },
+          {
+            "answer": "Salesianum School offers college counseling services like planning, application help, and financial aid guidance."
+          }
+        ],
+        "None": [
+          {
+            "answer": "Sorry, I don't understand."
+          },
+          {
+            "answer": "I don't know the answer to that."
+          },
+          {
+            "answer": "Sorry, I'm not sure. Maybe try rephrasing your question."
+          }
+        ]
+      }
+    }
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {}
+}

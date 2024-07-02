@@ -1,8 +1,8 @@
 {
   "useHTTPS": true,
   "HTTPS": {
-    "cert": "./ssl/fullchain.pem",
-    "key": "./ssl/key.pem"
+    "cert": "../../../node/ssl/fullchain.pem",
+    "key": "../../../node/ssl/key.pem"
   },
   "port": 9443,
   "reloadInterval": 30,
