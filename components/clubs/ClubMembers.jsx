@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
 import Member from "./Member";
-import { getUserAttributes } from "../../lib/firebase";
+import { getUserAttributes } from "../../lib/useFirebase";
 
 const ClubMembers = ({ members, moderators }) => {
   const [loading, setLoading] = useState(true);
