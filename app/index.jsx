@@ -14,7 +14,7 @@ const Onboarding = () => {
 /*if (1==1) {
   router.push("/(tabs)/home");
 }*/
-const {loading, isLogged, isVerified} = useGlobalContext();
+const {loading, isLogged, isVerified, orgId} = useGlobalContext();
 /*console.log("Loading: ",loading);
 console.log("Logged In: ",isLogged);
 console.log("Verified: ",isVerified);/*
@@ -25,11 +25,14 @@ console.log(loading);
 console.log(isVerified);
 console.log(isLogged);*/
 
-if (!loading && isLogged && isVerified){
+if (!loading && isLogged && isVerified && orgId){
   return <Redirect href={"/(tabs)/home"}/>
 
 } else {
-
+  /*if (!loading && isLogged && isVerified && !orgId) {
+    return <Redirect href={"/(auth)/accountSetUp/schoolsIndex"}/>
+  }
+*/
 }
 
   return (

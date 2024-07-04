@@ -90,7 +90,7 @@ const Register = () => {
                 const stuff = await signUpWithEmail(form.email,form.password);
                 console.log(stuff);
                 if (stuff) {
-                  router.push("/(auth)/needsEmail")
+                  router.push("/(auth)/verifyEmail")
                 }
 
 

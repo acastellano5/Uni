@@ -24,9 +24,6 @@ const pickImage = async () => {
 };
 
 const create = () => {
-followUser(
-"a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6",
-'20030049')
   const [image, setImage] = useState(null);
 
   const [form, setForm] = useState({

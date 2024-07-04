@@ -82,15 +82,22 @@ const LogIn = () => {
                 const stuff = await loginWithEmail(form.email,form.password);
                 console.log(stuff,"is the Resuly");
                 if (stuff=="nV") {
-                  router.push("/(auth)/needsEmail")
-
+                  router.push("/(auth)/verifyEmail")
                 }
                 else{
-                  if (!stuff) {
-                    
-                  } else {
-                    router.push("/(tabs)/home")
+                  if (stuff=="Setup") {
+                    router.push("./accountSetUp/")
                   }
+
+                  else{
+                    if (stuff=="NoOrgs") {
+                      router.push("./accountSetUp/schoolsIndex")
+                    }
+                    else{
+                      router.push('../(tabs)/home')
+                    }
+                  }
+
                 }
                 
 

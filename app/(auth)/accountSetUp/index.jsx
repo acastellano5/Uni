@@ -5,10 +5,12 @@ import PersonalInfo from "../../../components/accountSetUp/PersonalInfo";
 import ProfilePic from "../../../components/accountSetUp/ProfilePic";
 import Interests from "../../../components/accountSetUp/Interests";
 import { useRouter } from "expo-router";
+import { finishSignUp } from "../../../lib/useFirebase";
 
 const AccountSetUp = () => {
   const [currentPage, setCurrentPage] = useState("Personal Info");
   const router = useRouter();
+
 
   const displayContent = () => {
     switch (currentPage) {
@@ -28,8 +30,16 @@ const AccountSetUp = () => {
       case "Interests":
         return (
           <Interests
-            handleNextPress={() => router.push("./accountSetUp/schoolsIndex")}
-            handleSkipPress={() => router.push("./accountSetUp/schoolsIndex")}
+            handleNextPress={() =>
+               {
+                finishSignUp()
+              router.push("/accountSetUp/schoolsIndex")
+            }}
+            handleSkipPress={() =>
+               {
+                finishSignUp()
+              router.push("/accountSetUp/schoolsIndex")
+            }}
           />
         );
 
