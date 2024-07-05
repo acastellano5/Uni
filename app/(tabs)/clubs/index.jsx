@@ -152,14 +152,18 @@ export default function Clubs() {
                 />
               )}
               {!isSearchResult ? (
-                Object.keys(clubs).map((category) =>
-                  clubs[category].length > 0 ? (
-                    <ClubSection
-                      key={category}
-                      category={category}
-                      clubs={clubs[category]}
-                    />
-                  ) : null
+                Object.keys(clubs).length > 0 && Object.values(clubs).every(arr => arr.length === 0) ? (
+                  <Text style={styles.noResultsText}>No clubs found.</Text>
+                ) : (
+                  Object.keys(clubs).map((category) =>
+                    clubs[category].length > 0 ? (
+                      <ClubSection
+                        key={category}
+                        category={category}
+                        clubs={clubs[category]}
+                      />
+                    ) : null
+                  )
                 )
               ) : searchResults.length > 0 ? (
                 <>
