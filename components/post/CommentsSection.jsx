@@ -21,7 +21,7 @@ const Comment = ({ name, onRequestClose }) => {
           onRequestClose();
           router.push({
             pathname: "/profile/profileShow",
-            params: { uid: "a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6" },
+            params: { uid: "13eb8f6e-f9f2-431f-a263-e5e55f86f9bb" },
           });
         }}
       >
@@ -40,7 +40,7 @@ const Comment = ({ name, onRequestClose }) => {
               onRequestClose();
               router.push({
                 pathname: "/profile/profileShow",
-                params: { uid: "a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6" },
+                params: { uid: "13eb8f6e-f9f2-431f-a263-e5e55f86f9bb" },
               });
             }}
           >
@@ -83,21 +83,21 @@ const CommentsSection = ({
 
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View className="w-11/12 mx-auto pt-5">
-            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
+            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
 
-            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
+            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
 
-            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
+            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
 
-            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
+            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
 
-            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
+            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
 
-            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
+            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
 
-            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
+            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
 
-            <Comment name="Jerry Smith" onRequestClose={onRequestClose} />
+            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
           </View>
         </ScrollView>
       </View>

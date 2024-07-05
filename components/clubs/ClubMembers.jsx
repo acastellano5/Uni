@@ -45,11 +45,11 @@ const ClubMembers = ({ members, moderators }) => {
       ) : (
         <View className="flex-row flex-wrap">
           {fetchedModerators.map((moderator, index) => (
-            <Member key={index} role="Moderator" name={`${moderator.firstName} ${moderator.lastName}`} profileImg={ProfilePic} uid={moderator.uid} />
+            <Member key={index} role="Moderator" name={`${moderator.fullName}`} profileImg={ProfilePic} uid={moderator.id} />
           ))}
 
           {fetchedMembers.map((member, index) => (
-            <Member key={index} role="Member" name={`${member.firstName} ${member.lastName}`} profileImg={ProfilePic} uid={member.uid} />
+            <Member key={index} role="Member" name={`${member.fullName}`} profileImg={ProfilePic} uid={member.id} />
           ))}
         </View>
       )}

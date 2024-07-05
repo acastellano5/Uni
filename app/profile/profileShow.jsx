@@ -58,8 +58,10 @@ const ProfileShow = () => {
                 style={styles.profilePic}
                 className="mb-2"
               />
-              <Text className="text-lg font-medium mb-2">{`${user.firstName} ${user.lastName}`}</Text>
+              {/* for passing in fullName */}
+              {/* <Text className="text-lg font-medium mb-2">{`${user.fullName}`}</Text> */}
 
+              <Text className="text-lg font-medium mb-2">Derek Jeter</Text>
               <View className="flex-row w-2/3 mx-auto">
                 <CustomButton
                   title="Follow"
@@ -79,13 +81,20 @@ const ProfileShow = () => {
             <View className="bg-white w-11/12 mx-auto mt-5 px-3 py-2 rounded-lg mb-10">
               <Text className="text-lg font-medium mb-1">Bio</Text>
               <View className="bg-lightGreen mb-3 rounded-lg">
-                <Text className="text-[#5e5e5e] p-2">
+                {/* for passing in bio */}
+                {/* <Text className="text-[#5e5e5e] p-2">
                   {user.bio ? user.bio : "No bio."}
+                </Text> */}
+                <Text className="text-[#5e5e5e] p-2">
+                  No bio.
                 </Text>
               </View>
 
               {/* interests section */}
-              <InfoBox title="Interests" info={user.interests} />
+              {/* for passing in interests */}
+              {/* <InfoBox title="Interests" info={user.interests} /> */}
+
+              <InfoBox title="Interests" info={["hockey"]} />
 
               {/* groups section */}
               {/* <InfoBox title="Groups" info={user.orgs[0].groups}/> */}

@@ -16,7 +16,7 @@ const PostContent = () => {
             onPress={() => {
               router.push({
                 pathname: "/profile/profileShow",
-                params: { uid: "a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6" },
+                params: { uid: "c41be759-c7e3-4cc2-9751-1fe80f63bb24" },
               });
             }}
           >
@@ -29,11 +29,11 @@ const PostContent = () => {
             onPress={() => {
               router.push({
                 pathname: "/profile/profileShow",
-                params: { uid: "a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6" },
+                params: { uid: "c41be759-c7e3-4cc2-9751-1fe80f63bb24" },
               });
             }}
           >
-            <Text>Jerry Smith</Text>
+            <Text>Derek Jeter</Text>
             <Text>Class of 2024</Text>
           </TouchableOpacity>
         </View>
