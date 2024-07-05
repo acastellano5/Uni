@@ -14,7 +14,7 @@ import TabsDisplay from "../../../components/TabsDisplay";
 import ClubInfo from "../../../components/clubs/ClubInfo";
 import ClubMembers from "../../../components/clubs/ClubMembers";
 import BackHeader from "../../../components/BackHeader";
-import { getGroupById } from "../../../lib/useFirebase";
+import { getGroupById, joinGroup } from "../../../lib/useFirebase";
 import { useGlobalContext } from "../../../context/globalProvider";
 
 const tabs = ["Info", "Members"];
@@ -98,6 +98,9 @@ const ClubHome = () => {
             </View>
 
             <TouchableOpacity
+            onPress={()=>{
+              joinGroup(orgId,id)
+            }}
               className="bg-white py-2 px-4 rounded"
               activeOpacity={0.8}
             >

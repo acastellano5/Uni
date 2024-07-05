@@ -7,7 +7,7 @@ import CustomButton from "../../components/CustomButton";
 import { useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { runSeed, seedDatabase, seedGroups } from "../../lib/seed";
-import { createEvent, followUser, getEventById, getGroupByCategory, getGroupById, getUserByGroup } from "../../lib/useFirebase";
+import { createEvent, followUser, getEventById, getGroupByCategory, getGroupById, getUserByGroup, isUserInGroup } from "../../lib/useFirebase";
 const pickImage = async () => {
   // No permissions request is necessary for launching the image library
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -24,7 +24,8 @@ const pickImage = async () => {
 };
 
 const create = () => {
-  runSeed()
+  isUserInGroup("9d205ffe-b387-4753-8dab-3a36c2d3d562",20030049)
+  //runSeed()
   //createEvent("group", 20030049,"Plants", "Salesianum", '2023-06-10','2023-06-11',["8d9631b8-9a71-492e-a89e-aaa6aa684db5"],"8d9631b8-9a71-492e-a89e-aaa6aa684db5","Planting Trees")
   //getEventById("f0677ddd-050c-4443-90cd-42b7853ed90d",20030049)
   const [image, setImage] = useState(null);
