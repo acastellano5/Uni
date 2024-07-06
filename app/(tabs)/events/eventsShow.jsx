@@ -37,7 +37,6 @@ const eventsShow = () => {
       const event = await getEventById(eventId, orgId);
       setEvent(event);
       setLoading(false); // set loading to false after data is fetched
-      console.log(event);
     };
 
     fetchEvent();
@@ -52,7 +51,7 @@ const eventsShow = () => {
         return <EventInfo event={event} />;
 
       case "Attending":
-        return <Attending />;
+        return <Attending attendees={event.attendees}/>;
 
       default:
         return null;
