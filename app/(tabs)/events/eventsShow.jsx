@@ -5,6 +5,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,7 +21,6 @@ import { useGlobalContext } from "../../../context/globalProvider";
 const tabs = ["Info", "Attending"];
 
 const eventsShow = () => {
-
   // get orgId from global context
   const { orgId } = useGlobalContext();
 
@@ -29,17 +29,19 @@ const eventsShow = () => {
   const { eventId, author } = params;
 
   // fetch event by id
-  const [ event, setEvent ] = useState({})
+  const [event, setEvent] = useState({});
+  const [loading, setLoading] = useState(true); // loader state
 
   useEffect(() => {
     const fetchEvent = async () => {
-      const event = await getEventById(eventId, orgId)
-      setEvent(event)
-      console.log(event)
-    }
+      const event = await getEventById(eventId, orgId);
+      setEvent(event);
+      setLoading(false); // set loading to false after data is fetched
+      console.log(event);
+    };
 
-    fetchEvent()
-  }, [])
+    fetchEvent();
+  }, []);
 
   // setting tabs state
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -47,7 +49,7 @@ const eventsShow = () => {
   const displayTabContent = () => {
     switch (activeTab) {
       case "Info":
-        return <EventInfo event={event}/>;
+        return <EventInfo event={event} />;
 
       case "Attending":
         return <Attending />;
@@ -56,6 +58,16 @@ const eventsShow = () => {
         return null;
     }
   };
+
+  if (loading) {
+    // display loader while fetching data
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#22c55e" />
+      </View>
+    );
+  }
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} className="bg-white">
       {/* club background image */}
@@ -87,7 +99,6 @@ const eventsShow = () => {
       {/* club info */}
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-11 bottom-10">
         {/* info and member tabs */}
-
         <TabsDisplay
           tabs={tabs}
           activeTab={activeTab}
@@ -107,6 +118,11 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0,0,0,0.2)",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
