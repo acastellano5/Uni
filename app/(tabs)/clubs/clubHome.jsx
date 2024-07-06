@@ -159,7 +159,7 @@ const ClubHome = () => {
               activeOpacity={0.8}
             >
               <Text className="text-primary text-lg font-semibold">
-                {isInGroup ? "Joined" : "Join"}
+                {isInGroup ? "Leave" : "Join"}
               </Text>
             </TouchableOpacity>
           </View>
