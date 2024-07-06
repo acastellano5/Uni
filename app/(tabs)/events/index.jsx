@@ -1,10 +1,10 @@
 import { View, Text, SafeAreaView, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "../../../components/events/Calendar";
 import Header from "../../../components/Header";
 import TabsDisplay from "../../../components/TabsDisplay";
 
-const tabs = ["Your Events", "School"];
+const tabs = ["Your Events", "Community"];
 
 const EventsPage = () => {
   // setting tabs state
@@ -14,10 +14,10 @@ const EventsPage = () => {
   const displayTabContent = () => {
     switch (activeTab) {
       case "Your Events":
-        return <Calendar />;
+        return <Calendar tab="Your Events"/>;
 
-      case "School":
-        return <Calendar />;
+      case "Community":
+        return <Calendar tab="Community"/>;
 
       default:
         return null;

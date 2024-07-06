@@ -2,12 +2,12 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import EventIcon from "../../components/events/EventIcon";
 
-const EventInfo = () => {
+const EventInfo = ({ event }) => {
   return (
     <View className="bg-white w-11/12 mx-auto rounded-lg px-3 py-2">
       {/* event title */}
       <Text className="text-lg font-semibold mb-2 text-primary">
-        Saint Marks v. Sallies
+        {event.name}
       </Text>
 
       {/* event date and time */}

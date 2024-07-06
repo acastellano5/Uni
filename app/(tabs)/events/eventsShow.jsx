@@ -6,24 +6,48 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import background from "../../../assets/images/soccerbg.png";
 import TabsDisplay from "../../../components/TabsDisplay";
 import EventInfo from "../../../components/events/EventInfo";
 import BackHeader from "../../../components/BackHeader";
 import Attending from "../../../components/events/Attending";
+import { useLocalSearchParams } from "expo-router";
+import { getEventById } from "../../../lib/useFirebase";
+import { useGlobalContext } from "../../../context/globalProvider";
 
 const tabs = ["Info", "Attending"];
 
 const eventsShow = () => {
+
+  // get orgId from global context
+  const { orgId } = useGlobalContext();
+
+  // retrieve params from request
+  const params = useLocalSearchParams();
+  const { eventId, author } = params;
+
+  // fetch event by id
+  const [ event, setEvent ] = useState({})
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      const event = await getEventById(eventId, orgId)
+      setEvent(event)
+      console.log(event)
+    }
+
+    fetchEvent()
+  }, [])
+
   // setting tabs state
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   const displayTabContent = () => {
     switch (activeTab) {
       case "Info":
-        return <EventInfo />;
+        return <EventInfo event={event}/>;
 
       case "Attending":
         return <Attending />;
@@ -43,7 +67,7 @@ const eventsShow = () => {
           {/* group name and attend button */}
           <View className="flex-row justify-between items-center">
             <View className="bg-tertiary py-2 px-4 rounded">
-              <Text className="text-white text-lg font-semibold">Soccer</Text>
+              <Text className="text-white text-lg font-semibold">{author}</Text>
             </View>
 
             <TouchableOpacity
@@ -63,11 +87,6 @@ const eventsShow = () => {
       {/* club info */}
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-11 bottom-10">
         {/* info and member tabs */}
-
-        {/* <View className="flex flex-row w-10/12 bg-white mx-auto rounded-lg p-2">
-            <CustomButton title="Info" containerStyles="bg-black" textStyles="text-base text-white font-semibold w-3/6 text-center"/>
-            <CustomButton title="Members" containerStyles="bg-white" textStyles="text-base text-tertiary font-semibold w-3/6 text-center"/>
-          </View> */}
 
         <TabsDisplay
           tabs={tabs}
