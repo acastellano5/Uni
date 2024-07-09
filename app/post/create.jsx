@@ -28,7 +28,6 @@ const create = () => {
   //createEvent("group", 20030049,"Plants", "Salesianum", '2023-06-10','2023-06-11',["8d9631b8-9a71-492e-a89e-aaa6aa684db5"],"8d9631b8-9a71-492e-a89e-aaa6aa684db5","Planting Trees")
   //getEventById("f0677ddd-050c-4443-90cd-42b7853ed90d",20030049)
   const [image, setImage] = useState(null);
-  deleteComment("22bc2b38-de15-4c7c-b0ad-cfdae06dd63e",'2d13d183-3ceb-4246-a52d-c1a532728113')
   const [form, setForm] = useState({
     caption: "",
     postUrl: "",
