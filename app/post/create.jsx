@@ -4,10 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { runSeed, seedDatabase, seedGroups } from "../../lib/seed";
 import { createComment, createEvent, createPost, createUserPost, deleteComment, followUser, getEventById, getGroupByCategory, getGroupById, getUserByGroup, isUserInGroup } from "../../lib/useFirebase";
+import { useGlobalContext } from "../../context/globalProvider";
 const pickImage = async () => {
   // No permissions request is necessary for launching the image library
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -27,11 +28,18 @@ const create = () => {
   //runSeed()
   //createEvent("group", 20030049,"Plants", "Salesianum", '2023-06-10','2023-06-11',["8d9631b8-9a71-492e-a89e-aaa6aa684db5"],"8d9631b8-9a71-492e-a89e-aaa6aa684db5","Planting Trees")
   //getEventById("f0677ddd-050c-4443-90cd-42b7853ed90d",20030049)
+
+  // getting orgId from global context
+  const { orgId } = useGlobalContext();
   const [image, setImage] = useState(null);
   const [form, setForm] = useState({
     caption: "",
-    postUrl: "",
+    postUrl: "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
   });
+
+  useEffect(() => {
+    console.log(form)
+  }, [form])
   return (
     <SafeAreaView className="h-full bg-secondary">
       <BackHeader containerStyles="w-11/12 mx-auto" />
@@ -48,7 +56,6 @@ const create = () => {
               otherStyles="mb-3"
               placeholder="Post url..."
               labelStyles="text-base font-medium"
-              keyboardType="email-address"
               isEditable={true}
             />
             <FormField
@@ -58,7 +65,6 @@ const create = () => {
               otherStyles=" mb-5"
               placeholder="Caption..."
               labelStyles="text-base font-medium"
-              keyboardType="email-address"
               isEditable={true}
             />
             <CustomButton
@@ -66,7 +72,8 @@ const create = () => {
               containerStyles="bg-primary py-3"
               textStyles="text-white text-base font-semibold"
               handlePress={() => {
-                createUserPost("user",form.postUrl,form.caption)
+                createUserPost("user",form.postUrl,form.caption, orgId)
+                console.log("SUCCESFUL??")
               }}
             />
           </View>
