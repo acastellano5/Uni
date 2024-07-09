@@ -6,9 +6,8 @@ import Header from "../../../components/Header";
 import SearchBar from "../../../components/SearchBar";
 import CustomButton from "../../../components/CustomButton";
 import TabButton from "../../../components/TabButton";
-import Filter from "../../../components/social/Filter"
+import Filter from "../../../components/social/Filter";
 import ProfileCard from "../../../components/social/ProfileCard";
-
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("");
@@ -63,10 +62,19 @@ export default function Home() {
               activeText="#FFF"
               text="#22c55e"
             />
+
+            <TabButton
+              name="Parents"
+              activeTab={activeTab}
+              containerStyles="p-2 rounded-lg border border-primary ml-2"
+              textStyles=""
+              onHandleSearchType={() => setActiveTab("Parents")}
+              activeBackground="#22c55e"
+              background="#FFF"
+              activeText="#FFF"
+              text="#22c55e"
+            />
           </View>
-
-
-
 
           <Filter
             visible={isFilterVisible}
@@ -76,17 +84,15 @@ export default function Home() {
             category={activeTab}
           />
 
-
-
           <View className="mt-5 w-11/12 mx-auto flex-row flex-wrap">
-            <ProfileCard/>
+            <ProfileCard />
 
-            <ProfileCard/>
+            <ProfileCard />
 
-            <ProfileCard/>
+            <ProfileCard />
 
-            <ProfileCard/>
-            <ProfileCard/>
+            <ProfileCard />
+            <ProfileCard />
           </View>
         </ScrollView>
       </View>
