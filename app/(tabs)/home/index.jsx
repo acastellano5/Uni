@@ -19,8 +19,8 @@ import { getUserAttributes, getPostByAuthor } from "../../../lib/useFirebase";
 const tabs = ["Following", "Community"];
 
 export default function Home() {
-  // auth stuff
-  const { loading, isLogged, isVerified } = useGlobalContext();
+  // auth stuff and orgId
+  const { loading, isLogged, isVerified, orgId } = useGlobalContext();
   /*console.log("Loading: ", loading);
   console.log("Logged In: ", isLogged);
   console.log("Verified: ", isVerified);
@@ -35,19 +35,19 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   // get current user info
-  const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
     async function fetchUserData() {
       try {
         const currentUserInfo = await getCurrentUser();
         const currentUser = await getUserAttributes(currentUserInfo.uid);
-        setCurrentUser(currentUser)
+        setCurrentUser(currentUser);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
-  
+
     fetchUserData();
   }, []);
 
@@ -55,38 +55,56 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
 
   // get posts for following tab
-  const getFollowingPosts = async () => {
-    
-  }
+  // const getFollowingPosts = async () => {
+  //   try {
+  //     // store all posts for following
+  //     const posts = [];
 
-  // get posts for community tab
+  //     // stores all the users that the current user is following
+  //     const followingUsers = currentUser.orgs[orgId].social.following;
+  //     if (followingUsers && followingUsers.length > 0) {
+  //       // fetch posts from the followed users and push to post array
+  //       await Promise.all(
+  //         followingUsers.map(async (uid) => {
+  //           try {
+  //             const user = await getUserAttributes(uid);
+  //             const userPosts = await getPostByAuthor(uid, orgId);
+  //             // Iterate through userPosts and add fullName property
+  //             const postsWithFullName = userPosts.map((post) => ({
+  //               ...post,
+  //               authorFullName: user.fullName,
+  //               authorRole: user.orgs[orgId].role
+  //             }));
+
+  //             posts.push(...postsWithFullName);
+  //           } catch (error) {
+  //             console.error(`Failed to fetch posts for user ${uid}:`, error);
+  //           }
+  //         })
+  //       );
+  //     }
+
+  //     setPosts(posts);
+  //   } catch (error) {
+  //     console.error("An error occurred while getting following posts:", error);
+  //   }
+  // };
+
   const getCommunityPosts = async () => {
-
+    console.log("COMMUNITY!!!")
   }
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       if (activeTab === "Following") {
-        console.log(currentUser)
+        getFollowingPosts();
       } else if (activeTab === "Community") {
+        getCommunityPosts()
       } else {
-        return null
+        return null;
       }
     }
-  }, [activeTab, currentUser])
-
-  const displayTabContent = () => {
-    switch (activeTab) {
-      case "Following":
-        return <Text>following</Text>;
-
-      case "School":
-        return <Text>school</Text>;
-
-      default:
-        return null;
-    }
-  };
+  }, [activeTab, currentUser]);
 
   return (
     <SafeAreaView className="h-full bg-secondary">
@@ -103,7 +121,13 @@ export default function Home() {
           tabBarStyles="w-10/12"
         />
         <ScrollView showsVerticalScrollIndicator={false} className="mt-3">
-          {displayTabContent()}
+          {posts.map((post, index) => (
+            <Post
+              key={index}
+              containerStyles="w-10/12 mx-auto mb-10"
+              post={post}
+            />
+          ))}
         </ScrollView>
 
         <TouchableOpacity

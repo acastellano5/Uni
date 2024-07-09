@@ -96,7 +96,7 @@ const ProfileShow = () => {
               <InfoBox title="Interests" info={user.interests} />
 
               {/* groups section */}
-              {/* <InfoBox title="Groups" info={user.orgs[0].groups}/> */}
+              {/* <InfoBox title="Groups" info={user.orgs[orgId].groups}/> */}
 
               {/* classes section */}
               {/* <InfoBox title="Classes" /> */}

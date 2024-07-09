@@ -4,9 +4,11 @@ import { FontAwesome } from "@expo/vector-icons";
 import schoolImage from "../../assets/images/school.png";
 import Comments from "./CommentsSection";
 import { router } from "expo-router";
+import { formatDistance } from "date-fns";
 
-const PostContent = () => {
+const PostContent = ({ post }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const postedAtDate = new Date(post.postedAt.seconds * 1000);
   return (
     <>
       <View className="flex-row justify-between mb-3">
@@ -16,7 +18,7 @@ const PostContent = () => {
             onPress={() => {
               router.push({
                 pathname: "/profile/profileShow",
-                params: { uid: "c41be759-c7e3-4cc2-9751-1fe80f63bb24" },
+                params: { uid: post.author },
               });
             }}
           >
@@ -29,12 +31,13 @@ const PostContent = () => {
             onPress={() => {
               router.push({
                 pathname: "/profile/profileShow",
-                params: { uid: "c41be759-c7e3-4cc2-9751-1fe80f63bb24" },
+                params: { uid: post.author },
               });
             }}
           >
-            <Text>Derek Jeter</Text>
-            <Text>Class of 2024</Text>
+            <Text>{ post.authorFullName }</Text>
+            {/* potentially add class if role is student or alumni */}
+            <Text>{post.authorRole}</Text>  
           </TouchableOpacity>
         </View>
 
@@ -43,7 +46,7 @@ const PostContent = () => {
 
       {/* actual post */}
       <Image
-        source={schoolImage}
+        source={{uri: post.content}}
         resizeMode="cover"
         className="w-full h-[200] rounded-md"
       />
@@ -72,8 +75,7 @@ const PostContent = () => {
 
       {/* caption */}
       <Text className="mt-3">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever.
+        {post.caption}
       </Text>
 
       {/* View comments button */}
@@ -86,7 +88,7 @@ const PostContent = () => {
       </TouchableOpacity>
 
       {/* time */}
-      <Text className="font-semibold mt-3">45 minutes ago</Text>
+      <Text className="font-semibold mt-3">{formatDistance(postedAtDate, new Date(), { addSuffix: true })}</Text>
 
       {/* comments section modal */}
       <Comments
@@ -99,10 +101,10 @@ const PostContent = () => {
   );
 };
 
-const PostContainer = ({ containerStyles }) => {
+const PostContainer = ({ containerStyles, post }) => {
   return (
     <View className={containerStyles}>
-      <PostContent />
+      <PostContent post={post}/>
     </View>
   );
 };
