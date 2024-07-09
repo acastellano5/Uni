@@ -14,7 +14,7 @@ import { Feather } from "@expo/vector-icons";
 import { useGlobalContext } from "../../../context/globalProvider";
 import TabsDisplay from "../../../components/TabsDisplay";
 import { getCurrentUser } from "../../../lib/firebase";
-import { getUserAttributes } from "../../../lib/useFirebase";
+import { getUserAttributes, getPostByAuthor } from "../../../lib/useFirebase";
 
 const tabs = ["Following", "Community"];
 
@@ -56,7 +56,7 @@ export default function Home() {
 
   // get posts for following tab
   const getFollowingPosts = async () => {
-
+    
   }
 
   // get posts for community tab
