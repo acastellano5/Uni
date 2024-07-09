@@ -14,7 +14,12 @@ import { Feather } from "@expo/vector-icons";
 import { useGlobalContext } from "../../../context/globalProvider";
 import TabsDisplay from "../../../components/TabsDisplay";
 import { getCurrentUser } from "../../../lib/firebase";
-import { getUserAttributes, getPostByAuthor, getPostsByTime } from "../../../lib/useFirebase";
+import {
+  getUserAttributes,
+  getPostByAuthor,
+  getPostsByTime,
+  getGroupById
+} from "../../../lib/useFirebase";
 
 const tabs = ["Following", "Community"];
 
@@ -90,22 +95,59 @@ export default function Home() {
   //   }
   // };
 
+  // fetching community posts
   const getCommunityPosts = async () => {
     try {
-      const posts = []
-      const communityPosts = await getPostsByTime(orgId)
-      console.log(communityPosts)
-    } catch (error) {
-      
-    }
-  }
+      const posts = [];
+
+      // get latest posts from org
+      const communityPosts = await getPostsByTime(orgId);
+
+      // fetches author info for each post
+      for (const post of communityPosts) {
+
+        // will execute if author type is user
+        if (post.authorType === "user") {
+          const user = await getUserAttributes(post.author);
+
+          // adds author info along with post object
+          const postWithAuthorInfo = {
+            ...post,
+            type: "user",
+            authorName: user.fullName,
+            authorId: user.id,
+            authorType: user.orgs[orgId].role
+          }
+
+          // pushes newly created post object to posts
+          posts.push(postWithAuthorInfo)
+        } else if (post.authorType === "group") { // will execute if author type is group
+          const group = await getGroupById(post.author, orgId)
+          
+          const postWithAuthorInfo = {
+            ...post, 
+            type: "group",
+            authorName: group.name,
+            authorId: group.id,
+            authorType: group.category
+          }
+
+          posts.push(postWithAuthorInfo)
+        } else {
+          return null;
+        }
+
+      }
+      setPosts(posts);
+    } catch (error) {}
+  };
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       if (activeTab === "Following") {
         // getFollowingPosts();
       } else if (activeTab === "Community") {
-        getCommunityPosts()
+        getCommunityPosts();
       } else {
         return null;
       }

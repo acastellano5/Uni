@@ -16,10 +16,17 @@ const PostContent = ({ post }) => {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
-              router.push({
-                pathname: "/profile/profileShow",
-                params: { uid: post.author },
-              });
+              if (post.type === "user") {
+                router.push({
+                  pathname: "/profile/profileShow",
+                  params: { uid: post.author },
+                });
+              } else {
+                router.push({
+                  pathname: "/clubs/clubHome",
+                  params: { id: post.author },
+                });
+              }
             }}
           >
             <FontAwesome name="user-circle" size={30} color="black" />
@@ -29,15 +36,22 @@ const PostContent = ({ post }) => {
             className="ml-5"
             activeOpacity={0.8}
             onPress={() => {
-              router.push({
-                pathname: "/profile/profileShow",
-                params: { uid: post.author },
-              });
+              if (post.type === "user") {
+                router.push({
+                  pathname: "/profile/profileShow",
+                  params: { uid: post.author },
+                });
+              } else {
+                router.push({
+                  pathname: "/clubs/clubHome",
+                  params: { id: post.author },
+                });
+              }
             }}
           >
-            <Text>{ post.authorFullName }</Text>
+            <Text>{ post.authorName }</Text>
             {/* potentially add class if role is student or alumni */}
-            <Text>{post.authorRole}</Text>  
+            <Text>{post.authorType}</Text>  
           </TouchableOpacity>
         </View>
 
