@@ -3,7 +3,9 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import FormField from "../../FormField";
 import CustomButton from "../../CustomButton"
-
+const runUpdate = (old, newEmail) => {
+  
+}
 const UpdateEmail = ({ setScreen }) => {
   return (
     <View className="pt-8 w-11/12 mx-auto">
@@ -18,7 +20,7 @@ const UpdateEmail = ({ setScreen }) => {
       <Text className="text-xl font-semibold text-center mb-5">
         Update Email Address
       </Text>
-
+ 
       {/* update Email Address Fields */}
       <View className="mb-5">
         <FormField title="Current Email Address" isEditable={false} value="johndoe54@gmail.com" otherStyles="mb-5"/>

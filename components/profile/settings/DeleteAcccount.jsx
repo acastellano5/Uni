@@ -8,7 +8,7 @@ import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
 import { delUser } from "../../../lib/firebase";
 import { Redirect } from "expo-router";
-import { router } from "expo-router";
+import { router } from "expo-router"; 
 const delAccount= (email, password)=>{
   const user = auth().currentUser
   const cred = auth.EmailAuthProvider.credential(email, password)
