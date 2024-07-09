@@ -14,7 +14,7 @@ import InfoBox from "../../components/profile/InfoBox";
 import PostSection from "../../components/profile/PostSection";
 import BackHeader from "../../components/BackHeader";
 import { useLocalSearchParams } from "expo-router";
-import { getUserAttributes } from "../../lib/useFirebase";
+import { getUserAttributes, followUser } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 
 const ProfileShow = () => {
@@ -61,12 +61,16 @@ const ProfileShow = () => {
               {/* for passing in fullName */}
               {/* <Text className="text-lg font-medium mb-2">{`${user.fullName}`}</Text> */}
 
-              <Text className="text-lg font-medium mb-2">Derek Jeter</Text>
+              <Text className="text-lg font-medium mb-2">{user.fullName}</Text>
               <View className="flex-row w-2/3 mx-auto">
                 <CustomButton
                   title="Follow"
                   containerStyles="border border-primary py-1 w-3/6"
                   textStyles="text-primary text-sm font-semibold"
+                  handlePress={() => {
+                    followUser(user.id, orgId)
+                    console.log("succesful???")
+                  }}
                 />
 
                 <CustomButton
@@ -82,19 +86,14 @@ const ProfileShow = () => {
               <Text className="text-lg font-medium mb-1">Bio</Text>
               <View className="bg-lightGreen mb-3 rounded-lg">
                 {/* for passing in bio */}
-                {/* <Text className="text-[#5e5e5e] p-2">
-                  {user.bio ? user.bio : "No bio."}
-                </Text> */}
                 <Text className="text-[#5e5e5e] p-2">
-                  No bio.
+                  {user.bio ? user.bio : "No bio."}
                 </Text>
               </View>
 
               {/* interests section */}
               {/* for passing in interests */}
-              {/* <InfoBox title="Interests" info={user.interests} /> */}
-
-              <InfoBox title="Interests" info={["hockey"]} />
+              <InfoBox title="Interests" info={user.interests} />
 
               {/* groups section */}
               {/* <InfoBox title="Groups" info={user.orgs[0].groups}/> */}

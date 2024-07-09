@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
@@ -13,9 +13,10 @@ import Post from "../../../components/post/Post";
 import { Feather } from "@expo/vector-icons";
 import { useGlobalContext } from "../../../context/globalProvider";
 import TabsDisplay from "../../../components/TabsDisplay";
+import { getCurrentUser } from "../../../lib/firebase";
+import { getUserAttributes } from "../../../lib/useFirebase";
 
-
-const tabs = ["Following", "School"];
+const tabs = ["Following", "Community"];
 
 export default function Home() {
   // auth stuff
@@ -29,10 +30,50 @@ export default function Home() {
     router.replace("//index");
   }
 
-
   // tab functionality
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
+
+  // get current user info
+  const [currentUser, setCurrentUser] = useState({})
+
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const currentUserInfo = await getCurrentUser();
+        const currentUser = await getUserAttributes(currentUserInfo.uid);
+        setCurrentUser(currentUser)
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+  
+    fetchUserData();
+  }, []);
+
+  // fetch posts
+  const [posts, setPosts] = useState([]);
+
+  // get posts for following tab
+  const getFollowingPosts = async () => {
+
+  }
+
+  // get posts for community tab
+  const getCommunityPosts = async () => {
+
+  }
+
+  useEffect(() => {
+    if (Object.keys(currentUser).length > 0) {
+      if (activeTab === "Following") {
+        console.log(currentUser)
+      } else if (activeTab === "Community") {
+      } else {
+        return null
+      }
+    }
+  }, [activeTab, currentUser])
 
   const displayTabContent = () => {
     switch (activeTab) {
@@ -47,14 +88,13 @@ export default function Home() {
     }
   };
 
-
   return (
     <SafeAreaView className="h-full bg-secondary">
       {/* Header */}
       <Header title="Home" />
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-3">
-      <TabsDisplay
+        <TabsDisplay
           tabs={tabs}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -63,21 +103,17 @@ export default function Home() {
           tabBarStyles="w-10/12"
         />
         <ScrollView showsVerticalScrollIndicator={false} className="mt-3">
-
-
-          <Post containerStyles="w-10/12 mx-auto mb-10" />
-          <Post containerStyles="w-10/12 mx-auto mb-10" />
-          <Post containerStyles="w-10/12 mx-auto mb-10" />
-          <Post containerStyles="w-10/12 mx-auto mb-10" />
+          {displayTabContent()}
         </ScrollView>
 
-        <TouchableOpacity style={styles.addBtn} activeOpacity={0.9} onPress={() => router.push('/post/create')} className="shadow-lg">
+        <TouchableOpacity
+          style={styles.addBtn}
+          activeOpacity={0.9}
+          onPress={() => router.push("/post/create")}
+          className="shadow-lg"
+        >
           <Feather name="plus" size={24} color="white" />
         </TouchableOpacity>
-
-
-
-        {displayTabContent()}
       </View>
     </SafeAreaView>
   );

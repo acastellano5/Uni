@@ -9,6 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { runSeed, seedDatabase, seedGroups } from "../../lib/seed";
 import { createComment, createEvent, createPost, createUserPost, deleteComment, followUser, getEventById, getGroupByCategory, getGroupById, getUserByGroup, isUserInGroup } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
+import { router } from "expo-router";
 const pickImage = async () => {
   // No permissions request is necessary for launching the image library
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -31,6 +32,9 @@ const create = () => {
 
   // getting orgId from global context
   const { orgId } = useGlobalContext();
+  useEffect(() => {
+    console.log(orgId)
+  })
   const [image, setImage] = useState(null);
   const [form, setForm] = useState({
     caption: "",
@@ -72,8 +76,8 @@ const create = () => {
               containerStyles="bg-primary py-3"
               textStyles="text-white text-base font-semibold"
               handlePress={() => {
-                createUserPost("user",form.postUrl,form.caption, orgId)
-                console.log("SUCCESFUL??")
+                createUserPost(form.postUrl,form.caption, orgId)
+                router.push('/home')
               }}
             />
           </View>
