@@ -14,7 +14,7 @@ import { Feather } from "@expo/vector-icons";
 import { useGlobalContext } from "../../../context/globalProvider";
 import TabsDisplay from "../../../components/TabsDisplay";
 import { getCurrentUser } from "../../../lib/firebase";
-import { getUserAttributes, getPostByAuthor } from "../../../lib/useFirebase";
+import { getUserAttributes, getPostByAuthor, getPostsByTime } from "../../../lib/useFirebase";
 
 const tabs = ["Following", "Community"];
 
@@ -91,13 +91,19 @@ export default function Home() {
   // };
 
   const getCommunityPosts = async () => {
-    console.log("COMMUNITY!!!")
+    try {
+      const posts = []
+      const communityPosts = await getPostsByTime(orgId)
+      console.log(communityPosts)
+    } catch (error) {
+      
+    }
   }
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       if (activeTab === "Following") {
-        getFollowingPosts();
+        // getFollowingPosts();
       } else if (activeTab === "Community") {
         getCommunityPosts()
       } else {
