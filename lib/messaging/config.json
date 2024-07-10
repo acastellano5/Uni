@@ -1,0 +1,12 @@
+{
+  "useHTTPS": false,
+  "HTTPS": {
+    "cert": "../../../node/ssl/fullchain.pem",
+    "key": "../../../node/ssl/key.pem"
+  },
+  "port": 8080,
+  "realport": 9444,
+  "reloadInterval": 30,
+  "keys": "./secrets/keys.json",
+  "messages": "./secrets/messages.json"
+}
