@@ -1,6 +1,0 @@
-[
-  { "username": "test", "key": "key1", "type": "addMsg", "members": [ "test", "test2" ], "msg": "Hello World" },
-  { "username": "test2", "key": "key2"},
-
-  { "username": "test", "key": "key1", "type": "getChat", "members": [ "test", "test2" ] }
-]
