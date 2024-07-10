@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
+import { router } from "expo-router";
 
-const Item = ({ name }) => {
+const Item = ({ name, title }) => {
   return (
-    <View style={styles.itemStyles}>
+    <View style={title !== "Groups" ? styles.itemStyles : null}>
       <View className="bg-lightGreen rounded-lg py-3">
         <Text className="text-center">{name}</Text>
       </View>
@@ -17,7 +18,20 @@ const InfoBox = ({ title, info }) => {
       <Text className="text-lg font-medium mb-1">{title}</Text>
       <View className="flex-row flex-wrap">
         {info && info.length > 0 ? (
-          info.map((item, index) => <Item key={index} name={item} />)
+          title === "Groups" ? (
+            info.map((item, index) => (
+            <TouchableOpacity activeOpacity={0.8} key={index} style={styles.itemStyles} onPress={() => {
+              router.push({
+                pathname: "/clubs/clubHome",
+                params: { id: item.id }
+              })
+            }}>
+              <Item name={item.name} title={title}/>
+            </TouchableOpacity>
+          ))
+          ) : (
+            info.map((item, index) => <Item key={index} name={item} title={title}/>)
+          )
         ) : (
           <View style={styles.noInfoContainer}>
             <Text style={styles.noInfoText}>No information available</Text>
