@@ -7,7 +7,7 @@ import CustomButton from "../../components/CustomButton";
 import { useState, useEffect } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { runSeed, seedDatabase, seedGroups } from "../../lib/seed";
-import { createComment, createEvent, createPost, createUserPost, deleteComment, followUser, getEventById, getGroupByCategory, getGroupById, getUserByGroup, getUsers, isUserInGroup } from "../../lib/useFirebase";
+import { createComment, createEvent, createPost, createUserPost, deleteComment, filterUserByRole, followUser, getEventById, getGroupByCategory, getGroupById, getUserByGroup, getUsers, isUserInGroup } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router } from "expo-router";
 const pickImage = async () => {
@@ -32,6 +32,7 @@ const create = () => {
 
   // getting orgId from global context
   const { orgId } = useGlobalContext();
+  filterUserByRole(orgId,"Student")
   useEffect(() => {
     console.log(orgId)
   })
