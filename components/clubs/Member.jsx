@@ -13,8 +13,8 @@ const Member = ({ role, name, profileImg, uid }) => {
             resizeMode='cover'
             className="h-[100px] w-full mb-2 rounded-lg"
         />
-        <Text className="font-semibold mb-1">{role}</Text>
-      <Text>{name}</Text>
+        <Text className="font-semibold mb-1 text-center">{role}</Text>
+      <Text className="text-center">{name}</Text>
     </TouchableOpacity>
   )
 }

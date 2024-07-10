@@ -145,7 +145,7 @@ export default function Home() {
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       if (activeTab === "Following") {
-        // getFollowingPosts();
+        setPosts([])
       } else if (activeTab === "Community") {
         getCommunityPosts();
       } else {

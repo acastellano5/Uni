@@ -14,7 +14,7 @@ import InfoBox from "../../components/profile/InfoBox";
 import PostSection from "../../components/profile/PostSection";
 import BackHeader from "../../components/BackHeader";
 import { useLocalSearchParams } from "expo-router";
-import { getUserAttributes, followUser } from "../../lib/useFirebase";
+import { getUserAttributes, followUser, getGroupById } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 
 const ProfileShow = () => {
@@ -28,10 +28,20 @@ const ProfileShow = () => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true); // Add loading state
 
+   // set groups state
+   const [ groups, setGroups ] = useState([])
+
   useEffect(() => {
     const fetchUser = async () => {
       const userResult = await getUserAttributes(uid, orgId);
       setUser(userResult);
+
+      const groupIds = userResult.orgs[orgId].groups
+      const fetchedGroups = await Promise.all(groupIds.map(async groupId => {
+        const group = await getGroupById(groupId, orgId)
+        return { name: group.name, id: group.id, orgId: group.orgId }
+      }))
+      setGroups(fetchedGroups)
       setLoading(false); // Set loading to false once data is fetched
     };
 
@@ -40,7 +50,7 @@ const ProfileShow = () => {
 
   return (
     <SafeAreaView className="h-full bg-black">
-      <BackHeader title="My Profile" containerStyles="w-11/12 mx-auto" />
+      <BackHeader containerStyles="w-11/12 mx-auto" />
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         {loading ? (
@@ -96,10 +106,10 @@ const ProfileShow = () => {
               <InfoBox title="Interests" info={user.interests} />
 
               {/* groups section */}
-              {/* <InfoBox title="Groups" info={user.orgs[orgId].groups}/> */}
+              <InfoBox title="Groups" info={groups}/>
 
               {/* classes section */}
-              {/* <InfoBox title="Classes" /> */}
+              <InfoBox title="Classes" />
 
               <PostSection />
             </View>
