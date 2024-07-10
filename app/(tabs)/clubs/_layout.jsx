@@ -6,7 +6,6 @@ const ClubsLayout = () => {
   return (
     <Stack screenOptions={{gestureEnabled: false}}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="clubHome" options={{ headerShown: false }} />
 
     </Stack>
   )

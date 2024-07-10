@@ -3,7 +3,8 @@ import React from "react";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
 import { router } from "expo-router";
 
-const ProfileCard = () => {
+const ProfileCard = ({ user }) => {
+
   return (
     <View className="w-1/3 p-1">
       <TouchableOpacity
@@ -11,7 +12,7 @@ const ProfileCard = () => {
         onPress={() =>
           router.push({
             pathname: "/profile/profileShow",
-            params: { uid: "a4a0c5a6-3c27-4d70-93c7-d0b53ccb6fb6" },
+            params: { uid: user.id },
           })
         }
       >
@@ -20,7 +21,7 @@ const ProfileCard = () => {
             source={ProfilePic}
             className="w-full h-[10vh] object-cover rounded-lg mb-3"
           />
-          <Text className="text-center">Jerry Smith</Text>
+          <Text className="text-center">{user.fullName}</Text>
         </View>
       </TouchableOpacity>
     </View>
