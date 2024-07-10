@@ -1,31 +1,43 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import pongImage from "../../assets/images/pingpongbg.png"
 import { router } from "expo-router";
+import { getUserAttributes } from "../../lib/useFirebase"
 
-const PostImage = () => {
+const PostImage = ({ post }) => {
+  // const [ postAuthor, setPostAuthor ] = useState({})
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const user = await getUserAttributes(post.author)
+  //   }
+  //   fetchUser()
+  // }, [])
+
   return (
-    <TouchableOpacity className="w-1/4 h-[9vh] p-1" activeOpacity={0.8} onPress={() => router.push('/post')}>
+    <TouchableOpacity className="w-1/4 h-[9vh] p-1" activeOpacity={0.8} onPress={() => router.push({
+      pathname: '/post',
+      params: {
+        ...post,
+        source: "userProfile",
+        postedAt: post.postedAt.seconds,
+      }
+      })}>
       <Image 
-        source={pongImage}
+        source={{uri: post.content}}
         className="w-full h-full rounded-sm"
-        // style={styles.imageStyles}
       />
     </TouchableOpacity>
   );
 };
 
-const PostSection = () => {
+const PostSection = ({ posts }) => {
   return (
     <View>
       <Text className="text-lg font-medium mb-1">Posts</Text>
       <View className="flex-row flex-wrap">
-        <PostImage/>
-        <PostImage/>
-        <PostImage/>
-        <PostImage/>
-        <PostImage/>
-        <PostImage/>
+        { posts.map((post, index) => (
+          <PostImage key={index} post={post}/>
+        )) }
       </View>
     </View>
   );
