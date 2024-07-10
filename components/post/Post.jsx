@@ -8,7 +8,13 @@ import { formatDistance } from "date-fns";
 
 const PostContent = ({ post }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const postedAtDate = new Date(post.postedAt.seconds * 1000);
+  let postedAtDate
+  if (post.source === "userProfile") {
+    postedAtDate = new Date(post.postedAt * 1000);
+  } else {
+    postedAtDate = new Date(post.postedAt.seconds * 1000);
+  }
+
   return (
     <>
       <View className="flex-row justify-between mb-3">

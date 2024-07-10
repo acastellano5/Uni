@@ -10,7 +10,6 @@ import {
 import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import background from "../../../assets/images/pingpongbg.png";
 import TabsDisplay from "../../../components/TabsDisplay";
 import ClubInfo from "../../../components/clubs/ClubInfo";
 import ClubMembers from "../../../components/clubs/ClubMembers";
