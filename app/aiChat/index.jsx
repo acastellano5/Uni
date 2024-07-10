@@ -30,9 +30,9 @@ const aiChat = () => {
           {
             messages.map((message, index) => {
               if (message.type == "left") {
-                return <ChatMessageLeft message={message.value} />;
+                return <ChatMessageLeft key={index} message={message.value} />;
               } else {
-                return <ChatMessageRight message={message.value} />;
+                return <ChatMessageRight key={index} message={message.value} />;
               }
             })
           }
