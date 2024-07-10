@@ -9,7 +9,7 @@ import { formatDistance } from "date-fns";
 const PostContent = ({ post }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   let postedAtDate
-  if (post.source === "userProfile") {
+  if (post.source === "PostSection") {
     postedAtDate = new Date(post.postedAt * 1000);
   } else {
     postedAtDate = new Date(post.postedAt.seconds * 1000);

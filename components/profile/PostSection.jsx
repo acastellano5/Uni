@@ -18,7 +18,7 @@ const PostImage = ({ post }) => {
       pathname: '/post',
       params: {
         ...post,
-        source: "userProfile",
+        source: "PostSection",
         postedAt: post.postedAt.seconds,
       }
       })}>
