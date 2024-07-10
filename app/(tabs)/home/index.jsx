@@ -29,10 +29,6 @@ const tabs = ["Following", "Community"];
 export default function Home() {
   // auth stuff and orgId
   const { loading, isLogged, isVerified, orgId } = useGlobalContext();
-  /*console.log("Loading: ", loading);
-  console.log("Logged In: ", isLogged);
-  console.log("Verified: ", isVerified);
-  */
   if (!loading && isLogged && isVerified) {
   } else {
     router.replace("//index");
@@ -179,7 +175,7 @@ export default function Home() {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#22c55e"]} tintColor="#22c55e"/>
           }
         >
-          {postsLoading ? (
+          {!refreshing && postsLoading ? (
             <ActivityIndicator size="large" color="#22c55e" />
           ) : (
             posts.map((post, index) => (
