@@ -95,7 +95,7 @@ export default function Home() {
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Search bar */}
           <SearchBar
-            placeholder="Search"
+            placeholder="Search people"
             filterOnPress={() => setIsFilterVisible(true)}
             isFilterDisabled={!activeTab}
             textValue={searchValue}

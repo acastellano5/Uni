@@ -8,12 +8,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // import { Loader } from "../../components";
 // import { useGlobalContext } from "../../context/GlobalProvider";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { MaterialIcons } from '@expo/vector-icons';
 
-const TabIcon = ({ icon, color, name, focused }) => {
+const TabIcon = ({ icon, color, name, focused, iconType }) => {
 
   return (
     <View className="flex items-center justify-center gap-2">
-      <Ionicons name={`${icon}`} size={24} color={`${color}`} />
+      { iconType === "Ionicons" ? (
+        <Ionicons name={`${icon}`} size={24} color={`${color}`} />
+      ) : (
+        <MaterialIcons name={`${icon}`} size={24} color={`${color}`} />
+      )}
 
       <Text
         className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
@@ -69,6 +74,7 @@ const TabLayout = () => {
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
                   icon="home"
+                  iconType="Ionicons"
                   color={color}
                   name="Home"
                   focused={focused}
@@ -85,6 +91,7 @@ const TabLayout = () => {
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
                   icon="chatbubble"
+                  iconType="Ionicons"
                   color={color}
                   name="Messages"
                   focused={focused}
@@ -96,13 +103,14 @@ const TabLayout = () => {
           <Tabs.Screen
             name="clubs"
             options={{
-              title: "Clubs",
+              title: "Groups",
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
-                  icon="library"
+                  icon="groups"
+                  iconType="MaterialIcons"
                   color={color}
-                  name="Clubs"
+                  name="Groups"
                   focused={focused}
                 />
               ),
@@ -116,6 +124,7 @@ const TabLayout = () => {
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
                   icon="calendar-sharp"
+                  iconType="Ionicons"
                   color={color}
                   name="Events"
                   focused={focused}
@@ -132,6 +141,7 @@ const TabLayout = () => {
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
                   icon="people-sharp"
+                  iconType="Ionicons"
                   color={color}
                   name="Social"
                   focused={focused}

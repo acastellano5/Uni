@@ -130,7 +130,7 @@ export default function Clubs() {
           <ScrollView showsVerticalScrollIndicator={false}>
             {/* Search bar */}
             <SearchBar
-              placeholder="Search clubs and activities"
+              placeholder="Search groups"
               containerStyles="mt-5"
               textValue={searchValue}
               handleChangeText={(e) => setSearchValue(e)}
