@@ -32,8 +32,8 @@ const create = () => {
 
   // getting orgId from global context
   const { orgId } = useGlobalContext();
-  filterUserByRole(orgId,"Student")
-  useEffect(() => {
+  getUsers(orgId,"Andrew Cas")
+    useEffect(() => {
     console.log(orgId)
   })
   const [image, setImage] = useState(null);
