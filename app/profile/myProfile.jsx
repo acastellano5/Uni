@@ -15,7 +15,11 @@ import PostSection from "../../components/profile/PostSection";
 import BackHeader from "../../components/BackHeader";
 import Settings from "../../components/profile/settings/Settings";
 import { getCurrentUser } from "../../lib/firebase";
-import { getUserAttributes, getGroupById } from "../../lib/useFirebase";
+import {
+  getUserAttributes,
+  getGroupById,
+  getPostByAuthor,
+} from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 
 const Profile = () => {
@@ -29,7 +33,10 @@ const Profile = () => {
   const [currentUser, setCurrentUser] = useState({});
 
   // set groups state
-  const [ groups, setGroups ] = useState([])
+  const [groups, setGroups] = useState([]);
+
+  // set posts state
+  const [posts, setPosts] = useState([]);
 
   // set loading state
   const [loading, setLoading] = useState(true);
@@ -41,13 +48,28 @@ const Profile = () => {
       const currentUserAttributes = await getUserAttributes(currentUser.uid);
       setCurrentUser(currentUserAttributes);
 
-      const groupIds = currentUserAttributes.orgs[orgId].groups
-      const fetchedGroups = await Promise.all(groupIds.map(async groupId => {
-        const group = await getGroupById(groupId, orgId)
-        return { name: group.name, id: group.id, orgId: group.orgId }
-      }))
+      const groupIds = currentUserAttributes.orgs[orgId].groups;
+      const fetchedGroups = await Promise.all(
+        groupIds.map(async (groupId) => {
+          const group = await getGroupById(groupId, orgId);
+          return { name: group.name, id: group.id, orgId: group.orgId };
+        })
+      );
+      setGroups(fetchedGroups);
 
-      setGroups(fetchedGroups)
+      // fetch posts the user has
+      let userPosts = await getPostByAuthor(currentUser.uid, orgId);
+      userPosts = userPosts.map((post) => {
+        return {
+          ...post,
+          type: "user",
+          authorName: currentUserAttributes.fullName,
+          authorId: currentUserAttributes.id,
+          authorType: currentUserAttributes.orgs[orgId].role,
+        };
+      });
+      setPosts(userPosts);
+
       setLoading(false); // set loading to false after data is fetched
     };
 
@@ -72,7 +94,9 @@ const Profile = () => {
                 style={styles.profilePic}
                 className="mb-2"
               />
-              <Text className="text-lg font-medium">{currentUser.fullName}</Text>
+              <Text className="text-lg font-medium">
+                {currentUser.fullName}
+              </Text>
 
               <View className="flex-row">
                 <CustomButton
@@ -99,15 +123,15 @@ const Profile = () => {
               </View>
 
               {/* interests section */}
-              <InfoBox title="Interests" info={currentUser.interests}/>
+              <InfoBox title="Interests" info={currentUser.interests} />
 
               {/* groups section */}
-              <InfoBox title="Groups" info={groups}/>
+              <InfoBox title="Groups" info={groups} />
 
               {/* classes section */}
               <InfoBox title="Classes" />
 
-              <PostSection />
+              <PostSection posts={posts}/>
 
               <Settings
                 visible={isSettingsVisible}
