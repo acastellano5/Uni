@@ -35,3 +35,4 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 lib/messaging/secrets/messages.json
+lib/messaging/secrets/messages.json
