@@ -34,11 +34,15 @@ const PostSection = ({ posts }) => {
   return (
     <View>
       <Text className="text-lg font-medium mb-1">Posts</Text>
-      <View className="flex-row flex-wrap">
+      {posts.length > 0 ? (
+        <View className="flex-row flex-wrap">
         { posts.map((post, index) => (
           <PostImage key={index} post={post}/>
         )) }
       </View>
+      ) : (
+        <Text className="text-center mb-5 text-[#888] text-base">No posts yet</Text>
+      )}
     </View>
   );
 };
