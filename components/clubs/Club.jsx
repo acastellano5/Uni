@@ -10,7 +10,7 @@ const Club = ({img, name, id}) => {
       // redirect to club home page
       onPress={() => {
         router.push({
-          pathname: './clubs/clubHome',
+          pathname: '/club',
           params: {name, id}
         })
       }}
