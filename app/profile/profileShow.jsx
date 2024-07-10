@@ -14,7 +14,7 @@ import InfoBox from "../../components/profile/InfoBox";
 import PostSection from "../../components/profile/PostSection";
 import BackHeader from "../../components/BackHeader";
 import { useLocalSearchParams } from "expo-router";
-import { getUserAttributes, followUser, getGroupById } from "../../lib/useFirebase";
+import { getUserAttributes, followUser, getGroupById, ifUserFollowed, unfollowUser } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 
 const ProfileShow = () => {
@@ -31,6 +31,8 @@ const ProfileShow = () => {
    // set groups state
    const [ groups, setGroups ] = useState([])
 
+
+   // fetch user info and groups
   useEffect(() => {
     const fetchUser = async () => {
       const userResult = await getUserAttributes(uid, orgId);
@@ -47,6 +49,20 @@ const ProfileShow = () => {
 
     fetchUser();
   }, [uid]);
+
+
+  // state to see if current user is following this user
+  const [ isFollowing, setIsFollowing ] = useState(false)
+
+  // set the state to whether or not they or following user
+  useEffect(() => {
+    const fetchIsFollowing = async () => {
+      const isUserFollowing = await ifUserFollowed(uid, orgId)
+      setIsFollowing(isUserFollowing)
+    }
+
+    fetchIsFollowing()
+  }, [])
 
   return (
     <SafeAreaView className="h-full bg-black">
@@ -74,15 +90,20 @@ const ProfileShow = () => {
               <Text className="text-lg font-medium mb-2">{user.fullName}</Text>
               <View className="flex-row w-2/3 mx-auto">
                 <CustomButton
-                  title="Follow"
+                  title={!isFollowing ? "Follow" : "Unfollow"}
                   containerStyles="border border-primary py-1 w-3/6"
                   textStyles="text-primary text-sm font-semibold"
                   handlePress={() => {
-                    followUser(user.id, orgId)
-                    console.log("succesful???")
+                    if (!isFollowing) {
+                      followUser(user.id, orgId)
+                      setIsFollowing(true)
+                    } else {
+                      unfollowUser(user.id, orgId)
+                      setIsFollowing(false)
+                    }
+                    
                   }}
                 />
-
                 <CustomButton
                   title="Message"
                   containerStyles="ml-2 border border-primary py-1 w-3/6"
