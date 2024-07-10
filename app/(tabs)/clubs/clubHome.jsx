@@ -19,8 +19,12 @@ import {
   joinGroup,
   isUserInGroup,
   leaveGroup,
+  ifGroupFollowed,
+  unfollowGroup, 
+  followGroup
 } from "../../../lib/useFirebase";
 import { useGlobalContext } from "../../../context/globalProvider";
+import { AntDesign } from '@expo/vector-icons';
 
 const tabs = ["Info", "Members"];
 
@@ -66,6 +70,8 @@ const ClubHome = () => {
 
   // isInGroup state
   const [isInGroup, setIsInGroup] = useState(false);
+  //
+  const [ isFollowingGroup, setIsFollowingGroup ] = useState(false)
 
   useEffect(() => {
     // fetch to see if the user is in the group or not
@@ -73,42 +79,47 @@ const ClubHome = () => {
       if (club) {
         const status = await isUserInGroup(club.id, orgId);
         setIsInGroup(status);
+
+        const isFollowing = await ifGroupFollowed(club.id, orgId)
+        setIsFollowingGroup(isFollowing)
       }
     };
     fetchStatus();
   }, [club]);
 
-  useEffect(() => {
-    console.log("Is the user in this group? " + isInGroup);
-  }, [isInGroup]);
-
   const handleJoinOrLeaveGroup = async () => {
     if (isInGroup) {
-      Alert.alert(
-        "Leave Group",
-        "Are you sure you want to leave this group?",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
+      Alert.alert("Leave Group", "Are you sure you want to leave this group?", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            await leaveGroup(orgId, club.id);
+            setIsInGroup(false);
+            await fetchClub(); // Fetch the updated club members list
           },
-          {
-            text: "Yes",
-            onPress: async () => {
-              await leaveGroup(orgId, club.id);
-              setIsInGroup(false);
-              await fetchClub(); // Fetch the updated club members list
-            },
-          },
-        ]
-      );
+        },
+      ]);
     } else {
       await joinGroup(orgId, club.id);
       setIsInGroup(true);
       await fetchClub(); // Fetch the updated club members list
     }
   };
+
+  const handleFollowOrUnfollowGroup = async () => {
+    if (isFollowingGroup) {
+      await unfollowGroup(club.id, orgId)
+      setIsFollowingGroup(false)
+    } else {
+      await followGroup(club.id, orgId)
+      setIsFollowingGroup(true)
+    }
+  }
 
   const displayTabContent = () => {
     switch (activeTab) {
@@ -146,21 +157,42 @@ const ClubHome = () => {
 
           {/* club name and join button */}
           <View className="flex-row justify-between items-center">
-            <View className="bg-tertiary py-2 px-4 rounded">
-              <Text className="text-white text-lg font-semibold">
+            {/* club name */}
+            <View className="bg-tertiary py-2 px-4 rounded" style={{maxWidth: "60%"}}>
+              <Text className="text-white text-base font-semibold">
                 {club.name}
               </Text>
             </View>
+            
 
-            <TouchableOpacity
-              onPress={handleJoinOrLeaveGroup}
-              className="bg-white py-2 px-4 rounded"
-              activeOpacity={0.8}
-            >
-              <Text className="text-primary text-lg font-semibold">
-                {isInGroup ? "Leave" : "Join"}
-              </Text>
-            </TouchableOpacity>
+
+            {/* buttons */}
+            <View className="flex-row items-center">
+              {!isInGroup ? (
+                  <TouchableOpacity
+                  className="bg-white p-2 rounded mr-2"
+                  activeOpacity={0.8}
+                  onPress={handleFollowOrUnfollowGroup}
+                >
+                  { isFollowingGroup ? (
+                    <AntDesign name="star" size={24} color="#22c55e" />
+                  ) : (
+                    <AntDesign name="staro" size={24} color="#22c55e" />
+                  ) }
+                </TouchableOpacity>
+              ) : null}
+
+
+              <TouchableOpacity
+                onPress={handleJoinOrLeaveGroup}
+                className="bg-white py-2 px-3 rounded"
+                activeOpacity={0.8}
+              >
+                <Text className="text-primary text-base font-semibold">
+                  {isInGroup ? "Leave" : "Join"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </SafeAreaView>
 
