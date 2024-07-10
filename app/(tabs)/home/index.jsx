@@ -4,6 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
@@ -18,7 +19,8 @@ import {
   getUserAttributes,
   getPostByAuthor,
   getPostsByTime,
-  getGroupById
+  getGroupById,
+  getFollowingPosts
 } from "../../../lib/useFirebase";
 
 const tabs = ["Following", "Community"];
@@ -36,7 +38,6 @@ export default function Home() {
   }
 
   // tab functionality
-
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   // get current user info
@@ -58,94 +59,85 @@ export default function Home() {
 
   // fetch posts
   const [posts, setPosts] = useState([]);
+  const [postsLoading, setPostsLoading] = useState(true);
 
-  // get posts for following tab
-  // const getFollowingPosts = async () => {
-  //   try {
-  //     // store all posts for following
-  //     const posts = [];
+  // combine posts function
+  const combinePosts = async (postsArr) => {
+    const posts = []
 
-  //     // stores all the users that the current user is following
-  //     const followingUsers = currentUser.orgs[orgId].social.following;
-  //     if (followingUsers && followingUsers.length > 0) {
-  //       // fetch posts from the followed users and push to post array
-  //       await Promise.all(
-  //         followingUsers.map(async (uid) => {
-  //           try {
-  //             const user = await getUserAttributes(uid);
-  //             const userPosts = await getPostByAuthor(uid, orgId);
-  //             // Iterate through userPosts and add fullName property
-  //             const postsWithFullName = userPosts.map((post) => ({
-  //               ...post,
-  //               authorFullName: user.fullName,
-  //               authorRole: user.orgs[orgId].role
-  //             }));
+    // fetches author info for each post
+    for (const post of postsArr) {
 
-  //             posts.push(...postsWithFullName);
-  //           } catch (error) {
-  //             console.error(`Failed to fetch posts for user ${uid}:`, error);
-  //           }
-  //         })
-  //       );
-  //     }
+      // will execute if author type is user
+      if (post.authorType === "user") {
+        const user = await getUserAttributes(post.author);
 
-  //     setPosts(posts);
-  //   } catch (error) {
-  //     console.error("An error occurred while getting following posts:", error);
-  //   }
-  // };
+        // adds author info along with post object
+        const postWithAuthorInfo = {
+          ...post,
+          type: "user",
+          authorName: user.fullName,
+          authorId: user.id,
+          authorType: user.orgs[orgId].role
+        }
+
+        // pushes newly created post object to posts
+        posts.push(postWithAuthorInfo)
+      } else if (post.authorType === "group") { // will execute if author type is group
+        const group = await getGroupById(post.author, orgId)
+        
+        const postWithAuthorInfo = {
+          ...post, 
+          type: "group",
+          authorName: group.name,
+          authorId: group.id,
+          authorType: group.category
+        }
+
+        posts.push(postWithAuthorInfo)
+      } else {
+        continue;
+      }
+
+    }
+
+    return posts
+  }
 
   // fetching community posts
   const getCommunityPosts = async () => {
     try {
-      const posts = [];
-
+      setPostsLoading(true);
       // get latest posts from org
       const communityPosts = await getPostsByTime(orgId);
-
-      // fetches author info for each post
-      for (const post of communityPosts) {
-
-        // will execute if author type is user
-        if (post.authorType === "user") {
-          const user = await getUserAttributes(post.author);
-
-          // adds author info along with post object
-          const postWithAuthorInfo = {
-            ...post,
-            type: "user",
-            authorName: user.fullName,
-            authorId: user.id,
-            authorType: user.orgs[orgId].role
-          }
-
-          // pushes newly created post object to posts
-          posts.push(postWithAuthorInfo)
-        } else if (post.authorType === "group") { // will execute if author type is group
-          const group = await getGroupById(post.author, orgId)
-          
-          const postWithAuthorInfo = {
-            ...post, 
-            type: "group",
-            authorName: group.name,
-            authorId: group.id,
-            authorType: group.category
-          }
-
-          posts.push(postWithAuthorInfo)
-        } else {
-          return null;
-        }
-
-      }
+      const posts = await combinePosts(communityPosts)
       setPosts(posts);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setPostsLoading(false);
+    }
   };
+
+  // get posts for following tab
+  const getFollowingTabPosts = async () => {
+    try {
+      setPostsLoading(true);
+      // get latest posts from people user follows and groups that they follow or are a part of
+      const followingPosts = await getFollowingPosts(orgId)
+      const posts = await combinePosts(followingPosts)
+      setPosts(posts);
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setPostsLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       if (activeTab === "Following") {
-        setPosts([])
+        getFollowingTabPosts()
       } else if (activeTab === "Community") {
         getCommunityPosts();
       } else {
@@ -169,13 +161,17 @@ export default function Home() {
           tabBarStyles="w-10/12"
         />
         <ScrollView showsVerticalScrollIndicator={false} className="mt-3">
-          {posts.map((post, index) => (
-            <Post
-              key={index}
-              containerStyles="w-10/12 mx-auto mb-10"
-              post={post}
-            />
-          ))}
+          {postsLoading ? (
+            <ActivityIndicator size="large" color="#22c55e" />
+          ) : (
+            posts.map((post, index) => (
+              <Post
+                key={index}
+                containerStyles="w-10/12 mx-auto mb-10"
+                post={post}
+              />
+            ))
+          )}
         </ScrollView>
 
         <TouchableOpacity
