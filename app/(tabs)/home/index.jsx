@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
@@ -60,6 +61,7 @@ export default function Home() {
   // fetch posts
   const [posts, setPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   // combine posts function
   const combinePosts = async (postsArr) => {
@@ -134,6 +136,16 @@ export default function Home() {
     }
   }
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    if (activeTab === "Following") {
+      await getFollowingTabPosts();
+    } else if (activeTab === "Community") {
+      await getCommunityPosts();
+    }
+    setRefreshing(false);
+  };
+
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       if (activeTab === "Following") {
@@ -160,7 +172,13 @@ export default function Home() {
           textStyles="text-base"
           tabBarStyles="w-10/12"
         />
-        <ScrollView showsVerticalScrollIndicator={false} className="mt-3">
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          className="mt-3"
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#22c55e"]} tintColor="#22c55e"/>
+          }
+        >
           {postsLoading ? (
             <ActivityIndicator size="large" color="#22c55e" />
           ) : (
