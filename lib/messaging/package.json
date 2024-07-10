@@ -2,6 +2,7 @@
   "name": "messaging",
   "version": "1.0.0",
   "main": "main.js",
+  "type": "module",
   "scripts": {
     "test": "node main.js"
   },
