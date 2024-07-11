@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // import { Loader } from "../../components";
 // import { useGlobalContext } from "../../context/GlobalProvider";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { MaterialIcons } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 const TabIcon = ({ icon, color, name, focused, iconType }) => {
 
@@ -17,7 +17,7 @@ const TabIcon = ({ icon, color, name, focused, iconType }) => {
       { iconType === "Ionicons" ? (
         <Ionicons name={`${icon}`} size={24} color={`${color}`} />
       ) : (
-        <MaterialIcons name={`${icon}`} size={24} color={`${color}`} />
+        <SimpleLineIcons name={`${icon}`} size={24} color={`${color}`} />
       )}
 
       <Text
@@ -107,8 +107,8 @@ const TabLayout = () => {
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
-                  icon="groups"
-                  iconType="MaterialIcons"
+                  icon="organization"
+                  iconType="SimpleLineIcons"
                   color={color}
                   name="Groups"
                   focused={focused}
