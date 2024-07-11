@@ -183,7 +183,13 @@ export default function Home() {
                 <ActivityIndicator size="large" color="#22c55e" />
               </View>
             ) : (
-              orgUsers.map((user, index) => <ProfileCard key={index} user={user} />)
+              orgUsers.length === 0 ? (
+                <View style={styles.noUsersFoundContainer}>
+                  <Text style={styles.noUsersFoundText}>No users found</Text>
+                </View>
+              ) : (
+                orgUsers.map((user, index) => <ProfileCard key={index} user={user} />)
+              )
             )}
           </View>
         </ScrollView>
@@ -199,5 +205,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 200, // You can adjust this height as needed
     width: "100%",
+  },
+  noUsersFoundContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 200,
+    width: "100%",
+  },
+  noUsersFoundText: {
+    fontSize: 18,
+    color: "#666",
   },
 });
