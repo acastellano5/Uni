@@ -21,7 +21,7 @@ const Comment = ({ name, onRequestClose }) => {
           onRequestClose();
           router.push({
             pathname: "/profile/profileShow",
-            params: { uid: "13eb8f6e-f9f2-431f-a263-e5e55f86f9bb" },
+            params: { uid: "ah0hpbaD7lYTHjKejiSH1ntAsms2" },
           });
         }}
       >
@@ -40,7 +40,7 @@ const Comment = ({ name, onRequestClose }) => {
               onRequestClose();
               router.push({
                 pathname: "/profile/profileShow",
-                params: { uid: "13eb8f6e-f9f2-431f-a263-e5e55f86f9bb" },
+                params: { uid: "ah0hpbaD7lYTHjKejiSH1ntAsms2" },
               });
             }}
           >
@@ -83,21 +83,7 @@ const CommentsSection = ({
 
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View className="w-11/12 mx-auto pt-5">
-            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
-
-            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
-
-            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
-
-            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
-
-            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
-
-            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
-
-            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
-
-            <Comment name="Derek Jeter" onRequestClose={onRequestClose} />
+            <Comment name="Andrew Castellano" onRequestClose={onRequestClose} />
           </View>
         </ScrollView>
       </View>
