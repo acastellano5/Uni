@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,6 +28,7 @@ export default function Home() {
   const [isSearchResult, setIsSearchResult] = useState(false);
   const [isFilterApplied, setIsFilterApplied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false); // State for managing the refresh status
 
   // Fetch filtered users when tab switches
   useEffect(() => {
@@ -45,15 +47,18 @@ export default function Home() {
   }, [activeTab, orgId]);
 
   // Fetch initial set of users
-  useEffect(() => {
-    const fetchInitialUsers = async () => {
-      setIsLoading(true);
-      const users = await getUsers(orgId);
-      setOrgUsers(users);
-      setIsFilterApplied(false);
-      setIsLoading(false);
-    };
+  const fetchInitialUsers = async () => {
+    const users = await getUsers(orgId);
+    setOrgUsers(users);
+    setIsFilterApplied(false);
+    setIsSearchResult(false)
+    setActiveTab("")
+    setSearchValue("")
+    setIsLoading(false);
+  };
 
+  useEffect(() => {
+    setIsLoading(true);
     fetchInitialUsers();
   }, [orgId]);
 
@@ -86,13 +91,24 @@ export default function Home() {
     setIsLoading(false);
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchInitialUsers();
+    setRefreshing(false);
+  };
+
   return (
     <SafeAreaView className="h-full bg-secondary">
       {/* Header */}
       <Header />
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5">
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           {/* Search bar */}
           <SearchBar
             placeholder="Search people"
@@ -178,7 +194,7 @@ export default function Home() {
           <View
             className={`${!isSearchResult && !isFilterApplied ? "mt-5" : "mt-3"} w-11/12 mx-auto flex-row flex-wrap mb-20`}
           >
-            {isLoading ? (
+            {isLoading && !refreshing ? (
               <View style={styles.loaderContainer}>
                 <ActivityIndicator size="large" color="#22c55e" />
               </View>
