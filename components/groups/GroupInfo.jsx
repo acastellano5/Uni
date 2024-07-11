@@ -1,32 +1,32 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import EventIcon from "../../components/events/EventIcon"
+import EventIcon from "../events/EventIcon"
 import PostSection from '../profile/PostSection'
 import { getPostByGroup } from "../../lib/useFirebase"
 import { useGlobalContext } from "../../context/globalProvider"
 
-const ClubInfo = ({ club }) => {
+const GroupInfo = ({ group }) => {
 
   const { orgId } = useGlobalContext()
   const [ posts, setPosts ] = useState([])
 
   useEffect(() => {
     const fetchGroupPosts = async () => {
-      let groupPosts = await getPostByGroup(club.id, orgId)
+      let groupPosts = await getPostByGroup(group.id, orgId)
       groupPosts = groupPosts.map((post) => {
         return {
           ...post,
           type: "group",
-          authorName: club.name,
-          authorId: club.id,
-          authorType: club.category,
+          authorName: group.name,
+          authorId: group.id,
+          authorType: group.category,
         };
       })
 
       setPosts(groupPosts)
     }
     fetchGroupPosts()
-  }, [club])
+  }, [group])
 
 
   return (
@@ -35,7 +35,7 @@ const ClubInfo = ({ club }) => {
 
 
       <View className="bg-lightGreen mb-3">
-        <Text className="text-[#5e5e5e] p-2 rounded-lg">{club.description}</Text>
+        <Text className="text-[#5e5e5e] p-2 rounded-lg">{group.description}</Text>
       </View>
 
 
@@ -60,4 +60,4 @@ const ClubInfo = ({ club }) => {
   )
 }
 
-export default ClubInfo
+export default GroupInfo

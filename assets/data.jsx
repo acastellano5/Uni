@@ -476,7 +476,7 @@ export const departmentsData = [
 ];
 
 
-export const clubCategories = [
+export const groupCategories = [
   { label: "Technology", value: "Technology" },
   { label: "Arts", value: "Arts" },
   { label: "Athletic", value: "Athletic" },

@@ -9,19 +9,19 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
 import SearchBar from "../../../components/SearchBar";
-import ClubSection from "../../../components/clubs/ClubSection";
+import GroupSection from "../../../components/groups/GroupSection";
 import { getGroupsByCategory, getGroupsByName } from "../../../lib/useFirebase";
-import Club from "../../../components/clubs/Club";
+import Group from "../../../components/groups/Group";
 import BackButton from "../../../components/BackButton";
-import ClubFilter from "../../../components/clubs/ClubFilter";
+import GroupFilter from "../../../components/groups/GroupFilter";
 import { useGlobalContext } from "../../../context/globalProvider";
 
-export default function Clubs() {
+export default function Groups() {
   // getting orgId from global context
   const { orgId } = useGlobalContext();
 
-  // set state of clubs
-  const [clubs, setClubs] = useState({
+  // set state of groups
+  const [groups, setGroups] = useState({
     Technology: [],
     Arts: [],
     Athletic: [],
@@ -33,34 +33,34 @@ export default function Clubs() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchClubs = async () => {
-      const clubTypes = [
+    const fetchGroups = async () => {
+      const groupTypes = [
         "Technology",
         "Arts",
         "Athletic",
         "Academic",
         "Service",
       ];
-      const clubData = {};
+      const groupData = {};
 
-      for (const type of clubTypes) {
-        // returns array of clubs based on type passed in
-        const clubsByType = await getGroupsByCategory(type, orgId);
-        // assigns the type key (ex. Technology) to club data
+      for (const type of groupTypes) {
+        // returns array of groups based on type passed in
+        const groupsByType = await getGroupsByCategory(type, orgId);
+        // assigns the type key (ex. Technology) to group data
         // will look something like this:
         //      Technology: [array]
         //      Arts: [array]
         //      Athletic [array]
-        clubData[type] = clubsByType;
+        groupData[type] = groupsByType;
       }
 
-      // sets the state of clubs
-      setClubs(clubData);
+      // sets the state of groups
+      setGroups(groupData);
       setLoading(false); // set loading to false once data is fetched
     };
 
-    // calls fetchClubs when club tab loads
-    fetchClubs();
+    // calls fetchGroups when groups tab loads
+    fetchGroups();
   }, []);
 
   // set state for the search input's value
@@ -69,7 +69,7 @@ export default function Clubs() {
   // state for if there are search results it will display them
   const [isSearchResult, setIsSearchResult] = useState(false);
 
-  // state for the search results themselves (the clubs)
+  // state for the search results themselves (the groups)
   const [searchResults, setSearchResults] = useState([]);
 
   // executes when search is submitted
@@ -79,10 +79,10 @@ export default function Clubs() {
       return;
     }
 
-    // fetch club result
-    const clubsResult = await getGroupsByName(searchValue, orgId);
+    // fetch group result
+    const groupsResult = await getGroupsByName(searchValue, orgId);
     setIsSearchResult(true);
-    setSearchResults(clubsResult ? clubsResult : []);
+    setSearchResults(groupsResult ? groupsResult : []);
   };
 
   // state for filter visibility
@@ -91,25 +91,25 @@ export default function Clubs() {
   // state for whether a filter is applied
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
-  // callback function to update clubs state when a filter is selected
+  // callback function to update groups state when a filter is selected
   const handleFilterSelect = async (selectedCategory) => {
-    const filteredClubs = await getGroupsByCategory(selectedCategory, orgId); // get clubs by selected category
-    setClubs({ [selectedCategory]: filteredClubs }); // update state with filtered clubs
+    const filteredGroups = await getGroupsByCategory(selectedCategory, orgId); // get groups by selected category
+    setGroups({ [selectedCategory]: filteredGroups }); // update state with filtered groups
     setIsFilterApplied(true); // indicate that a filter is applied
   };
 
-  // function to reset filter and show all clubs
+  // function to reset filter and show all groups
   const resetFilter = async () => {
     setLoading(true); // show loading indicator
-    const clubTypes = ["Technology", "Arts", "Athletic", "Academic", "Service"];
-    const clubData = {};
+    const groupTypes = ["Technology", "Arts", "Athletic", "Academic", "Service"];
+    const groupData = {};
 
-    for (const type of clubTypes) {
-      const clubsByType = await getGroupsByCategory(type, orgId); // get clubs by each type
-      clubData[type] = clubsByType; // update state with clubs by type
+    for (const type of groupTypes) {
+      const groupsByType = await getGroupsByCategory(type, orgId); // get groups by each type
+      groupData[type] = groupsByType; // update state with groups by type
     }
 
-    setClubs(clubData); // set state of clubs
+    setGroups(groupData); // set state of groups
     setLoading(false); // hide loading indicator
     setIsFilterApplied(false); // indicate that the filter is reset
   };
@@ -117,14 +117,14 @@ export default function Clubs() {
   return (
     <SafeAreaView className="h-full bg-black">
       {/* Header */}
-      <Header title="Clubs" />
+      <Header title="Groups" />
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl">
         {loading ? (
           // Display ActivityIndicator while loading
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#22c55e" />
-            <Text style={styles.loadingText}>Loading clubs...</Text>
+            <Text style={styles.loadingText}>Loading groups...</Text>
           </View>
         ) : (
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -143,31 +143,32 @@ export default function Clubs() {
               filterOnPress={() => setIsFilterVisible(true)}
             />
 
-            {/* clubs */}
+            {/* groups */}
             <View className="w-10/12 mx-auto mt-5 mb-20">
               {/* BackButton appears when a filter is applied */}
               {isFilterApplied && (
                 <BackButton
-                  handlePress={resetFilter} // reset filter to show all clubs
+                  handlePress={resetFilter} // reset filter to show all groups
                 />
               )}
               {!isSearchResult ? (
-                Object.keys(clubs).length > 0 && Object.values(clubs).every(arr => arr.length === 0) ? (
-                  <Text style={styles.noResultsText}>No clubs found.</Text>
+                Object.keys(groups).length > 0 &&
+                Object.values(groups).every((arr) => arr.length === 0) ? (
+                  <Text style={styles.noResultsText}>No groups found.</Text>
                 ) : (
-                  Object.keys(clubs).map((category) =>
-                    clubs[category].length > 0 ? (
-                      <ClubSection
+                  Object.keys(groups).map((category) =>
+                    groups[category].length > 0 ? (
+                      <GroupSection
                         key={category}
                         category={category}
-                        clubs={clubs[category]}
+                        groups={groups[category]}
                       />
                     ) : null
                   )
                 )
               ) : searchResults.length > 0 ? (
                 <>
-                  {/* back to all clubs */}
+                  {/* back to all groups */}
                   <BackButton
                     handlePress={() => {
                       setSearchValue("");
@@ -175,17 +176,17 @@ export default function Clubs() {
                       setSearchResults([]);
                     }}
                   />
-                  {/* if club was found it will render */}
+                  {/* if group was found it will render */}
                   <View className="flex-row flex-wrap">
-                    {searchResults.map((club) => (
-                      <Club key={club.id} name={club.name} id={club.id} />
+                    {searchResults.map((group) => (
+                      <Group key={group.id} name={group.name} id={group.id} />
                     ))}
                   </View>
                 </>
               ) : (
-                // if club wasn't found, this will render
+                // if group wasn't found, this will render
                 <>
-                  {/* back to all clubs */}
+                  {/* back to all groups */}
                   <BackButton
                     handlePress={() => {
                       setSearchValue("");
@@ -193,18 +194,18 @@ export default function Clubs() {
                       setSearchResults([]);
                     }}
                   />
-                  <Text style={styles.noResultsText}>No clubs found</Text>
+                  <Text style={styles.noResultsText}>No groups found</Text>
                 </>
               )}
             </View>
 
-            {/* club filter */}
-            <ClubFilter
+            {/* group filter */}
+            <GroupFilter
               visible={isFilterVisible}
               onRequestClose={() => setIsFilterVisible(false)}
               animationType="slide"
               presentationStyle="formSheet"
-              onFilterSelect={handleFilterSelect} // pass handleFilterSelect to ClubFilter
+              onFilterSelect={handleFilterSelect} // pass handleFilterSelect to GroupFilter
             />
           </ScrollView>
         )}

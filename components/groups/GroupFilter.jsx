@@ -11,9 +11,9 @@ import {
   import { AntDesign } from "@expo/vector-icons";
   import { Ionicons } from "@expo/vector-icons";
   import SingleSelectDropDown from "../dropdown/SingleSelect";
-  import { clubCategories } from "../../assets/data";
+  import { groupCategories } from "../../assets/data";
   
-  const ClubFilter = ({
+  const GroupFilter = ({
     visible,
     onRequestClose,
     animationType,
@@ -37,7 +37,7 @@ import {
   
             <View className="mt-3 mb-3 flex-row justify-center items-center">
               <Text className="text-3xl font-semibold text-center mr-2">
-                Clubs/Activities
+                Groups
               </Text>
               <Ionicons name="filter-circle-outline" size={32} color="black" />
             </View>
@@ -46,7 +46,7 @@ import {
               <SingleSelectDropDown
                 title="Category"
                 placeholder="Filter by Category"
-                data={clubCategories}
+                data={groupCategories}
                 onItemSelect={async (item) => {
                   await onFilterSelect(item.value); // call onFilterSelect with selected category
                   onRequestClose(); // close the modal
@@ -59,7 +59,7 @@ import {
     );
   };
   
-  export default ClubFilter;
+  export default GroupFilter;
   
   const styles = StyleSheet.create({});
   

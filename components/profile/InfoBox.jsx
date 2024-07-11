@@ -22,7 +22,7 @@ const InfoBox = ({ title, info }) => {
             info.map((item, index) => (
             <TouchableOpacity activeOpacity={0.8} key={index} style={styles.itemStyles} onPress={() => {
               router.push({
-                pathname: "/club",
+                pathname: "/group",
                 params: { id: item.id }
               })
             }}>

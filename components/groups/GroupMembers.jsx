@@ -4,7 +4,7 @@ import ProfilePic from "../../assets/images/profilepic.jpeg";
 import Member from "./Member";
 import { getUserAttributes } from "../../lib/useFirebase";
 
-const ClubMembers = ({ members, moderators }) => {
+const GroupMembers = ({ members, moderators }) => {
   const [loading, setLoading] = useState(true);
 
   // make requests to fetch members from database
@@ -57,6 +57,6 @@ const ClubMembers = ({ members, moderators }) => {
   );
 };
 
-export default ClubMembers;
+export default GroupMembers;
 
 const styles = StyleSheet.create({});

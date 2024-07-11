@@ -101,7 +101,7 @@ const TabLayout = () => {
           />
 
           <Tabs.Screen
-            name="clubs"
+            name="groups"
             options={{
               title: "Groups",
               headerShown: false,

@@ -3,7 +3,7 @@ import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-const ClubLayout = () => {
+const GroupLayout = () => {
   return (
     <>
       <Stack screenOptions={{gestureEnabled: false}}>
@@ -19,4 +19,4 @@ const ClubLayout = () => {
   );
 };
 
-export default ClubLayout;
+export default GroupLayout;
