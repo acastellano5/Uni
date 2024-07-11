@@ -29,7 +29,7 @@ const PostContent = ({ post }) => {
                 });
               } else {
                 router.push({
-                  pathname: "/clubs/clubHome",
+                  pathname: "/group",
                   params: { id: post.author },
                 });
               }
@@ -49,7 +49,7 @@ const PostContent = ({ post }) => {
                 });
               } else {
                 router.push({
-                  pathname: "/clubs/clubHome",
+                  pathname: "/group",
                   params: { id: post.author },
                 });
               }

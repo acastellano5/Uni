@@ -4,12 +4,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
+
 import { useState, useEffect } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { runSeed, seedDatabase, seedGroups } from "../../lib/seed";
 import { createComment, createEvent, createPost, createUserPost, deleteComment, filterUserByRole, followUser, getEventById, getGroupByCategory, getGroupById, getUserByGroup, getUsers, isUserInGroup } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router } from "expo-router";
+import { getCurrentUser } from "../../lib/firebase";
 const pickImage = async () => {
   // No permissions request is necessary for launching the image library
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -32,7 +34,8 @@ const create = () => {
 
   // getting orgId from global context
   const { orgId } = useGlobalContext();
-  getUsers(orgId,"Andrew Cas")
+  //createEvent('user', orgId, "Soccer Practice", "Salesianum", '2024-08-11', '2024-08-11', 'lbNMpnLjx9bU1mROL6AjtSQdub73','lbNMpnLjx9bU1mROL6AjtSQdub73',"Go to Soccer Practice")
+
     useEffect(() => {
     console.log(orgId)
   })

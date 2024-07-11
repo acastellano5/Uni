@@ -27,6 +27,7 @@ export default function Groups() {
     Athletic: [],
     Academic: [],
     Service: [],
+    General: [],
   });
 
   // set state for loading
@@ -40,6 +41,8 @@ export default function Groups() {
         "Athletic",
         "Academic",
         "Service",
+        "Faith, Justice, Wellness",
+        "General",
       ];
       const groupData = {};
 
@@ -101,7 +104,7 @@ export default function Groups() {
   // function to reset filter and show all groups
   const resetFilter = async () => {
     setLoading(true); // show loading indicator
-    const groupTypes = ["Technology", "Arts", "Athletic", "Academic", "Service"];
+    const groupTypes = ["Technology", "Arts", "Athletic", "Academic", "Service", "Faith, Justice, Wellness", "General"];
     const groupData = {};
 
     for (const type of groupTypes) {

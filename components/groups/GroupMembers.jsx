@@ -45,6 +45,8 @@ const GroupMembers = ({ members, moderators }) => {
       ) : (
         <View className="flex-row flex-wrap">
           {fetchedModerators.map((moderator, index) => (
+            console.log(moderator),
+
             <Member key={index} role="Moderator" name={`${moderator.fullName}`} profileImg={ProfilePic} uid={moderator.id} />
           ))}
 

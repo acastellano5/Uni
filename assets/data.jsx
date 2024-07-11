@@ -480,7 +480,10 @@ export const groupCategories = [
   { label: "Technology", value: "Technology" },
   { label: "Arts", value: "Arts" },
   { label: "Athletic", value: "Athletic" },
-  { label: "Academic", value: "Academic" }
+  { label: "Academic", value: "Academic" },
+  { label: "Faith, Justice, Wellness", value: "Faith, Justice, Wellness" },
+  { label: "General", value: "General" },
+
 ]
 
 
