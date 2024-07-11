@@ -8,7 +8,7 @@ import CustomButton from "../../components/CustomButton";
 import { useState, useEffect } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { runSeed, seedDatabase, seedGroups } from "../../lib/seed";
-import { createComment, createEvent, createPost, createUserPost, deleteComment, filterUserByRole, followUser, getEventById, getGroupByCategory, getGroupById, getUserByGroup, getUsers, isUserInGroup } from "../../lib/useFirebase";
+import { createComment, createEvent, createPost, createUserPost, deleteComment, filterUserByRole, followUser, getEventById, getGroupByCategory, getGroupById, getUserByGroup, getUsers, isPostLiked, isUserInGroup } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router } from "expo-router";
 import { getCurrentUser } from "../../lib/firebase";
@@ -35,7 +35,6 @@ const create = () => {
   // getting orgId from global context
   const { orgId } = useGlobalContext();
   //createEvent('user', orgId, "Soccer Practice", "Salesianum", '2024-08-11', '2024-08-11', 'lbNMpnLjx9bU1mROL6AjtSQdub73','lbNMpnLjx9bU1mROL6AjtSQdub73',"Go to Soccer Practice")
-
     useEffect(() => {
     console.log(orgId)
   })
