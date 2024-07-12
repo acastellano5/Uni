@@ -36,7 +36,7 @@ const create = () => {
   const { orgId } = useGlobalContext();
   //getGroupsByUser('lbNMpnLjx9bU1mROL6AjtSQdub73',orgId)
   //createEvent('org',orgId,"Test","Salesianum",'2024-08-09','2024-08-10',[orgId],orgId,"its coool")
-  getGroupsByUser('lbNMpnLjx9bU1mROL6AjtSQdub73',orgId,true)
+  //getGroupsByUser('lbNMpnLjx9bU1mROL6AjtSQdub73',orgId,true)
   //createEvent('user', orgId, "Soccer Practice", "Salesianum", '2024-08-11', '2024-08-11', 'lbNMpnLjx9bU1mROL6AjtSQdub73','lbNMpnLjx9bU1mROL6AjtSQdub73',"Go to Soccer Practice")
     useEffect(() => {
     console.log(orgId)
