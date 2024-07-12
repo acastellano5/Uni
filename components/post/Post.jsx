@@ -4,13 +4,13 @@ import Comments from "./CommentsSection";
 import { router } from "expo-router";
 import { formatDistance } from "date-fns";
 import { getCurrentUser } from "../../lib/firebase";
-import { delPost } from "../../lib/useFirebase";
+import { delPost, isPostLiked } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
 import { FontAwesome } from "@expo/vector-icons";
 
-const PostContent = ({ post, cuid, onDelete }) => {
+const PostContent = ({ post, cuid, onDelete, isPostLiked, setIsPostLiked }) => {
   const { orgId } = useGlobalContext();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -107,7 +107,7 @@ const PostContent = ({ post, cuid, onDelete }) => {
       <View className="mt-3 flex-row items-center justify-between">
         <View className="flex-row items-center">
           {/* like button */}
-          <LikeButton/>
+          <LikeButton isPostLiked={isPostLiked} setIsPostLiked={setIsPostLiked} postLikes={post.likes.length} post={post}/>
 
           {/* comment button */}
           <CommentButton/>
@@ -144,21 +144,28 @@ const PostContent = ({ post, cuid, onDelete }) => {
 
 const PostContainer = ({ containerStyles, post, onDelete }) => {
   const [cuid, setCuid] = useState("");
+  const [ isLiked, setIsLiked ] = useState(false)
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCurrentUserId = async () => {
+    const fetchPostData = async () => {
+      // get the current Id
       const cuser = await getCurrentUser();
       setCuid(cuser.uid);
+
+      // get isPostLiked boolean
+      const postLiked = await isPostLiked(post.postId)
+      setIsLiked(postLiked)
+
       setLoading(false); // Set loading to false after fetching the user ID
     };
-    fetchCurrentUserId();
+    fetchPostData();
   }, []);
 
   if (!loading) {
     return (
       <View className={containerStyles}>
-        <PostContent post={post} cuid={cuid} onDelete={onDelete} />
+        <PostContent post={post} cuid={cuid} onDelete={onDelete} isPostLiked={isLiked} setIsPostLiked={setIsLiked}/>
       </View>
     );
   }
