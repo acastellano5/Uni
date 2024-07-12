@@ -1,19 +1,32 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import schoolImage from "../../assets/images/school.png";
 import Comments from "./CommentsSection";
 import { router } from "expo-router";
 import { formatDistance } from "date-fns";
+import { getCurrentUser } from "../../lib/firebase";
+import { delPost } from "../../lib/useFirebase";
+import { useGlobalContext } from "../../context/globalProvider";
 
-const PostContent = ({ post }) => {
+const PostContent = ({ post, cuid, onDelete }) => {
+  const { orgId } = useGlobalContext();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
-  let postedAtDate
+  let postedAtDate;
   if (post.source === "PostSection") {
     postedAtDate = new Date(post.postedAt * 1000);
   } else {
     postedAtDate = new Date(post.postedAt.seconds * 1000);
   }
+
+  const handleDelete = async () => {
+    try {
+      await delPost(orgId, post.postId);
+      onDelete(post.postId); // call the onDelete callback with the post ID
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
 
   return (
     <>
@@ -55,18 +68,23 @@ const PostContent = ({ post }) => {
               }
             }}
           >
-            <Text>{ post.authorName }</Text>
+            <Text>{post.authorName}</Text>
             {/* potentially add class if role is student or alumni */}
-            <Text>{post.authorType}</Text>  
+            <Text>{post.authorType}</Text>
           </TouchableOpacity>
         </View>
-
-        <FontAwesome name="ellipsis-v" size={24} color="black" />
+        {cuid === post.author ? (
+          // delete button for post
+          <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
+            <FontAwesome name="trash-o" size={24} color="red" />
+          </TouchableOpacity>
+        
+        ) : null}
       </View>
 
       {/* actual post */}
       <Image
-        source={{uri: post.content}}
+        source={{ uri: post.content }}
         resizeMode="cover"
         className="w-full h-[200] rounded-md"
       />
@@ -88,15 +106,10 @@ const PostContent = ({ post }) => {
             <Text className="text-base ml-2">234</Text>
           </View>
         </View>
-
-        {/* Save */}
-        <FontAwesome name="bookmark-o" size={24} color="black" />
       </View>
 
       {/* caption */}
-      <Text className="mt-3">
-        {post.caption}
-      </Text>
+      <Text className="mt-3">{post.caption}</Text>
 
       {/* View comments button */}
 
@@ -108,7 +121,9 @@ const PostContent = ({ post }) => {
       </TouchableOpacity>
 
       {/* time */}
-      <Text className="font-semibold mt-3">{formatDistance(postedAtDate, new Date(), { addSuffix: true })}</Text>
+      <Text className="font-semibold mt-3">
+        {formatDistance(postedAtDate, new Date(), { addSuffix: true })}
+      </Text>
 
       {/* comments section modal */}
       <Comments
@@ -121,12 +136,26 @@ const PostContent = ({ post }) => {
   );
 };
 
-const PostContainer = ({ containerStyles, post }) => {
-  return (
-    <View className={containerStyles}>
-      <PostContent post={post}/>
-    </View>
-  );
+const PostContainer = ({ containerStyles, post, onDelete }) => {
+  const [cuid, setCuid] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCurrentUserId = async () => {
+      const cuser = await getCurrentUser();
+      setCuid(cuser.uid);
+      setLoading(false); // Set loading to false after fetching the user ID
+    };
+    fetchCurrentUserId();
+  }, []);
+
+  if (!loading) {
+    return (
+      <View className={containerStyles}>
+        <PostContent post={post} cuid={cuid} onDelete={onDelete} />
+      </View>
+    );
+  }
 };
 
 export default PostContainer;
