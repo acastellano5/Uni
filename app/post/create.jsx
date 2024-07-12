@@ -8,7 +8,7 @@ import CustomButton from "../../components/CustomButton";
 import { useState, useEffect } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { runSeed, seedDatabase, seedGroups } from "../../lib/seed";
-import { createComment, createEvent, createPost, createUserPost, deleteComment, filterUserByRole, followUser, getCommunityEvents, getEventById, getGroupByCategory, getGroupById, getGroupsByUser, getUserByGroup, getUsers, isAttended, isPostLiked, isUserInGroup } from "../../lib/useFirebase";
+import { createComment, createEvent, createPost, createUserPost, deleteComment, filterUserByRole, followUser, getCommunityEvents, getEventById, getFollowers, getGroupByCategory, getGroupById, getGroupsByUser, getOrgs, getUserByGroup, getUsers, isAttended, isPostLiked, isUserInGroup, leaveGroup, leaveOrg } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router } from "expo-router";
 import { getCurrentUser } from "../../lib/firebase";

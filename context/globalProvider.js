@@ -1,6 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import auth from '@react-native-firebase/auth'
-import {getCurrentUser} from "../lib/firebase";
 const GlobalContext = createContext()
 export const useGlobalContext = () => useContext(GlobalContext);
 
