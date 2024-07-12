@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import Comments from "./CommentsSection";
@@ -21,8 +21,20 @@ const PostContent = ({ post, cuid, onDelete }) => {
 
   const handleDelete = async () => {
     try {
-      await delPost(orgId, post.postId);
-      onDelete(post.postId); // call the onDelete callback with the post ID
+      Alert.alert("Delete Post", "Are you sure you want to delete this post?", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            await delPost(orgId, post.postId);
+            onDelete(post.postId);
+          },
+        },
+      ]);
     } catch (error) {
       console.error("Error deleting post:", error);
     }
@@ -78,7 +90,6 @@ const PostContent = ({ post, cuid, onDelete }) => {
           <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
             <FontAwesome name="trash-o" size={24} color="red" />
           </TouchableOpacity>
-        
         ) : null}
       </View>
 
