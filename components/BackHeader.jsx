@@ -19,13 +19,6 @@ const BackHeader = ({ containerStyles, title, route, params }) => {
       </TouchableOpacity>
 
       <Text className="text-2xl text-white font-semibold">{title}</Text>
-
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => router.push("/aiChat")}
-      >
-        <Image source={logo} className="h-[4vh] w-[4vh]" />
-      </TouchableOpacity>
     </View>
   );
 };
