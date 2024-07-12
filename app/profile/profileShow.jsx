@@ -14,6 +14,7 @@ import InfoBox from "../../components/profile/InfoBox";
 import PostSection from "../../components/profile/PostSection";
 import BackHeader from "../../components/BackHeader";
 import { useLocalSearchParams } from "expo-router";
+import Settings from "../../components/profile/settings/Settings";
 import {
   getUserAttributes,
   followUser,
@@ -30,26 +31,36 @@ const ProfileShow = () => {
   const { orgId } = useGlobalContext();
 
   const params = useLocalSearchParams();
-  const { uid } = params;
+  const [uid, setUid] = useState(params.uid);
 
   // Setting user state and retrieving user data from the database
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true); // Add loading state
 
+  // settings modal state
+  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+
   // set groups state
   const [groups, setGroups] = useState([]);
   // set posts state
-  const [ posts, setPosts ] = useState([])
+  const [posts, setPosts] = useState([]);
 
   // set current user state
-  const [currentUserId, setCurrentUserId] = useState([]);
+  const [currentUserId, setCurrentUserId] = useState("");
 
   // fetch user info and groups
   useEffect(() => {
     // fetch the user's profile info and current user info
     const fetchUsers = async () => {
-      // fetch user info
-      const userResult = await getUserAttributes(uid, orgId);
+      let userResult;
+      if (uid) {
+        userResult = await getUserAttributes(uid, orgId);
+      } else {
+        const currentUser = await getCurrentUser();
+        userResult = await getUserAttributes(currentUser.uid, orgId);
+        setUid(currentUser.uid); // update the state with current user uid
+      }
+
       setUser(userResult);
 
       // fetch groups the user is a part of
@@ -63,23 +74,22 @@ const ProfileShow = () => {
       setGroups(fetchedGroups);
 
       // fetch posts the user has
-      let userPosts = await getPostByAuthor(uid, orgId)
+      let userPosts = await getPostByAuthor(uid, orgId);
       userPosts = await Promise.all(userPosts.map(async (post) => {
-        const author = await getUserAttributes(uid)
+        const author = await getUserAttributes(uid);
         return {
           ...post,
           type: 'user',
           authorName: author.fullName,
           authorId: author.id,
           authorType: author.orgs[orgId].role
-        }
-    }))
-      setPosts(userPosts)
-
+        };
+      }));
+      setPosts(userPosts);
 
       // fetch current user info
-        const user = await getCurrentUser();
-        setCurrentUserId(user.uid);
+      const user = await getCurrentUser();
+      setCurrentUserId(user.uid);
 
       setLoading(false); // Set loading to false once data is fetched
     };
@@ -90,7 +100,7 @@ const ProfileShow = () => {
   // state to see if current user is following this user
   const [isFollowing, setIsFollowing] = useState(false);
 
-  // set the state to whether or not they or following user
+  // set the state to whether or not they are following user
   useEffect(() => {
     const fetchIsFollowing = async () => {
       const isUserFollowing = await ifUserFollowed(uid, orgId);
@@ -98,11 +108,11 @@ const ProfileShow = () => {
     };
 
     fetchIsFollowing();
-  }, []);
+  }, [uid]);
 
   return (
     <SafeAreaView className="h-full bg-black">
-      <BackHeader containerStyles="w-11/12 mx-auto" />
+      <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum"/>
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         {loading ? (
@@ -123,10 +133,9 @@ const ProfileShow = () => {
               {/* for passing in fullName */}
               {/* <Text className="text-lg font-medium mb-2">{`${user.fullName}`}</Text> */}
 
-              <Text className="text-lg font-medium mb-2">{user.fullName}</Text>
-
+              <Text className="text-lg font-medium">{user.fullName}</Text>
               {currentUserId !== uid ? (
-                <View className="flex-row w-2/3 mx-auto">
+                <View className="flex-row w-2/3 mx-auto mt-2">
                   <CustomButton
                     title={!isFollowing ? "Follow" : "Unfollow"}
                     containerStyles="border border-primary py-1 w-3/6"
@@ -147,7 +156,20 @@ const ProfileShow = () => {
                     textStyles="text-primary text-sm font-semibold"
                   />
                 </View>
-              ) : null}
+              ) : (
+                <View className="flex-row mb-4">
+                  <CustomButton
+                    title="Edit"
+                    textStyles="text-primary text-sm font-semibold"
+                  />
+                  <CustomButton
+                    title="Settings"
+                    containerStyles="ml-2"
+                    textStyles="text-darkGray text-sm font-semibold"
+                    handlePress={() => setIsSettingsVisible(true)}
+                  />
+                </View>
+              )}
             </View>
 
             {/* bio section */}
@@ -171,6 +193,15 @@ const ProfileShow = () => {
               <InfoBox title="Classes" />
 
               <PostSection posts={posts}/>
+
+              <Settings
+                visible={isSettingsVisible}
+                onRequestClose={() => {
+                  setIsSettingsVisible(false);
+                }}
+                animationType="slide"
+                presentationStyle="formSheet"
+              />
             </View>
           </ScrollView>
         )}

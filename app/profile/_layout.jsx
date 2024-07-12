@@ -7,12 +7,6 @@ const ProfileLayout = () => {
   return (
     <>
       <Stack screenOptions={{gestureEnabled: false}}>
-        <Stack.Screen
-          name="myProfile"
-          options={{
-            headerShown: false,
-          }}
-        />
 
         <Stack.Screen
           name="profileShow"

@@ -9,7 +9,7 @@ const Header = ({ textStyles }) => {
     <View className="flex-row justify-between w-11/12 mx-auto items-center">
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => router.push("/profile/myProfile")}
+        onPress={() => router.push("/profile/profileShow")}
       >
         <FontAwesome name="user-circle" size={27} color="white" />
       </TouchableOpacity>
