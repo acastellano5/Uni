@@ -8,7 +8,7 @@ import CustomButton from "../../components/CustomButton";
 import { useState, useEffect } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { runSeed, seedDatabase, seedGroups } from "../../lib/seed";
-import { createComment, createEvent, createPost, createUserPost, deleteComment, filterUserByRole, followUser, getCommunityEvents, getEventById, getGroupByCategory, getGroupById, getGroupsByUser, getUserByGroup, getUsers, isAttended, isPostLiked, isUserInGroup, createGroupPost } from "../../lib/useFirebase";
+import { createComment, createEvent, createPost, createUserPost, deleteComment, filterUserByRole, followUser, getCommunityEvents, getEventById, getGroupByCategory, getGroupById, getGroupsByUser, getUserByGroup, getUsers, isAttended, isPostLiked, isUserInGroup, createGroupPost, getPostByAuthor } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router } from "expo-router";
 import { getCurrentUser } from "../../lib/firebase";
@@ -35,6 +35,8 @@ const create = () => {
 
   // getting orgId from global context
   const { orgId } = useGlobalContext();
+  getPostByAuthor('lbNMpnLjx9bU1mROL6AjtSQdub73',orgId)
+
   const params = useLocalSearchParams();
   const { authorType, groupId } = params
   //getGroupsByUser('lbNMpnLjx9bU1mROL6AjtSQdub73',orgId)
