@@ -6,23 +6,26 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Modal,
+  Dimensions,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TabsDisplay from "../../components/TabsDisplay";
 import GroupInfo from "../../components/groups/GroupInfo";
 import GroupMembers from "../../components/groups/GroupMembers";
 import BackHeader from "../../components/BackHeader";
+import CustomButton from "../../components/CustomButton"
 import {
   getGroupById,
   joinGroup,
   isUserInGroup,
   leaveGroup,
   ifGroupFollowed,
-  unfollowGroup, 
+  unfollowGroup,
   followGroup,
-  isUserModerator
+  isUserModerator,
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { AntDesign } from '@expo/vector-icons';
@@ -30,31 +33,27 @@ import { AntDesign } from '@expo/vector-icons';
 const tabs = ["Info", "Members"];
 
 const GroupHome = () => {
-  // getting orgId from global context
   const { orgId } = useGlobalContext();
-
-  // retrieve params from request
   const params = useLocalSearchParams();
   const { id } = params;
 
-  // setting tabs state
   const [activeTab, setActiveTab] = useState(tabs[0]);
-
-  // setting group state
   const [group, setGroup] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isInGroup, setIsInGroup] = useState(false);
+  const [isFollowingGroup, setIsFollowingGroup] = useState(false);
+  const [isModerator, setIsModerator] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // function gets group data
   const fetchGroup = async () => {
     if (!id) {
       console.log("ID is not available");
       return;
     }
 
-    // console.log("Fetching group data for ID:", id);
     try {
       const groupData = await getGroupById(id, orgId);
       if (groupData) {
-        // console.log("Group data fetched:", groupData);
         setGroup(groupData);
       } else {
         console.log("No group data found");
@@ -64,23 +63,11 @@ const GroupHome = () => {
     }
   };
 
-  // fetching group data
   useEffect(() => {
     fetchGroup();
   }, [id]);
 
-  // isInGroup state
-  const [isInGroup, setIsInGroup] = useState(false);
-  // see if they are following group
-  const [isFollowingGroup, setIsFollowingGroup] = useState(false);
-
-
-  // see if the currentUser is moderator
-  const [ isModerator, setIsModerator ] = useState(false)
-
-
   useEffect(() => {
-    // set the statuses of user
     const fetchStatus = async () => {
       if (group) {
         const status = await isUserInGroup(group.id, orgId);
@@ -89,8 +76,10 @@ const GroupHome = () => {
         const isFollowing = await ifGroupFollowed(group.id, orgId);
         setIsFollowingGroup(isFollowing);
 
-        const isGroupModerator = await isUserModerator(group.id, orgId)
-        setIsModerator(isGroupModerator)
+        const isGroupModerator = await isUserModerator(group.id, orgId);
+        setIsModerator(isGroupModerator);
+
+        setIsLoading(false);
       }
     };
     fetchStatus();
@@ -109,14 +98,14 @@ const GroupHome = () => {
           onPress: async () => {
             await leaveGroup(orgId, group.id);
             setIsInGroup(false);
-            await fetchGroup(); // Fetch the updated group members list
+            await fetchGroup();
           },
         },
       ]);
     } else {
       await joinGroup(orgId, group.id);
       setIsInGroup(true);
-      await fetchGroup(); // Fetch the updated group members list
+      await fetchGroup();
     }
   };
 
@@ -134,18 +123,14 @@ const GroupHome = () => {
     switch (activeTab) {
       case "Info":
         return <GroupInfo group={group} />;
-
       case "Members":
-        return (
-          <GroupMembers members={group.members} moderators={group.moderators} />
-        );
-
+        return <GroupMembers members={group.members} moderators={group.moderators} />;
       default:
         return null;
     }
   };
 
-  if (!group) {
+  if (isLoading) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-white">
         <Text className="text-lg font-semibold">Loading...</Text>
@@ -156,25 +141,18 @@ const GroupHome = () => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false} className="bg-white">
-        {/* group background image */}
         <ImageBackground
           className="w-full h-[40vh] pb-5"
           source={{ uri: `${group.image}` }}
         >
           <SafeAreaView className="w-11/12 mx-auto h-full justify-between z-10">
-            {/* back button and ai btn */}
             <BackHeader />
-
-            {/* group name and join button */}
             <View className="flex-row justify-between items-center">
-              {/* group name */}
               <View className="bg-tertiary py-2 px-4 rounded" style={{ maxWidth: "60%" }}>
                 <Text className="text-white text-base font-semibold">
                   {group.name}
                 </Text>
               </View>
-
-              {/* buttons */}
               <View className="flex-row items-center">
                 {!isInGroup && !isModerator ? (
                   <TouchableOpacity
@@ -189,24 +167,20 @@ const GroupHome = () => {
                     )}
                   </TouchableOpacity>
                 ) : null}
-
                 <TouchableOpacity
                   onPress={handleJoinOrLeaveGroup}
                   className="bg-white py-2 px-3 rounded"
                   activeOpacity={0.8}
                 >
                   <Text className="text-primary text-base font-semibold">
-                    {isInGroup || isModerator? "Leave" : "Join"}
+                    {isInGroup || isModerator ? "Leave" : "Join"}
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </SafeAreaView>
-
           <View style={styles.overlay} />
         </ImageBackground>
-
-        {/* group info */}
         <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-11 bottom-10">
           <TabsDisplay
             tabs={tabs}
@@ -216,22 +190,54 @@ const GroupHome = () => {
             textStyles="text-lg"
             tabBarStyles="mb-6 w-11/12"
           />
-
           {displayTabContent()}
         </View>
       </ScrollView>
-      
       {isModerator ? (
         <TouchableOpacity
-        style={styles.floatingButton}
-        onPress={() => Alert.alert('Button Pressed!')}
-      >
-        <AntDesign name="plus" size={24} color="white" />
-      </TouchableOpacity>
+          style={styles.floatingButton}
+          onPress={() => setIsModalVisible(true)}
+        >
+          <AntDesign name="plus" size={24} color="white" />
+        </TouchableOpacity>
       ) : null}
+
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => {
+          setIsModalVisible(!isModalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+
+            <CustomButton title="Create Post" containerStyles="bg-primary w-full" textStyles="text-white py-2 text-base" handlePress={() => {
+              setIsModalVisible(!isModalVisible)
+              router.push({
+                pathname: '/post/create',
+                params: {authorType: 'group', groupId: group.id, orgId}
+              })
+            }}/>
+
+            <CustomButton title="Create Event" containerStyles="bg-primary w-full my-3 mb-5" textStyles="text-white py-2 text-base"/>
+
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => setIsModalVisible(!isModalVisible)}
+            >
+              <Text className="text-base">Close</Text>
+            </TouchableOpacity>
+          
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
+
+const { height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   overlay: {
@@ -239,16 +245,35 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.2)",
   },
   floatingButton: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 70,
     right: 20,
-    backgroundColor: '#22c55e',
+    backgroundColor: "#22c55e",
     borderRadius: 30,
     width: 60,
     height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "100%",
+    height: height * 0.25,
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  }
 });
 
 export default GroupHome;
