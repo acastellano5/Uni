@@ -142,6 +142,10 @@ export default function Home() {
     setRefreshing(false);
   };
 
+  const handlePostDelete = (postId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
+  };
+
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       if (activeTab === "Following") {
@@ -183,6 +187,7 @@ export default function Home() {
                 key={index}
                 containerStyles="w-10/12 mx-auto mb-10"
                 post={post}
+                onDelete={handlePostDelete} // pass the handlePostDelete function
               />
             ))
           )}
