@@ -19,7 +19,7 @@ const PostImage = ({ post }) => {
       params: {
         ...post,
         source: "PostSection",
-        postedAt: post.postedAt.seconds,
+        postedAt: post.postedAt.seconds
       }
       })}>
       <Image 

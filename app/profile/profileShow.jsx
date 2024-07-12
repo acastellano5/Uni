@@ -6,7 +6,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
 import CustomButton from "../../components/CustomButton";
@@ -25,6 +25,7 @@ import {
 } from "../../lib/useFirebase";
 import { getCurrentUser } from "../../lib/firebase";
 import { useGlobalContext } from "../../context/globalProvider";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ProfileShow = () => {
   // getting orgId from global context
@@ -48,54 +49,61 @@ const ProfileShow = () => {
   // set current user state
   const [currentUserId, setCurrentUserId] = useState("");
 
+  // fetch the user's post
+  const fetchUserPosts = async () => {
+    let userPosts = await getPostByAuthor(uid, orgId);
+    userPosts = await Promise.all(userPosts.map(async (post) => {
+      const author = await getUserAttributes(uid);
+      return {
+        ...post,
+        type: 'user',
+        authorName: author.fullName,
+        authorId: author.id,
+        authorType: author.orgs[orgId].role
+      };
+    }));
+    setPosts(userPosts);
+  }
+
   // fetch user info and groups
-  useEffect(() => {
-    // fetch the user's profile info and current user info
-    const fetchUsers = async () => {
-      let userResult;
-      if (uid) {
-        userResult = await getUserAttributes(uid, orgId);
-      } else {
-        const currentUser = await getCurrentUser();
-        userResult = await getUserAttributes(currentUser.uid, orgId);
-        setUid(currentUser.uid); // update the state with current user uid
-      }
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUsers = async () => {
+        setLoading(true); // Set loading to true when fetching data
+        let userResult;
+        if (uid) {
+          userResult = await getUserAttributes(uid, orgId);
+        } else {
+          const currentUser = await getCurrentUser();
+          userResult = await getUserAttributes(currentUser.uid, orgId);
+          setUid(currentUser.uid); // update the state with current user uid
+        }
 
-      setUser(userResult);
+        setUser(userResult);
 
-      // fetch groups the user is a part of
-      const groupIds = userResult.orgs[orgId].groups;
-      const fetchedGroups = await Promise.all(
-        groupIds.map(async (groupId) => {
-          const group = await getGroupById(groupId, orgId);
-          return { name: group.name, id: group.id, orgId: group.orgId };
-        })
-      );
-      setGroups(fetchedGroups);
+        // fetch groups the user is a part of
+        const groupIds = userResult.orgs[orgId].groups;
+        const fetchedGroups = await Promise.all(
+          groupIds.map(async (groupId) => {
+            const group = await getGroupById(groupId, orgId);
+            return { name: group.name, id: group.id, orgId: group.orgId };
+          })
+        );
+        setGroups(fetchedGroups);
 
-      // fetch posts the user has
-      let userPosts = await getPostByAuthor(uid, orgId);
-      userPosts = await Promise.all(userPosts.map(async (post) => {
-        const author = await getUserAttributes(uid);
-        return {
-          ...post,
-          type: 'user',
-          authorName: author.fullName,
-          authorId: author.id,
-          authorType: author.orgs[orgId].role
-        };
-      }));
-      setPosts(userPosts);
+        // fetch posts the user has
+        fetchUserPosts()
 
-      // fetch current user info
-      const user = await getCurrentUser();
-      setCurrentUserId(user.uid);
+        // fetch current user info
+        const user = await getCurrentUser();
+        setCurrentUserId(user.uid);
 
-      setLoading(false); // Set loading to false once data is fetched
-    };
+        setLoading(false); // Set loading to false once data is fetched
+      };
 
-    fetchUsers();
-  }, [uid]);
+      fetchUsers();
+    }, [uid])
+  );
 
   // state to see if current user is following this user
   const [isFollowing, setIsFollowing] = useState(false);

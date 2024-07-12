@@ -16,7 +16,9 @@ const ShowPost = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
             <View className="w-11/12 mx-auto">
                 <BackHeader containerStyles="mb-10"/>
-                <Post post={post} onDelete={() => router.dismiss()}/>
+                <Post post={post} onDelete={() => {
+                  router.dismiss()
+                  }}/>
             </View>
         </ScrollView>
     </SafeAreaView>
