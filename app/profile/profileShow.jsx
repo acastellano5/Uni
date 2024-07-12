@@ -69,7 +69,6 @@ const ProfileShow = () => {
   useFocusEffect(
     useCallback(() => {
       const fetchUsers = async () => {
-        setLoading(true); // Set loading to true when fetching data
         let userResult;
         if (uid) {
           userResult = await getUserAttributes(uid, orgId);
