@@ -11,7 +11,8 @@ const SearchBar = ({
   handleChangeText,
   textValue,
   handleSubmitEditing,
-  onClearSearch
+  onClearSearch,
+  needFilter,
 }) => {
   const isDisabled = isFilterDisabled;
   return (
@@ -19,7 +20,7 @@ const SearchBar = ({
       className={`w-10/12 mx-auto flex-row justify-between items-center ${containerStyles}`}
     >
       {/* search field */}
-      <View className="flex-row px-4 py-3 bg-white rounded-md w-10/12 border border-tertiary shadow">
+      <View className={`flex-row px-4 py-3 bg-white rounded-md border border-tertiary shadow ${needFilter ? 'w-10/12' : 'w-full'}`}>
         {/* search icon */}
         <TouchableOpacity
           className="absolute left-2 top-3"
@@ -38,27 +39,31 @@ const SearchBar = ({
           onSubmitEditing={handleSubmitEditing}
         />
 
-
         {/* clear search field button */}
         {textValue ? (
-          <TouchableOpacity className="absolute right-2 top-2" activeOpacity={0.8} onPress={onClearSearch}>
+          <TouchableOpacity
+            className="absolute right-2 top-2"
+            activeOpacity={0.8}
+            onPress={onClearSearch}
+          >
             <Ionicons name="close-circle-outline" size={24} color="#CDCDE0" />
           </TouchableOpacity>
         ) : null}
       </View>
 
       {/* filter button */}
-
-      <TouchableOpacity
-        className={`bg-white p-3 rounded-md border border-tertiary shadow ${
-          isDisabled ? "opacity-50" : "opacity-100"
-        }`}
-        onPress={filterOnPress}
-        disabled={isDisabled}
-        activeOpacity={0.8}
-      >
-        <Ionicons name="filter" size={19} color="#CDCDE0" />
-      </TouchableOpacity>
+      {needFilter ? (
+        <TouchableOpacity
+          className={`bg-white p-3 rounded-md border border-tertiary shadow ${
+            isDisabled ? "opacity-50" : "opacity-100"
+          }`}
+          onPress={filterOnPress}
+          disabled={isDisabled}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="filter" size={19} color="#CDCDE0" />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };

@@ -106,7 +106,7 @@ export default function Home() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#22c55e"]} tintColor="#22c55e"/>
           }
         >
           {/* Search bar */}
@@ -118,6 +118,7 @@ export default function Home() {
             onClearSearch={handleClearSearch}
             handleChangeText={(e) => setSearchValue(e)}
             handleSubmitEditing={onSubmitSearch}
+            needFilter={true}
           />
 
           <View className="w-10/12 mx-auto flex-row justify-center items-center mt-5">

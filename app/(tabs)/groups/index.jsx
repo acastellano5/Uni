@@ -4,182 +4,217 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
 import SearchBar from "../../../components/SearchBar";
 import GroupSection from "../../../components/groups/GroupSection";
-import { getGroupsByCategory, getGroupsByName } from "../../../lib/useFirebase";
+import {
+  getGroupsByCategory,
+  getGroupsByName,
+  getGroupsByUser,
+  getFollowedGroupsByUser,
+} from "../../../lib/useFirebase";
+import { getCurrentUser } from "../../../lib/firebase";
 import Group from "../../../components/groups/Group";
 import BackButton from "../../../components/BackButton";
 import GroupFilter from "../../../components/groups/GroupFilter";
 import { useGlobalContext } from "../../../context/globalProvider";
+import TabsDisplay from "../../../components/TabsDisplay";
+
+const tabs = ["My Groups", "All"];
+const groupTypes = [
+  "Academic",
+  "Faith, Justice, Wellness",
+  "Athletic",
+  "General",
+];
 
 export default function Groups() {
-  // getting orgId from global context
   const { orgId } = useGlobalContext();
-
-  // set state of groups
-  const [groups, setGroups] = useState({
-    Technology: [],
-    Arts: [],
-    Athletic: [],
-    Academic: [],
-    Service: [],
-    General: [],
-  });
-
-  // set state for loading
+  const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [currentUser, setCurrentUser] = useState("");
+  const [groups, setGroups] = useState({});
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchGroups = async () => {
-      const groupTypes = [
-        "Technology",
-        "Arts",
-        "Athletic",
-        "Academic",
-        "Service",
-        "Faith, Justice, Wellness",
-        "General",
-      ];
-      const groupData = {};
-
-      for (const type of groupTypes) {
-        // returns array of groups based on type passed in
-        const groupsByType = await getGroupsByCategory(type, orgId);
-        // assigns the type key (ex. Technology) to group data
-        // will look something like this:
-        //      Technology: [array]
-        //      Arts: [array]
-        //      Athletic [array]
-        groupData[type] = groupsByType;
-      }
-
-      // sets the state of groups
-      setGroups(groupData);
-      setLoading(false); // set loading to false once data is fetched
-    };
-
-    // calls fetchGroups when groups tab loads
-    fetchGroups();
-  }, []);
-
-  // set state for the search input's value
+  const [refreshing, setRefreshing] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-
-  // state for if there are search results it will display them
   const [isSearchResult, setIsSearchResult] = useState(false);
-
-  // state for the search results themselves (the groups)
   const [searchResults, setSearchResults] = useState([]);
-
-  // executes when search is submitted
-  const onSubmitSearch = async () => {
-    // make sure that search value isn't empty
-    if (!searchValue.trim()) {
-      return;
-    }
-
-    // fetch group result
-    const groupsResult = await getGroupsByName(searchValue, orgId);
-    setIsSearchResult(true);
-    setSearchResults(groupsResult ? groupsResult : []);
-  };
-
-  // state for filter visibility
   const [isFilterVisible, setIsFilterVisible] = useState(false);
-
-  // state for whether a filter is applied
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
-  // callback function to update groups state when a filter is selected
-  const handleFilterSelect = async (selectedCategory) => {
-    const filteredGroups = await getGroupsByCategory(selectedCategory, orgId); // get groups by selected category
-    setGroups({ [selectedCategory]: filteredGroups }); // update state with filtered groups
-    setIsFilterApplied(true); // indicate that a filter is applied
-  };
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const user = await getCurrentUser();
+      setCurrentUser(user.uid);
+    };
 
-  // function to reset filter and show all groups
-  const resetFilter = async () => {
-    setLoading(true); // show loading indicator
-    const groupTypes = ["Technology", "Arts", "Athletic", "Academic", "Service", "Faith, Justice, Wellness", "General"];
+    fetchCurrentUser();
+  }, []);
+
+  const fetchAllGroups = async (isRefreshing) => {
+    if (!isRefreshing) {
+      setLoading(true);
+    }
     const groupData = {};
 
     for (const type of groupTypes) {
-      const groupsByType = await getGroupsByCategory(type, orgId); // get groups by each type
-      groupData[type] = groupsByType; // update state with groups by type
+      const groupsByType = await getGroupsByCategory(type, orgId);
+      groupData[type] = groupsByType;
+    }
+    setGroups(groupData);
+    setLoading(false);
+    setRefreshing(false);
+  };
+
+  const fetchMyGroups = async (isRefreshing) => {
+    if (!isRefreshing) {
+      setLoading(true);
+    }
+    const groupCategories = ["Joined", "Following"];
+    const groupData = {};
+
+    for (const category of groupCategories) {
+      if (category === "Joined") {
+        const joinedGroups = await getGroupsByUser(currentUser, orgId, true);
+        groupData[category] = joinedGroups;
+      } else if (category === "Following") {
+        const followedGroups = await getFollowedGroupsByUser(
+          currentUser,
+          orgId,
+          true
+        );
+        groupData[category] = followedGroups;
+      }
     }
 
-    setGroups(groupData); // set state of groups
-    setLoading(false); // hide loading indicator
-    setIsFilterApplied(false); // indicate that the filter is reset
+    setGroups(groupData);
+    setLoading(false);
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      if (activeTab === "All") {
+        fetchAllGroups();
+      } else if (activeTab === "My Groups") {
+        fetchMyGroups();
+      }
+    }
+  }, [activeTab, currentUser]);
+
+  const onSubmitSearch = async () => {
+    if (!searchValue.trim()) return;
+
+    const groupsResult = await getGroupsByName(searchValue, orgId);
+    setIsSearchResult(true);
+    setIsFilterApplied(false);
+    setSearchResults(groupsResult || []);
+  };
+
+  const handleFilterSelect = async (selectedCategory) => {
+    const filteredGroups = await getGroupsByCategory(selectedCategory, orgId);
+    setGroups({ [selectedCategory]: filteredGroups });
+    setIsSearchResult(false);
+    setSearchValue("");
+    setSearchResults([]);
+    setIsFilterApplied(true);
+  };
+
+  const resetFilter = async () => {
+    setLoading(true);
+    const groupData = {};
+
+    for (const type of groupTypes) {
+      const groupsByType = await getGroupsByCategory(type, orgId);
+      groupData[type] = groupsByType;
+    }
+
+    setGroups(groupData);
+    setLoading(false);
+    setIsFilterApplied(false);
+  };
+
+  const resetGroups = (isRefreshing) => {
+    setSearchValue("");
+    setIsSearchResult(false);
+    setSearchResults([]);
+    setIsFilterApplied(false);
+    fetchAllGroups(isRefreshing);
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    if (activeTab === "All") {
+      resetGroups(true)
+    } else if (activeTab === "My Groups") {
+      fetchMyGroups(true);
+    }
   };
 
   return (
     <SafeAreaView className="h-full bg-black">
-      {/* Header */}
-      <Header title="Groups" />
-
+      <Header />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl">
-        {loading ? (
-          // Display ActivityIndicator while loading
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#22c55e" />
-            <Text style={styles.loadingText}>Loading groups...</Text>
-          </View>
-        ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {/* Search bar */}
+        <TabsDisplay
+          tabs={tabs}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          containerStyles="py-3"
+          textStyles="text-base"
+          tabBarStyles="w-10/12 mt-3"
+        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#22c55e"]} tintColor="#22c55e"/>
+          }
+        >
+          {activeTab === "All" && (
             <SearchBar
               placeholder="Search groups"
               containerStyles="mt-5"
               textValue={searchValue}
-              handleChangeText={(e) => setSearchValue(e)}
+              handleChangeText={setSearchValue}
               handleSubmitEditing={onSubmitSearch}
-              onClearSearch={() => {
-                setSearchValue("");
-                setIsSearchResult(false);
-                setSearchResults([]);
-              }}
+              onClearSearch={() => resetGroups()}
               filterOnPress={() => setIsFilterVisible(true)}
+              needFilter={true}
             />
+          )}
 
-            {/* groups */}
+          {loading ? (
+            <View className="h-full items-center justify-center mt-10">
+              <ActivityIndicator size="large" color="#22c55e" />
+            </View>
+          ) : (
             <View className="w-10/12 mx-auto mt-5 mb-20">
-              {/* BackButton appears when a filter is applied */}
-              {isFilterApplied && (
-                <BackButton
-                  handlePress={resetFilter} // reset filter to show all groups
-                />
-              )}
+              {isFilterApplied && <BackButton handlePress={resetFilter} />}
               {!isSearchResult ? (
                 Object.keys(groups).length > 0 &&
                 Object.values(groups).every((arr) => arr.length === 0) ? (
                   <Text style={styles.noResultsText}>No groups found.</Text>
                 ) : (
-                  Object.keys(groups).map((category) =>
-                    groups[category].length > 0 ? (
-                      <GroupSection
-                        key={category}
-                        category={category}
-                        groups={groups[category]}
-                      />
-                    ) : null
+                  Object.keys(groups).map(
+                    (category) =>
+                      groups[category].length > 0 && (
+                        <GroupSection
+                          key={category}
+                          category={category}
+                          groups={groups[category]}
+                        />
+                      )
                   )
                 )
               ) : searchResults.length > 0 ? (
                 <>
-                  {/* back to all groups */}
                   <BackButton
                     handlePress={() => {
-                      setSearchValue("");
-                      setIsSearchResult(false);
-                      setSearchResults([]);
+                      resetGroups();
                     }}
                   />
-                  {/* if group was found it will render */}
                   <View className="flex-row flex-wrap">
                     {searchResults.map((group) => (
                       <Group key={group.id} name={group.name} id={group.id} />
@@ -187,47 +222,33 @@ export default function Groups() {
                   </View>
                 </>
               ) : (
-                // if group wasn't found, this will render
                 <>
-                  {/* back to all groups */}
                   <BackButton
                     handlePress={() => {
-                      setSearchValue("");
-                      setIsSearchResult(false);
-                      setSearchResults([]);
+                      resetGroups();
                     }}
                   />
                   <Text style={styles.noResultsText}>No groups found</Text>
                 </>
               )}
             </View>
+          )}
 
-            {/* group filter */}
-            <GroupFilter
-              visible={isFilterVisible}
-              onRequestClose={() => setIsFilterVisible(false)}
-              animationType="slide"
-              presentationStyle="formSheet"
-              onFilterSelect={handleFilterSelect} // pass handleFilterSelect to GroupFilter
-            />
-          </ScrollView>
-        )}
+          <GroupFilter
+            visible={isFilterVisible}
+            onRequestClose={() => setIsFilterVisible(false)}
+            animationType="slide"
+            presentationStyle="formSheet"
+            onFilterSelect={handleFilterSelect}
+            groupTypes={groupTypes}
+          />
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 18,
-    color: "#000",
-  },
   noResultsText: {
     fontSize: 18,
     color: "#000",
