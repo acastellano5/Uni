@@ -3,7 +3,7 @@ import React from 'react'
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from '../../components/BackHeader';
 import Post from '../../components/post/Post';
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 const ShowPost = () => {
   // retrieve params from request
@@ -16,7 +16,7 @@ const ShowPost = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
             <View className="w-11/12 mx-auto">
                 <BackHeader containerStyles="mb-10"/>
-                <Post post={post}/>
+                <Post post={post} onDelete={() => router.dismiss()}/>
             </View>
         </ScrollView>
     </SafeAreaView>

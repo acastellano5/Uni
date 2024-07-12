@@ -48,8 +48,8 @@ const create = () => {
   })
   const [image, setImage] = useState(null);
   const [form, setForm] = useState({
-    caption: "",
-    postUrl: "",
+    caption: "pool day",
+    postUrl: "https://leisurepoolsusa.com/wp-content/uploads/2020/06/best-type-of-swimming-pool-for-my-home_2.jpg",
   });
 
   useEffect(() => {
