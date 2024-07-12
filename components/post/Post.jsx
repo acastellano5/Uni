@@ -1,12 +1,14 @@
 import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
-import { FontAwesome } from "@expo/vector-icons";
 import Comments from "./CommentsSection";
 import { router } from "expo-router";
 import { formatDistance } from "date-fns";
 import { getCurrentUser } from "../../lib/firebase";
 import { delPost } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
+import LikeButton from "./LikeButton";
+import CommentButton from "./CommentButton";
+import { FontAwesome } from "@expo/vector-icons";
 
 const PostContent = ({ post, cuid, onDelete }) => {
   const { orgId } = useGlobalContext();
@@ -43,6 +45,7 @@ const PostContent = ({ post, cuid, onDelete }) => {
   return (
     <>
       <View className="flex-row justify-between mb-3">
+        {/* author info */}
         <View className="flex-row items-center">
           <TouchableOpacity
             activeOpacity={0.8}
@@ -93,7 +96,7 @@ const PostContent = ({ post, cuid, onDelete }) => {
         ) : null}
       </View>
 
-      {/* actual post */}
+      {/* post content */}
       <Image
         source={{ uri: post.content }}
         resizeMode="cover"
@@ -103,19 +106,11 @@ const PostContent = ({ post, cuid, onDelete }) => {
       {/* like, comment, save */}
       <View className="mt-3 flex-row items-center justify-between">
         <View className="flex-row items-center">
-          {/* like */}
-          <View className="flex-row items-center">
-            <FontAwesome name="heart-o" size={24} color="black" />
-            <Text className="text-base ml-2">234</Text>
-          </View>
+          {/* like button */}
+          <LikeButton/>
 
-          {/* comment */}
-          <View className="flex-row items-center ml-10">
-            <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-              <FontAwesome name="commenting-o" size={24} color="black" />
-            </TouchableOpacity>
-            <Text className="text-base ml-2">234</Text>
-          </View>
+          {/* comment button */}
+          <CommentButton/>
         </View>
       </View>
 
