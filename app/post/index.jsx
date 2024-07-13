@@ -8,8 +8,12 @@ import { router, useLocalSearchParams } from "expo-router";
 const ShowPost = () => {
   // retrieve params from request
   const params = useLocalSearchParams();
-  const post = params
-
+  let post = params
+  if (post.likes === "") {
+    post.likes = []
+  } else {
+    post.likes = post.likes.split(/[,\s]+/)
+  }
 
   return (
     <SafeAreaView className="h-full bg-darkWhite">

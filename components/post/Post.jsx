@@ -10,7 +10,7 @@ import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton"
 import { FontAwesome } from "@expo/vector-icons";
 
-const PostContent = ({ post, cuid, onDelete, isPostLiked, setIsPostLiked }) => {
+const PostContent = ({ post, cuid, onDelete }) => {
   const { orgId } = useGlobalContext();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -144,7 +144,6 @@ const PostContent = ({ post, cuid, onDelete, isPostLiked, setIsPostLiked }) => {
 
 const PostContainer = ({ containerStyles, post, onDelete }) => {
   const [cuid, setCuid] = useState("");
-  const [ isLiked, setIsLiked ] = useState(false)
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -161,7 +160,7 @@ const PostContainer = ({ containerStyles, post, onDelete }) => {
   if (!loading) {
     return (
       <View className={containerStyles}>
-        <PostContent post={post} cuid={cuid} onDelete={onDelete} isPostLiked={isLiked} setIsPostLiked={setIsLiked}/>
+        <PostContent post={post} cuid={cuid} onDelete={onDelete}/>
       </View>
     );
   }
