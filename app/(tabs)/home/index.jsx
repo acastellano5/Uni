@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Text,
   View,
@@ -7,36 +8,22 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from "react-native";
-import React, { useState, useEffect, useCallback } from "react";
-import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from '@react-navigation/native';
+import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
+
 import Header from "../../../components/Header";
 import Post from "../../../components/post/Post";
-import { Feather } from "@expo/vector-icons";
-import { useGlobalContext } from "../../../context/globalProvider";
 import TabsDisplay from "../../../components/TabsDisplay";
+import { useGlobalContext } from "../../../context/globalProvider";
 import { getCurrentUser } from "../../../lib/firebase";
-import {
-  getUserAttributes,
-  getPostsByTime,
-  getGroupById,
-  getFollowingPosts,
-} from "../../../lib/useFirebase";
-import { useFocusEffect } from '@react-navigation/native';
+import { getUserAttributes, getPostsByTime, getGroupById, getFollowingPosts } from "../../../lib/useFirebase";
 
 const tabs = ["Following", "Community"];
 
 export default function Home() {
   const { loading, isLogged, isVerified, orgId } = useGlobalContext();
-
-  useEffect(() => {
-    if (!loading && isLogged && isVerified) {
-      // Proceed to load data
-    } else {
-      router.replace("//index");
-    }
-  }, [loading, isLogged, isVerified]);
-
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUser, setCurrentUser] = useState({});
   const [posts, setPosts] = useState([]);
@@ -44,18 +31,22 @@ export default function Home() {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const currentUserInfo = await getCurrentUser();
-        const user = await getUserAttributes(currentUserInfo.uid);
-        setCurrentUser(user);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+    if (!loading && isLogged && isVerified) {
+      fetchUserData();
+    } else {
+      router.replace("//index");
+    }
+  }, [loading, isLogged, isVerified]);
 
-    fetchUserData();
-  }, []);
+  const fetchUserData = async () => {
+    try {
+      const currentUserInfo = await getCurrentUser();
+      const user = await getUserAttributes(currentUserInfo.uid);
+      setCurrentUser(user);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const combinePosts = useCallback(async (postsArr) => {
     const posts = await Promise.all(postsArr.map(async (post) => {
@@ -66,7 +57,7 @@ export default function Home() {
           type: "user",
           authorName: user.fullName,
           authorId: user.id,
-          authorType: user.orgs[orgId].role,
+          authorType: user.orgs[orgId]?.role,
         };
       } else if (post.authorType === "group") {
         const group = await getGroupById(post.author, orgId);
@@ -83,39 +74,25 @@ export default function Home() {
     return posts;
   }, [orgId]);
 
-  const getCommunityPosts = useCallback(async () => {
+  const getPosts = useCallback(async (fetchPosts) => {
     try {
       setPostsLoading(true);
-      const communityPosts = await getPostsByTime(orgId);
-      const combinedPosts = await combinePosts(communityPosts);
+      const posts = await fetchPosts(orgId);
+      const combinedPosts = await combinePosts(posts);
       setPosts(combinedPosts);
     } catch (error) {
       console.log(error);
     } finally {
       setPostsLoading(false);
     }
-  }, [orgId, combinePosts]);
+  }, [combinePosts, orgId]);
 
-  const getFollowingTabPosts = useCallback(async () => {
-    try {
-      setPostsLoading(true);
-      const followingPosts = await getFollowingPosts(orgId);
-      const combinedPosts = await combinePosts(followingPosts);
-      setPosts(combinedPosts);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setPostsLoading(false);
-    }
-  }, [orgId, combinePosts]);
+  const getCommunityPosts = useCallback(() => getPosts(getPostsByTime), [getPosts]);
+  const getFollowingTabPosts = useCallback(() => getPosts(getFollowingPosts), [getPosts]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    if (activeTab === "Following") {
-      await getFollowingTabPosts();
-    } else if (activeTab === "Community") {
-      await getCommunityPosts();
-    }
+    activeTab === "Following" ? await getFollowingTabPosts() : await getCommunityPosts();
     setRefreshing(false);
   }, [activeTab, getFollowingTabPosts, getCommunityPosts]);
 
@@ -126,11 +103,7 @@ export default function Home() {
   useFocusEffect(
     useCallback(() => {
       if (Object.keys(currentUser).length > 0) {
-        if (activeTab === "Following") {
-          getFollowingTabPosts();
-        } else if (activeTab === "Community") {
-          getCommunityPosts();
-        }
+        activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
       }
     }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts])
   );
@@ -175,12 +148,7 @@ export default function Home() {
         <TouchableOpacity
           style={styles.addBtn}
           activeOpacity={0.9}
-          onPress={() =>
-            router.push({
-              pathname: "/post/create",
-              params: { authorType: "user" },
-            })
-          }
+          onPress={() => router.push({ pathname: "/post/create", params: { authorType: "user" } })}
           className="shadow-lg"
         >
           <Feather name="plus" size={24} color="white" />
