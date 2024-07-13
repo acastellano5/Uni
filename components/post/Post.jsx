@@ -7,131 +7,70 @@ import { getCurrentUser } from "../../lib/firebase";
 import { delPost } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import CommentButton from "./CommentButton";
-import LikeButton from "./LikeButton"
+import LikeButton from "./LikeButton";
 import { FontAwesome } from "@expo/vector-icons";
 
 const PostContent = ({ post, cuid, onDelete }) => {
   const { orgId } = useGlobalContext();
-
   const [isModalVisible, setIsModalVisible] = useState(false);
-  let postedAtDate;
-  if (post.source === "PostSection") {
-    postedAtDate = new Date(post.postedAt * 1000);
-  } else {
-    postedAtDate = new Date(post.postedAt.seconds * 1000);
-  }
+
+  const postedAtDate = post.source === "PostSection" 
+    ? new Date(post.postedAt * 1000) 
+    : new Date(post.postedAt.seconds * 1000);
+
+  const navigateToProfile = () => {
+    const route = post.type === "user" ? "/profile/profileShow" : "/group";
+    const params = post.type === "user" ? { uid: post.author } : { id: post.author };
+    router.push({ pathname: route, params });
+  };
 
   const handleDelete = async () => {
-    try {
-      Alert.alert("Delete Post", "Are you sure you want to delete this post?", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "Yes",
-          onPress: async () => {
+    Alert.alert("Delete Post", "Are you sure you want to delete this post?", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Yes", onPress: async () => {
+          try {
             await delPost(orgId, post.postId);
             onDelete(post.postId);
-          },
-        },
-      ]);
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    }
+          } catch (error) {
+            console.error("Error deleting post:", error);
+          }
+        }
+      }
+    ]);
   };
 
   return (
     <>
       <View className="flex-row justify-between mb-3">
-        {/* author info */}
         <View className="flex-row items-center">
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-              if (post.type === "user") {
-                router.push({
-                  pathname: "/profile/profileShow",
-                  params: { uid: post.author },
-                });
-              } else {
-                router.push({
-                  pathname: "/group",
-                  params: { id: post.author },
-                });
-              }
-            }}
-          >
+          <TouchableOpacity activeOpacity={0.8} onPress={navigateToProfile}>
             <FontAwesome name="user-circle" size={30} color="black" />
           </TouchableOpacity>
-
-          <TouchableOpacity
-            className="ml-5"
-            activeOpacity={0.8}
-            onPress={() => {
-              if (post.type === "user") {
-                router.push({
-                  pathname: "/profile/profileShow",
-                  params: { uid: post.author },
-                });
-              } else {
-                router.push({
-                  pathname: "/group",
-                  params: { id: post.author },
-                });
-              }
-            }}
-          >
+          <TouchableOpacity className="ml-5" activeOpacity={0.8} onPress={navigateToProfile}>
             <Text>{post.authorName}</Text>
-            {/* potentially add class if role is student or alumni */}
             <Text>{post.authorType}</Text>
           </TouchableOpacity>
         </View>
-        {cuid === post.author ? (
-          // delete button for post
+        {cuid === post.author && (
           <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
             <FontAwesome name="trash-o" size={24} color="red" />
           </TouchableOpacity>
-        ) : null}
+        )}
       </View>
-
-      {/* post content */}
-      <Image
-        source={{ uri: post.content }}
-        resizeMode="cover"
-        className="w-full h-[200] rounded-md"
-      />
-
-      {/* like, comment, save */}
+      <Image source={{ uri: post.content }} resizeMode="cover" className="w-full h-[200] rounded-md" />
       <View className="mt-3 flex-row items-center justify-between">
         <View className="flex-row items-center">
-          {/* like button */}
-          <LikeButton postId={post.postId} initialLikes={post.likes.length}/>
-
-          {/* comment button */}
-          <CommentButton/>
+          <LikeButton postId={post.postId} initialLikes={post.likes.length} />
+          <CommentButton />
         </View>
       </View>
-
-      {/* caption */}
       <Text className="mt-3">{post.caption}</Text>
-
-      {/* View comments button */}
-
-      <TouchableOpacity
-        className="mt-3"
-        onPress={() => setIsModalVisible(true)}
-      >
+      <TouchableOpacity className="mt-3" onPress={() => setIsModalVisible(true)}>
         <Text className="font-semibold text-darkGray">View Comments</Text>
       </TouchableOpacity>
-
-      {/* time */}
       <Text className="font-semibold mt-3">
         {formatDistance(postedAtDate, new Date(), { addSuffix: true })}
       </Text>
-
-      {/* comments section modal */}
       <Comments
         visible={isModalVisible}
         onRequestClose={() => setIsModalVisible(false)}
@@ -148,22 +87,20 @@ const PostContainer = ({ containerStyles, post, onDelete }) => {
 
   useEffect(() => {
     const fetchPostData = async () => {
-      // get the current Id
       const cuser = await getCurrentUser();
       setCuid(cuser.uid);
-
-      setLoading(false); // Set loading to false after fetching the user ID
+      setLoading(false);
     };
     fetchPostData();
   }, []);
 
-  if (!loading) {
-    return (
-      <View className={containerStyles}>
-        <PostContent post={post} cuid={cuid} onDelete={onDelete}/>
-      </View>
-    );
-  }
+  if (loading) return null;
+
+  return (
+    <View className={containerStyles}>
+      <PostContent post={post} cuid={cuid} onDelete={onDelete} />
+    </View>
+  );
 };
 
 export default PostContainer;
