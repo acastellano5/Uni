@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
@@ -18,27 +18,26 @@ import TabsDisplay from "../../../components/TabsDisplay";
 import { getCurrentUser } from "../../../lib/firebase";
 import {
   getUserAttributes,
-  getPostByAuthor,
   getPostsByTime,
   getGroupById,
-  getFollowingPosts
+  getFollowingPosts,
 } from "../../../lib/useFirebase";
+import { useFocusEffect } from '@react-navigation/native';
 
 const tabs = ["Following", "Community"];
 
 export default function Home() {
-  // auth stuff and orgId
   const { loading, isLogged, isVerified, orgId } = useGlobalContext();
   if (!loading && isLogged && isVerified) {
   } else {
     router.replace("//index");
   }
 
-  // tab functionality
   const [activeTab, setActiveTab] = useState(tabs[0]);
-
-  // get current user info
   const [currentUser, setCurrentUser] = useState({});
+  const [posts, setPosts] = useState([]);
+  const [postsLoading, setPostsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     async function fetchUserData() {
@@ -54,83 +53,59 @@ export default function Home() {
     fetchUserData();
   }, []);
 
-  // fetch posts
-  const [posts, setPosts] = useState([]);
-  const [postsLoading, setPostsLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-
-  // combine posts function
   const combinePosts = async (postsArr) => {
-    const posts = []
-
-    // fetches author info for each post
+    const posts = [];
     for (const post of postsArr) {
-
-      // will execute if author type is user
       if (post.authorType === "user") {
         const user = await getUserAttributes(post.author);
-
-        // adds author info along with post object
         const postWithAuthorInfo = {
           ...post,
           type: "user",
           authorName: user.fullName,
           authorId: user.id,
-          authorType: user.orgs[orgId].role
-        }
-
-        // pushes newly created post object to posts
-        posts.push(postWithAuthorInfo)
-      } else if (post.authorType === "group") { // will execute if author type is group
-        const group = await getGroupById(post.author, orgId)
-        
+          authorType: user.orgs[orgId].role,
+        };
+        posts.push(postWithAuthorInfo);
+      } else if (post.authorType === "group") {
+        const group = await getGroupById(post.author, orgId);
         const postWithAuthorInfo = {
-          ...post, 
+          ...post,
           type: "group",
           authorName: group.name,
           authorId: group.id,
-          authorType: group.category
-        }
-
-        posts.push(postWithAuthorInfo)
-      } else {
-        continue;
+          authorType: group.category,
+        };
+        posts.push(postWithAuthorInfo);
       }
-
     }
-
-    return posts
-  }
-
-  // fetching community posts
-  const getCommunityPosts = async () => {
-    try {
-      setPostsLoading(true);
-      // get latest posts from org
-      const communityPosts = await getPostsByTime(orgId);
-      const posts = await combinePosts(communityPosts)
-      setPosts(posts);
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setPostsLoading(false);
-    }
+    return posts;
   };
 
-  // get posts for following tab
-  const getFollowingTabPosts = async () => {
+  const getCommunityPosts = useCallback(async () => {
     try {
       setPostsLoading(true);
-      // get latest posts from people user follows and groups that they follow or are a part of
-      const followingPosts = await getFollowingPosts(orgId)
-      const posts = await combinePosts(followingPosts)
+      const communityPosts = await getPostsByTime(orgId);
+      const posts = await combinePosts(communityPosts);
       setPosts(posts);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       setPostsLoading(false);
     }
-  }
+  }, [orgId]);
+
+  const getFollowingTabPosts = useCallback(async () => {
+    try {
+      setPostsLoading(true);
+      const followingPosts = await getFollowingPosts(orgId);
+      const posts = await combinePosts(followingPosts);
+      setPosts(posts);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setPostsLoading(false);
+    }
+  }, [orgId]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -146,23 +121,21 @@ export default function Home() {
     setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
   };
 
-  useEffect(() => {
-    if (Object.keys(currentUser).length > 0) {
-      if (activeTab === "Following") {
-        getFollowingTabPosts()
-      } else if (activeTab === "Community") {
-        getCommunityPosts();
-      } else {
-        return null;
+  useFocusEffect(
+    useCallback(() => {
+      if (Object.keys(currentUser).length > 0) {
+        if (activeTab === "Following") {
+          getFollowingTabPosts();
+        } else if (activeTab === "Community") {
+          getCommunityPosts();
+        }
       }
-    }
-  }, [activeTab, currentUser]);
+    }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts])
+  );
 
   return (
     <SafeAreaView className="h-full bg-secondary">
-      {/* Header */}
       <Header title="Home" />
-
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-3">
         <TabsDisplay
           tabs={tabs}
@@ -176,7 +149,12 @@ export default function Home() {
           showsVerticalScrollIndicator={false}
           className="mt-3"
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#22c55e"]} tintColor="#22c55e"/>
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={["#22c55e"]}
+              tintColor="#22c55e"
+            />
           }
         >
           {!refreshing && postsLoading ? (
@@ -187,19 +165,20 @@ export default function Home() {
                 key={index}
                 containerStyles="w-10/12 mx-auto mb-10"
                 post={post}
-                onDelete={handlePostDelete} // pass the handlePostDelete function
+                onDelete={handlePostDelete}
               />
             ))
           )}
         </ScrollView>
-
         <TouchableOpacity
           style={styles.addBtn}
           activeOpacity={0.9}
-          onPress={() => router.push({
-            pathname: "/post/create", 
-            params: { authorType: "user" }
-          })}
+          onPress={() =>
+            router.push({
+              pathname: "/post/create",
+              params: { authorType: "user" },
+            })
+          }
           className="shadow-lg"
         >
           <Feather name="plus" size={24} color="white" />
