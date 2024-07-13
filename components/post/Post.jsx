@@ -13,6 +13,7 @@ import { FontAwesome } from "@expo/vector-icons";
 const PostContent = ({ post, cuid, onDelete }) => {
   const { orgId } = useGlobalContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [likeCount, setLikeCount ] = useState(post.likes.length)
 
   const postedAtDate = post.source === "PostSection" 
     ? new Date(post.postedAt * 1000) 
@@ -43,6 +44,7 @@ const PostContent = ({ post, cuid, onDelete }) => {
     <>
       <View className="flex-row justify-between mb-3">
         <View className="flex-row items-center">
+          {/* author info */}
           <TouchableOpacity activeOpacity={0.8} onPress={navigateToProfile}>
             <FontAwesome name="user-circle" size={30} color="black" />
           </TouchableOpacity>
@@ -57,20 +59,34 @@ const PostContent = ({ post, cuid, onDelete }) => {
           </TouchableOpacity>
         )}
       </View>
+      {/* post content */}
       <Image source={{ uri: post.content }} resizeMode="cover" className="w-full h-[200] rounded-md" />
-      <View className="mt-3 flex-row items-center justify-between">
+      <View className="mt-3">
+        <Text className="text-base font-semibold mb-1">
+          {likeCount === 1 ? (
+            `${likeCount} like`
+          ) : (
+            `${likeCount} likes`
+          )}
+
+        </Text>
         <View className="flex-row items-center">
-          <LikeButton postId={post.postId} initialLikes={post.likes.length} />
-          <CommentButton />
+          {/* like button */}
+          <LikeButton postId={post.postId} likeCount={likeCount} setLikeCount={setLikeCount}/>
+          {/* comment button */}
+          <CommentButton setIsModalVisible={setIsModalVisible} initialComments={post.comments.length}/>
         </View>
       </View>
       <Text className="mt-3">{post.caption}</Text>
+      {/* opens up comments */}
       <TouchableOpacity className="mt-3" onPress={() => setIsModalVisible(true)}>
         <Text className="font-semibold text-darkGray">View Comments</Text>
       </TouchableOpacity>
+      {/* date of post */}
       <Text className="font-semibold mt-3">
         {formatDistance(postedAtDate, new Date(), { addSuffix: true })}
       </Text>
+      {/* comment modal */}
       <Comments
         visible={isModalVisible}
         onRequestClose={() => setIsModalVisible(false)}

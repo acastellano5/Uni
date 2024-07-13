@@ -9,10 +9,19 @@ const ShowPost = () => {
   // retrieve params from request
   const params = useLocalSearchParams();
   let post = params
+
+  // set likes of post from params
   if (post.likes === "") {
     post.likes = []
   } else {
     post.likes = post.likes.split(/[,\s]+/)
+  }
+  
+  // set comments of post from params
+  if (post.comments === "") {
+    post.comments = []
+  } else {
+    post.comments = post.comments.split(/[,\s]+/)
   }
 
   return (

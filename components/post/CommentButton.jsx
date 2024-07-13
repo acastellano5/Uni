@@ -2,13 +2,12 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
-const CommentButton = () => {
+const CommentButton = ({ setIsModalVisible }) => {
   return (
-    <View className="flex-row items-center ml-10">
+    <View className="flex-row items-center ml-5">
       <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-        <FontAwesome name="commenting-o" size={24} color="black" />
+        <FontAwesome name="commenting-o" size={25} color="black" />
       </TouchableOpacity>
-      <Text className="text-base ml-2">234</Text>
     </View>
   );
 };

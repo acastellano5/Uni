@@ -3,9 +3,9 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { isPostLiked, likePost, unlikePost } from '../../lib/useFirebase'; 
 
-const LikeButton = ({ postId, initialLikes }) => {
+const LikeButton = ({ postId, likeCount, setLikeCount }) => {
   const [liked, setLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(initialLikes || 0);
+  // const [likesCount, setLikesCount] = useState(initialLikes || 0);
 
   useEffect(() => {
     const checkIfLiked = async () => {
@@ -19,10 +19,10 @@ const LikeButton = ({ postId, initialLikes }) => {
   const handleLikeToggle = async () => {
     if (liked) {
       await unlikePost(postId);
-      setLikesCount(likesCount - 1);
+      setLikeCount(likeCount - 1);
     } else {
       await likePost(postId);
-      setLikesCount(likesCount + 1);
+      setLikeCount(likeCount + 1);
     }
     setLiked(!liked);
   };
@@ -36,7 +36,6 @@ const LikeButton = ({ postId, initialLikes }) => {
           <FontAwesome name="heart-o" size={24} color="black" />
         )}
       </TouchableOpacity>
-      <Text className="ml-2 text-base">{likesCount}</Text>
     </View>
   );
 };
