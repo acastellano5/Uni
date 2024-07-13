@@ -28,7 +28,7 @@ const LikeButton = ({ postId, initialLikes }) => {
   };
 
   return (
-    <View>
+    <View className="flex-row items-center justify-center">
       <TouchableOpacity onPress={handleLikeToggle}>
         {liked ? (
           <FontAwesome name="heart" size={24} color="red" />
@@ -36,7 +36,7 @@ const LikeButton = ({ postId, initialLikes }) => {
           <FontAwesome name="heart-o" size={24} color="black" />
         )}
       </TouchableOpacity>
-      <Text>{likesCount} {likesCount === 1 ? 'Like' : 'Likes'}</Text>
+      <Text className="ml-2 text-base">{likesCount}</Text>
     </View>
   );
 };
