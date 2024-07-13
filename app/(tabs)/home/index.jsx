@@ -28,10 +28,14 @@ const tabs = ["Following", "Community"];
 
 export default function Home() {
   const { loading, isLogged, isVerified, orgId } = useGlobalContext();
-  if (!loading && isLogged && isVerified) {
-  } else {
-    router.replace("//index");
-  }
+
+  useEffect(() => {
+    if (!loading && isLogged && isVerified) {
+      // Proceed to load data
+    } else {
+      router.replace("//index");
+    }
+  }, [loading, isLogged, isVerified]);
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUser, setCurrentUser] = useState({});
@@ -40,74 +44,72 @@ export default function Home() {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    async function fetchUserData() {
+    const fetchUserData = async () => {
       try {
         const currentUserInfo = await getCurrentUser();
-        const currentUser = await getUserAttributes(currentUserInfo.uid);
-        setCurrentUser(currentUser);
+        const user = await getUserAttributes(currentUserInfo.uid);
+        setCurrentUser(user);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
-    }
+    };
 
     fetchUserData();
   }, []);
 
-  const combinePosts = async (postsArr) => {
-    const posts = [];
-    for (const post of postsArr) {
+  const combinePosts = useCallback(async (postsArr) => {
+    const posts = await Promise.all(postsArr.map(async (post) => {
       if (post.authorType === "user") {
         const user = await getUserAttributes(post.author);
-        const postWithAuthorInfo = {
+        return {
           ...post,
           type: "user",
           authorName: user.fullName,
           authorId: user.id,
           authorType: user.orgs[orgId].role,
         };
-        posts.push(postWithAuthorInfo);
       } else if (post.authorType === "group") {
         const group = await getGroupById(post.author, orgId);
-        const postWithAuthorInfo = {
+        return {
           ...post,
           type: "group",
           authorName: group.name,
           authorId: group.id,
           authorType: group.category,
         };
-        posts.push(postWithAuthorInfo);
       }
-    }
+      return post;
+    }));
     return posts;
-  };
+  }, [orgId]);
 
   const getCommunityPosts = useCallback(async () => {
     try {
       setPostsLoading(true);
       const communityPosts = await getPostsByTime(orgId);
-      const posts = await combinePosts(communityPosts);
-      setPosts(posts);
+      const combinedPosts = await combinePosts(communityPosts);
+      setPosts(combinedPosts);
     } catch (error) {
       console.log(error);
     } finally {
       setPostsLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, combinePosts]);
 
   const getFollowingTabPosts = useCallback(async () => {
     try {
       setPostsLoading(true);
       const followingPosts = await getFollowingPosts(orgId);
-      const posts = await combinePosts(followingPosts);
-      setPosts(posts);
+      const combinedPosts = await combinePosts(followingPosts);
+      setPosts(combinedPosts);
     } catch (error) {
       console.log(error);
     } finally {
       setPostsLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, combinePosts]);
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     if (activeTab === "Following") {
       await getFollowingTabPosts();
@@ -115,11 +117,11 @@ export default function Home() {
       await getCommunityPosts();
     }
     setRefreshing(false);
-  };
+  }, [activeTab, getFollowingTabPosts, getCommunityPosts]);
 
-  const handlePostDelete = (postId) => {
+  const handlePostDelete = useCallback((postId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
-  };
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -157,12 +159,12 @@ export default function Home() {
             />
           }
         >
-          {!refreshing && postsLoading ? (
+          {postsLoading && !refreshing ? (
             <ActivityIndicator size="large" color="#22c55e" />
           ) : (
             posts.map((post, index) => (
               <Post
-                key={index}
+                key={post.postId || index}
                 containerStyles="w-10/12 mx-auto mb-10"
                 post={post}
                 onDelete={handlePostDelete}
