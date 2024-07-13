@@ -4,10 +4,10 @@ import Comments from "./CommentsSection";
 import { router } from "expo-router";
 import { formatDistance } from "date-fns";
 import { getCurrentUser } from "../../lib/firebase";
-import { delPost, isPostLiked } from "../../lib/useFirebase";
+import { delPost } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
-import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
+import LikeButton from "./LikeButton"
 import { FontAwesome } from "@expo/vector-icons";
 
 const PostContent = ({ post, cuid, onDelete, isPostLiked, setIsPostLiked }) => {
@@ -107,7 +107,7 @@ const PostContent = ({ post, cuid, onDelete, isPostLiked, setIsPostLiked }) => {
       <View className="mt-3 flex-row items-center justify-between">
         <View className="flex-row items-center">
           {/* like button */}
-          <LikeButton isPostLiked={isPostLiked} setIsPostLiked={setIsPostLiked} postLikes={post.likes.length} post={post}/>
+          <LikeButton postId={post.postId} initialLikes={post.likes.length}/>
 
           {/* comment button */}
           <CommentButton/>
@@ -152,10 +152,6 @@ const PostContainer = ({ containerStyles, post, onDelete }) => {
       // get the current Id
       const cuser = await getCurrentUser();
       setCuid(cuser.uid);
-
-      // get isPostLiked boolean
-      const postLiked = await isPostLiked(post.postId)
-      setIsLiked(postLiked)
 
       setLoading(false); // Set loading to false after fetching the user ID
     };

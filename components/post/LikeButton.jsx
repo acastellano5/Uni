@@ -1,35 +1,47 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import { likePost, unlikePost } from "../../lib/useFirebase";
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import { isPostLiked, likePost, unlikePost } from '../../lib/useFirebase'; 
 
-const LikeButton = ({ isPostLiked, setIsPostLiked, postLikes, post }) => {
-    const [ numLikes, setNumLikes ] = useState(postLikes)
+const LikeButton = ({ postId, initialLikes }) => {
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(initialLikes || 0);
+
+  useEffect(() => {
+    const checkIfLiked = async () => {
+      const response = await isPostLiked(postId);
+      setLiked(response);
+    };
+
+    checkIfLiked();
+  }, [postId]);
+
+  const handleLikeToggle = async () => {
+    if (liked) {
+      await unlikePost(postId);
+      setLikesCount(likesCount - 1);
+    } else {
+      await likePost(postId);
+      setLikesCount(likesCount + 1);
+    }
+    setLiked(!liked);
+  };
 
   return (
-    <View className="flex-row items-center">
-      <TouchableOpacity activeOpacity={0.8} onPress={() => {
-        if (isPostLiked) {
-            unlikePost(post.postId)
-            setNumLikes(numLikes - 1)
-            setIsPostLiked(false)
-        } else {
-            likePost(post.postId)
-            setNumLikes(numLikes + 1)
-            setIsPostLiked(true)
-        }
-      }}>
-        {isPostLiked ? (
-            <FontAwesome name="heart" size={24} color="black" />
+    <View>
+      <TouchableOpacity onPress={handleLikeToggle}>
+        {liked ? (
+          <FontAwesome name="heart" size={24} color="red" />
         ) : (
-            <FontAwesome name="heart-o" size={24} color="black" />
+          <FontAwesome name="heart-o" size={24} color="black" />
         )}
       </TouchableOpacity>
-      <Text className="text-base ml-2">{numLikes}</Text>
+      <Text>{likesCount} {likesCount === 1 ? 'Like' : 'Likes'}</Text>
     </View>
   );
 };
 
-export default LikeButton;
+const styles = StyleSheet.create({
+});
 
-const styles = StyleSheet.create({});
+export default LikeButton;
