@@ -3,64 +3,101 @@ import {
   Text,
   View,
   Modal,
-  Image,
   ScrollView,
   TouchableOpacity,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
 } from "react-native";
-import React from "react";
-import ProfilePic from "../../assets/images/profilepic.jpeg";
+import React, { useState, useEffect, useMemo } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { router } from "expo-router";
-
-const Comment = ({ name, onRequestClose }) => {
-  return (
-    <View className="flex-row items-start mb-5">
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {
-          onRequestClose();
-          router.push({
-            pathname: "/profile/profileShow",
-            params: { uid: "ah0hpbaD7lYTHjKejiSH1ntAsms2" },
-          });
-        }}
-      >
-        <Image
-          source={ProfilePic}
-          style={styles.roundedBorders}
-          className="mr-3"
-        />
-      </TouchableOpacity>
-
-      <View className="justify-center">
-        <View className="flex-row items-center">
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-              onRequestClose();
-              router.push({
-                pathname: "/profile/profileShow",
-                params: { uid: "ah0hpbaD7lYTHjKejiSH1ntAsms2" },
-              });
-            }}
-          >
-            <Text className="font-semibold">{name}</Text>
-          </TouchableOpacity>
-          <Text className="text-sm ml-2 text-darkGray">2h</Text>
-        </View>
-
-        <Text>Awesome post!</Text>
-      </View>
-    </View>
-  );
-};
+import Comment from "./Comment";
+import {
+  createComment,
+  getUserAttributes,
+  getComments,
+} from "../../lib/useFirebase";
+import { useGlobalContext } from "../../context/globalProvider";
 
 const CommentsSection = ({
   visible,
   onRequestClose,
   animationType,
   presentationStyle,
+  post,
+  currentUserId
 }) => {
+  const { orgId } = useGlobalContext();
+  const [commentText, setCommentText] = useState("");
+  const [loadedComments, setLoadedComments] = useState([]);
+
+  const fetchComments = async () => {
+    const comments = await getComments(post.postId, orgId);
+    let commentsArr = [];
+    for (let key in comments) {
+      let comment = {};
+      if (comments.hasOwnProperty(key)) {
+        comment.commentId = key;
+        comment.authorId = comments[key].author;
+        comment.postedAt = comments[key].postedAt.seconds; // Store as number
+        comment.text = comments[key].text;
+      }
+      commentsArr.push(comment);
+    }
+    console.log(commentsArr)
+    const commentsWithAuthors = await fetchCommentsAuthor(commentsArr);
+    // Sort comments by postedAt in descending order
+    commentsWithAuthors.sort((a, b) => b.postedAt - a.postedAt);
+    setLoadedComments(commentsWithAuthors);
+  };
+
+  useEffect(() => {
+    if (visible) {
+      fetchComments();
+    }
+  }, [visible]);
+
+  const fetchCommentsAuthor = async (comments) => {
+    return await Promise.all(
+      comments.map(async (comment) => {
+        const author = await getUserAttributes(comment.authorId);
+        return {
+          ...comment,
+          authorName: author.fullName,
+        };
+      })
+    );
+  };
+
+  const handleSendComment = async () => {
+    if (commentText.trim() !== "") {
+      await createComment(post.postId, commentText);
+      setCommentText("");
+      Keyboard.dismiss();
+      fetchComments();
+    }
+  };
+
+  const commentsList = useMemo(
+    () =>
+      loadedComments.length > 0 ? (
+        loadedComments.map((comment, index) => (
+          <Comment
+            key={index}
+            comment={comment}
+            onRequestClose={onRequestClose}
+            currentUserId={currentUserId}
+            postId={post.postId}
+            onDelete={fetchComments}
+          />
+        ))
+      ) : (
+        <Text className="text-center text-base">No Comments</Text>
+      ),
+    [loadedComments, onRequestClose]
+  );
+
   return (
     <Modal
       visible={visible}
@@ -68,7 +105,11 @@ const CommentsSection = ({
       animationType={animationType}
       presentationStyle={presentationStyle}
     >
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={50} // Adjust this offset based on your needs
+      >
         {/* comments header */}
         <View style={styles.header}>
           {/* close button */}
@@ -77,16 +118,37 @@ const CommentsSection = ({
               <AntDesign name="close" size={24} color="#545454" />
             </TouchableOpacity>
           </View>
-
           <Text style={styles.headerText}>Comments</Text>
         </View>
 
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContent}
+          keyboardShouldPersistTaps={"always"}
+          keyboardDismissMode="on-drag"
+        >
           <View className="w-11/12 mx-auto pt-5">
-            <Comment name="Andrew Castellano" onRequestClose={onRequestClose} />
+            {visible ? commentsList : null}
           </View>
         </ScrollView>
-      </View>
+
+        <View style={styles.commentInputContainer}>
+          <TextInput
+            style={styles.commentInput}
+            placeholder="Write a comment..."
+            value={commentText}
+            onChangeText={setCommentText}
+            onSubmitEditing={handleSendComment}
+          />
+          <TouchableOpacity
+            style={styles.sendButton}
+            onPress={handleSendComment}
+          >
+            <Text style={styles.sendButtonText} className="text-yellow-500">
+              Send
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
@@ -121,9 +183,27 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingTop: 80, // Adjust this value based on the header height
   },
-  roundedBorders: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+  commentInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    paddingBottom: 30,
+    borderTopWidth: 1,
+    borderColor: "#dcdcdc",
+    backgroundColor: "#fff",
+  },
+  commentInput: {
+    flex: 1,
+    height: 40,
+    borderColor: "#dcdcdc",
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+  },
+  sendButton: {
+    marginLeft: 10,
+  },
+  sendButtonText: {
+    fontWeight: "bold",
   },
 });

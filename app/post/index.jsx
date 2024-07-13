@@ -26,7 +26,10 @@ const ShowPost = () => {
 
   return (
     <SafeAreaView className="h-full bg-darkWhite">
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={'always'}
+          keyboardDismissMode="on-drag"
+        >
             <View className="w-11/12 mx-auto">
                 <BackHeader containerStyles="mb-10"/>
                 <Post post={post} onDelete={() => {

@@ -92,6 +92,8 @@ const PostContent = ({ post, cuid, onDelete }) => {
         onRequestClose={() => setIsModalVisible(false)}
         animationType="slide"
         presentationStyle="formSheet"
+        post={post}
+        currentUserId={cuid}
       />
     </>
   );

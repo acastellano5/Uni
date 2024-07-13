@@ -123,6 +123,8 @@ export default function Home() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           className="mt-3"
+          keyboardShouldPersistTaps={'always'}
+          keyboardDismissMode="on-drag"
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
