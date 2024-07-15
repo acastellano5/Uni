@@ -113,7 +113,7 @@ const EditProfile = () => {
           {/* bio */}
           <FormField
             title="Bio"
-            placeholder="Type here"
+            placeholder="Max 300 characters"
             isEditable={true}
             isMultiLine={true}
             value={form.bio}

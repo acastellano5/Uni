@@ -151,7 +151,6 @@ export default function Home() {
           style={styles.addBtn}
           activeOpacity={0.9}
           onPress={() => router.push({ pathname: "/post/create", params: { authorType: "user" } })}
-          className="shadow-lg"
         >
           <Feather name="plus" size={24} color="white" />
         </TouchableOpacity>
@@ -163,11 +162,12 @@ export default function Home() {
 const styles = StyleSheet.create({
   addBtn: {
     position: "absolute",
-    bottom: 40,
+    bottom: 38,
     right: 20,
     backgroundColor: "#22c55e",
-    padding: 10,
-    borderRadius: 30,
+    borderRadius: 50,
+    width: 60,
+    height: 60,
     justifyContent: "center",
     alignItems: "center",
   },
