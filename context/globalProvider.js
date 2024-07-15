@@ -1,6 +1,14 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import auth from '@react-native-firebase/auth'
+import firestore, {
+    Filter,
+    Timestamp,
+    query,
+  } from "@react-native-firebase/firestore";
 const GlobalContext = createContext()
+const db = firestore();
+
+const usersCollection = firestore().collection("User");
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({children}) => {
@@ -9,12 +17,15 @@ const GlobalProvider = ({children}) => {
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     const [isVerified, setIsVerified] = useState(false);
+    const [userRole, setUserRole] = useState(null);
+
     const [orgId, setOrgId] = useState(20030049);
 
 
     
 
-    function onAuthStateChanged(user) {
+    async function onAuthStateChanged(user) {
+        
         setLoading(false)
         setUser(user);
         if (initializing) setInitializing(false);
@@ -22,6 +33,9 @@ const GlobalProvider = ({children}) => {
             setIsVerified(true)
             setIsLogged(true)
             setLoading(false)
+            setOrgId(20030049)
+            const role = await getUserRole(user.uid,orgId)
+            console.log(role);
             if (user.emailVerified) {
                 setIsVerified(true)
             } else {
@@ -30,15 +44,17 @@ const GlobalProvider = ({children}) => {
             }        
         }
         else{
+            console.log("MEEMMEME");
             setIsVerified(false)
             setIsLogged(false)
             setLoading(false)
             setUser(user)
+
         }
       }
     
       useEffect(() => {
-        console.log("WHYY");
+        console.log("WHYYME");
         const subscriber = auth().onUserChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
       }, []);
@@ -55,12 +71,25 @@ const GlobalProvider = ({children}) => {
             setUser,
             loading,
             isVerified,
-            setIsVerified
+            setIsVerified,
+            userRole,
+            setUserRole,
         }}
         >
             {children}
         </GlobalContext.Provider>
     );
 }
+export async function getUserRole(user,orgId) {
+    try {
+        const docRef = (await usersCollection.where('id','==',user).get()).docs[0].data().orgs[orgId].role
+        console.log(docRef,"cant");
 
+
+    } catch (error) {
+        console.log(error);
+    }
+    
+    return docRef
+  }
 export default GlobalProvider;
