@@ -13,7 +13,7 @@ import Header from '../../../components/Header'
 import {ListItem, Avatar} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import ChatList from '../../../components/messaging/ChatList';
-import TabsDisplay from "../../../components/TabsDisplay";
+import ChatTabs from '../../../components/messaging/ChatTabs';
 
 const tabs = ["DM", "Groups", "Classes", "Alerts"];
 
@@ -43,14 +43,7 @@ export default function Messages() {
     <SafeAreaView className="h-full bg-secondary">
       <Header title="Home" />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-3">
-      <TabsDisplay
-          tabs={tabs}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          containerStyles="py-3"
-          textStyles="text-base"
-          tabBarStyles="w-10/12"
-        />
+        <ChatTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab}/>
         
         {displayTabContent()}
 
