@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { MultiSelect } from "react-native-element-dropdown";
 
-const MultiSelectComponent = ({title, placeholder, data, focusedColor}) => {
-  const [selected, setSelected] = useState([]);
+const MultiSelectComponent = ({title, placeholder, data, focusedColor, defaultSelected, setList}) => {
+  const [selected, setSelected] = useState(defaultSelected || []);
   const [isFocus, setIsFocus] = useState(false);
+
+  useEffect(() => {
+    if (defaultSelected) {
+      const formattedSelected = defaultSelected.map(item => item.toLowerCase().replace(/ /g, '_'));
+      setSelected(formattedSelected);
+    }
+  }, [defaultSelected]);
+
+  // useEffect(() => {
+  //   console.log(selected)
+  // }, [selected])
 
   const renderLabel = () => {
     return (
@@ -31,6 +42,7 @@ const MultiSelectComponent = ({title, placeholder, data, focusedColor}) => {
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
           setSelected(item);
+          setList(item)
         }}
         selectedStyle={styles.selectedStyle}
       />

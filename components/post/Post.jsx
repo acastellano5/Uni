@@ -53,7 +53,7 @@ const PostContent = ({ post, cuid, onDelete }) => {
             <Text>{post.authorType}</Text>
           </TouchableOpacity>
         </View>
-        {cuid === post.author && (
+        {cuid === post.author || cuid === post.writtenBy && (
           <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
             <FontAwesome name="trash-o" size={24} color="red" />
           </TouchableOpacity>

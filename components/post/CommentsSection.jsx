@@ -45,7 +45,6 @@ const CommentsSection = ({
       }
       commentsArr.push(comment);
     }
-    console.log(commentsArr)
     const commentsWithAuthors = await fetchCommentsAuthor(commentsArr);
     // Sort comments by postedAt in descending order
     commentsWithAuthors.sort((a, b) => b.postedAt - a.postedAt);

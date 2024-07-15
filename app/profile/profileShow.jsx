@@ -13,7 +13,7 @@ import CustomButton from "../../components/CustomButton";
 import InfoBox from "../../components/profile/InfoBox";
 import PostSection from "../../components/profile/PostSection";
 import BackHeader from "../../components/BackHeader";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
 import Settings from "../../components/profile/settings/Settings";
 import {
   getUserAttributes,
@@ -168,6 +168,10 @@ const ProfileShow = () => {
                   <CustomButton
                     title="Edit"
                     textStyles="text-primary text-sm font-semibold"
+                    handlePress={() => router.push({
+                      pathname: "./editProfile",
+                      params: user
+                    })}
                   />
                   <CustomButton
                     title="Settings"
