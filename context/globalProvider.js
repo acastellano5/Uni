@@ -4,7 +4,7 @@ import firestore, {
     Filter,
     Timestamp,
     query,
-  } from "@react-native-firebase/firestore";
+} from "@react-native-firebase/firestore";
 const GlobalContext = createContext()
 const db = firestore();
 
@@ -18,14 +18,14 @@ const GlobalProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
     const [isVerified, setIsVerified] = useState(false);
     const [userRole, setUserRole] = useState(null);
-
+    const [needsReload, setNeedsReload] = useState(false);
     const [orgId, setOrgId] = useState(20030049);
 
 
-    
+
 
     async function onAuthStateChanged(user) {
-        
+
         setLoading(false)
         setUser(user);
         if (initializing) setInitializing(false);
@@ -51,34 +51,36 @@ const GlobalProvider = ({children}) => {
             setUser(user)
 
         }
-      }
-    
-      useEffect(() => {
+    }
+
+    useEffect(() => {
         console.log("WHYYME");
         const subscriber = auth().onUserChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
-      }, []);
+    }, []);
 
 
     return (
         <GlobalContext.Provider
-        value={{
-            orgId,
-            setOrgId,
-            isLogged,
-            setIsLogged,
-            user,
-            setUser,
-            loading,
-            isVerified,
-            setIsVerified,
-            userRole,
-            setUserRole,
-        }}
-        >
-            {children}
-        </GlobalContext.Provider>
-    );
+    value={{
+        orgId,
+        setOrgId,
+        isLogged,
+        setIsLogged,
+        user,
+        setUser,
+        loading,
+        isVerified,
+        setIsVerified,
+        userRole,
+        setUserRole,
+        needsReload,
+        setNeedsReload,
+    }}
+    >
+    {children}
+    </GlobalContext.Provider>
+);
 }
 export async function getUserRole(user,orgId) {
     try {
@@ -88,8 +90,9 @@ export async function getUserRole(user,orgId) {
 
     } catch (error) {
         console.log(error);
+        return null
     }
-    
+
     return docRef
-  }
+}
 export default GlobalProvider;
