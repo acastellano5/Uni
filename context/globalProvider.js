@@ -17,7 +17,6 @@ const GlobalProvider =  ({children}) => {
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     const [isVerified, setIsVerified] = useState(false);
-    const [userRole, setUserRole] = useState(null);
     const [needsReload, setNeedsReload] = useState(false);
     const [orgId, setOrgId] = useState(20030049);
 
@@ -28,16 +27,14 @@ const GlobalProvider =  ({children}) => {
 
         setLoading(false)
         setUser(user);
-        const role = await getUserRole(user.uid,orgId)
-        setUserRole(role)
+
         if (initializing) setInitializing(false);
         if (user) {
             setIsVerified(true)
             setIsLogged(true)
             setLoading(false)
             setOrgId(20030049)
-            const role = await getUserRole(user.uid,orgId)
-            console.log(role);
+
             if (user.emailVerified) {
                 setIsVerified(true)
             } else {
@@ -73,8 +70,6 @@ const GlobalProvider =  ({children}) => {
         loading,
         isVerified,
         setIsVerified,
-        userRole,
-        setUserRole,
         needsReload,
         setNeedsReload,
     }}
@@ -83,16 +78,5 @@ const GlobalProvider =  ({children}) => {
     </GlobalContext.Provider>
 );
 }
-export async function getUserRole(user,orgId) {
-    try {
-        const docRef = (await usersCollection.where('id','==',user).get()).docs[0].data().orgs[orgId].role
-        return docRef
 
-    } catch (error) {
-        console.log(error);
-        return null
-    }
-
-    return docRef
-}
 export default GlobalProvider;
