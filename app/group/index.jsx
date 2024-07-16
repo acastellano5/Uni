@@ -152,9 +152,9 @@ const GroupHome = () => {
             <View className="flex-row justify-between items-center">
               <View
                 className="bg-tertiary py-2 px-4 rounded"
-                style={{ maxWidth: "60%" }}
+                style={{ maxWidth: "70%" }}
               >
-                <Text className="text-white text-base font-semibold">
+                <Text className="text-white text-base font-semibold" numberOfLines={1} ellipsizeMode="tail">
                   {group.name}
                 </Text>
               </View>

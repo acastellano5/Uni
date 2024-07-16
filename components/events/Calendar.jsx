@@ -90,7 +90,7 @@ const Calendar = ({ events }) => {
         style={styles.item}
         className="bg-primary"
         onPress={() => router.push({
-          pathname: "./events/eventsShow",
+          pathname: "/event",
           params: { eventId: item.eventId, author: item.author }
         })}
       >
