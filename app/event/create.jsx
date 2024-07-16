@@ -6,7 +6,7 @@ import BackHeader from "../../components/BackHeader";
 import { useGlobalContext } from "../../context/globalProvider";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { createEvent } from "../../lib/useFirebase";
+import { createEvent, deleteUserEvent } from "../../lib/useFirebase";
 import { getCurrentUser } from "../../lib/firebase";
 import { router } from "expo-router";
 
@@ -26,6 +26,7 @@ const CreateEvent = () => {
 
   const { orgId } = useGlobalContext();
 
+  deleteUserEvent('0e9d70fe-540b-44b7-bf69-fc8cbf5ce5ba',orgId)
   const [form, setForm] = useState({
     name: "",
     location: "",

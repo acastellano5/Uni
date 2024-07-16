@@ -5,6 +5,7 @@ import firestore, {
     Timestamp,
     query,
 } from "@react-native-firebase/firestore";
+import { initializeVars } from "../lib/useFirebase";
 const GlobalContext = createContext()
 const db = firestore();
 
@@ -34,6 +35,7 @@ const GlobalProvider =  ({children}) => {
             setIsLogged(true)
             setLoading(false)
             setOrgId(20030049)
+            initializeVars()
 
             if (user.emailVerified) {
                 setIsVerified(true)
