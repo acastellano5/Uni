@@ -27,9 +27,13 @@ const Attending = ({ attendees }) => {
         {loading ? (
           <ActivityIndicator size="large" color="#22c55e" /> // Show loader while loading
         ) : (
-          attending.map((attendee, index) => (
-            <AttendeeCard key={index} isFirst={index === 0} attendee={attendee}/>
-          ))
+          attendees.length > 0 ? (
+            attending.map((attendee, index) => (
+              <AttendeeCard key={index} isFirst={index === 0} attendee={attendee}/>
+            ))
+          ) : (
+            <Text className="text-center my-3 text-base text-darkGray">No attendees yet</Text>
+          )
         )}
       </View>
     </View>

@@ -17,7 +17,7 @@ const AttendeeCard = ({ isFirst, attendee }) => {
       }
     >
       <Image source={ProfilePic} style={styles.profilePic} className="mr-3" />
-      <Text className="text-base">{attendee.email}</Text>
+      <Text className="text-base">{attendee.fullName}</Text>
     </TouchableOpacity>
   );
 };
