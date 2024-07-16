@@ -74,6 +74,7 @@ const Calendar = ({ events }) => {
       formatted[date].push({
         name,
         eventId,
+        authorId,
         author,
         time: `${startTimeFormatted} - ${endTimeFormatted}`,
       });
@@ -95,7 +96,7 @@ const Calendar = ({ events }) => {
         })}
       >
         <Text className="text-white font-bold">{item.name}</Text>
-        <Text className="text-white font-semibold">{item.author}</Text>
+        <Text className="text-white font-semibold">{currentUserId === item.authorId ? "My Event" : item.author}</Text>
         <Text style={styles.itemData} className="text-white">
           {item.time}
         </Text>

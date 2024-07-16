@@ -27,7 +27,7 @@ import EventHeader from "../../components/events/EventHeader";
 const tabs = ["Info", "Attending"];
 
 const EventsShow = () => {
-  const { orgId } = useGlobalContext();
+  const { orgId, user } = useGlobalContext();
   const params = useLocalSearchParams();
   const { eventId, author } = params;
 
@@ -91,10 +91,11 @@ const EventsShow = () => {
             >
               <Text
                 style={styles.authorText}
+                className="text-white text-lg font-semibold"
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                {author}
+                {event.authorId === user.uid ? "My Event" : author}
               </Text>
             </View>
 
@@ -137,14 +138,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  authorText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-    maxWidth: 175,
-  },
   authorContainer: {
-    maxWidth: "70%",
+    maxWidth: "65%",
   },
 });
 
