@@ -11,7 +11,7 @@ const db = firestore();
 const usersCollection = firestore().collection("User");
 export const useGlobalContext = () => useContext(GlobalContext);
 
-const GlobalProvider = ({children}) => {
+const GlobalProvider =  ({children}) => {
     const [isLogged, setIsLogged] = useState(false);
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
@@ -28,6 +28,8 @@ const GlobalProvider = ({children}) => {
 
         setLoading(false)
         setUser(user);
+        const role = await getUserRole(user.uid,orgId)
+        setUserRole(role)
         if (initializing) setInitializing(false);
         if (user) {
             setIsVerified(true)
@@ -52,9 +54,8 @@ const GlobalProvider = ({children}) => {
 
         }
     }
-
     useEffect(() => {
-        console.log("WHYYME");
+
         const subscriber = auth().onUserChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
     }, []);
@@ -85,7 +86,6 @@ const GlobalProvider = ({children}) => {
 export async function getUserRole(user,orgId) {
     try {
         const docRef = (await usersCollection.where('id','==',user).get()).docs[0].data().orgs[orgId].role
-        console.log(docRef,"cant");
         return docRef
 
     } catch (error) {
