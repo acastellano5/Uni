@@ -65,20 +65,6 @@ const EventsPage = () => {
     }, [currentUserId, activeTab])
   );
 
-  // change between content via tabs
-  // const displayTabContent = () => {
-  //   switch (activeTab) {
-  //     case "Your Events":
-  //       return <Calendar events={events} />;
-
-  //     case "Community":
-  //       return <Calendar events={events} />;
-
-  //     default:
-  //       return null;
-  //   }
-  // };
-
   return (
     <SafeAreaView style={styles.container} className="bg-secondary">
       {/* header */}
@@ -102,7 +88,6 @@ const EventsPage = () => {
       </View>
 
       {/* Create Button */}
-      {activeTab === "Your Events" ? (
         <TouchableOpacity
           style={styles.createButton}
           activeOpacity={0.8}
@@ -113,7 +98,6 @@ const EventsPage = () => {
         >
           <Feather name="plus" size={24} color="#22c55e" />
         </TouchableOpacity>
-      ) : null}
     </SafeAreaView>
   );
 };
