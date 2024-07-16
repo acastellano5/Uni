@@ -14,7 +14,7 @@ import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useGlobalContext } from "../../../context/globalProvider";
 import { getCurrentUser } from "../../../lib/firebase";
-import { getEventByUser } from "../../../lib/useFirebase";
+import { getEventByUser, getCommunityEvents } from "../../../lib/useFirebase";
 import { useFocusEffect } from "expo-router";
 
 const tabs = ["Your Events", "Community"];
@@ -47,35 +47,37 @@ const EventsPage = () => {
         const userEvents = await getEventByUser(currentUserId, orgId);
         setEvents(userEvents);
       } catch (error) {
-        console.error("Error fetching events:", error);
+        console.error("Error fetching user events:", error);
       }
     } else if (currentUserId && activeTab === "Community") {
-      console.log("render community events here");
+      try {
+        const communityEvents = await getCommunityEvents(orgId);
+        setEvents(communityEvents);
+      } catch (error) {
+        console.error("Error fetching community events:", error)
+      }
     }
   };
 
   useFocusEffect(
     useCallback(() => {
-      console.log("executing")
-      fetchEvents()
+      fetchEvents();
     }, [currentUserId, activeTab])
   );
 
-
-
   // change between content via tabs
-  const displayTabContent = () => {
-    switch (activeTab) {
-      case "Your Events":
-        return <Calendar events={events} />;
+  // const displayTabContent = () => {
+  //   switch (activeTab) {
+  //     case "Your Events":
+  //       return <Calendar events={events} />;
 
-      case "Community":
-        return <Calendar events={events} />;
+  //     case "Community":
+  //       return <Calendar events={events} />;
 
-      default:
-        return null;
-    }
-  };
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   return (
     <SafeAreaView style={styles.container} className="bg-secondary">
@@ -93,7 +95,7 @@ const EventsPage = () => {
           tabBarStyles="w-10/12"
         />
         {events ? (
-          displayTabContent()
+          <Calendar events={events}/>
         ) : (
           <ActivityIndicator size="large" color="#22c55e" />
         )}

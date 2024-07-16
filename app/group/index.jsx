@@ -16,7 +16,7 @@ import TabsDisplay from "../../components/TabsDisplay";
 import GroupInfo from "../../components/groups/GroupInfo";
 import GroupMembers from "../../components/groups/GroupMembers";
 import BackHeader from "../../components/BackHeader";
-import CustomButton from "../../components/CustomButton"
+import CustomButton from "../../components/CustomButton";
 import {
   getGroupById,
   joinGroup,
@@ -28,7 +28,7 @@ import {
   isUserModerator,
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 
 const tabs = ["Info", "Members"];
 
@@ -124,7 +124,9 @@ const GroupHome = () => {
       case "Info":
         return <GroupInfo group={group} />;
       case "Members":
-        return <GroupMembers members={group.members} moderators={group.moderators} />;
+        return (
+          <GroupMembers members={group.members} moderators={group.moderators} />
+        );
       default:
         return null;
     }
@@ -148,7 +150,10 @@ const GroupHome = () => {
           <SafeAreaView className="w-11/12 mx-auto h-full justify-between z-10">
             <BackHeader />
             <View className="flex-row justify-between items-center">
-              <View className="bg-tertiary py-2 px-4 rounded" style={{ maxWidth: "60%" }}>
+              <View
+                className="bg-tertiary py-2 px-4 rounded"
+                style={{ maxWidth: "60%" }}
+              >
                 <Text className="text-white text-base font-semibold">
                   {group.name}
                 </Text>
@@ -212,16 +217,31 @@ const GroupHome = () => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+            <CustomButton
+              title="Create Post"
+              containerStyles="bg-primary w-full"
+              textStyles="text-white py-2 text-base"
+              handlePress={() => {
+                setIsModalVisible(!isModalVisible);
+                router.push({
+                  pathname: "/post/create",
+                  params: { authorType: "group", groupId: group.id, orgId },
+                });
+              }}
+            />
 
-            <CustomButton title="Create Post" containerStyles="bg-primary w-full" textStyles="text-white py-2 text-base" handlePress={() => {
-              setIsModalVisible(!isModalVisible)
-              router.push({
-                pathname: '/post/create',
-                params: {authorType: 'group', groupId: group.id, orgId}
-              })
-            }}/>
-
-            <CustomButton title="Create Event" containerStyles="bg-primary w-full my-3 mb-5" textStyles="text-white py-2 text-base"/>
+            <CustomButton
+              title="Create Event"
+              containerStyles="bg-primary w-full my-3 mb-5"
+              textStyles="text-white py-2 text-base"
+              handlePress={() => {
+                setIsModalVisible(!isModalVisible);
+                router.push({
+                  pathname: "/event/create",
+                  params: {eventType: "group", groupId: group.id}
+                })
+              }}
+            />
 
             <TouchableOpacity
               activeOpacity={0.8}
@@ -229,7 +249,6 @@ const GroupHome = () => {
             >
               <Text className="text-base">Close</Text>
             </TouchableOpacity>
-          
           </View>
         </View>
       </Modal>
@@ -273,7 +292,7 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 18,
     marginBottom: 20,
-  }
+  },
 });
 
 export default GroupHome;

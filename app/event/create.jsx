@@ -1,18 +1,25 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
-import  DateTimePicker  from "@react-native-community/datetimepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import BackHeader from "../../components/BackHeader";
 import { useGlobalContext } from "../../context/globalProvider";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { createEvent, deleteUserEvent } from "../../lib/useFirebase";
+import { createEvent } from "../../lib/useFirebase";
 import { getCurrentUser } from "../../lib/firebase";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 const CreateEvent = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { orgId } = useGlobalContext();
+  const { eventType, groupId } = useLocalSearchParams()
+
+  useEffect(() => {
+    console.log(eventType)
+    console.log(groupId)
+  }, [eventType])
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -23,8 +30,6 @@ const CreateEvent = () => {
 
     fetchCurrentUser();
   }, []);
-
-  const { orgId } = useGlobalContext();
 
   deleteUserEvent('0e9d70fe-540b-44b7-bf69-fc8cbf5ce5ba',orgId)
   const [form, setForm] = useState({
@@ -86,9 +91,16 @@ const CreateEvent = () => {
 
   const onCreatePress = async () => {
     const { name, location, startTime, endTime, description } = form
-    let type = "user"
     let attendees = currentUser.uid
-    let authorId = currentUser.uid
+    let authorId
+    let type
+    if (eventType === "group") {
+      type="group"
+      authorId=groupId
+    } else {
+      authorId = currentUser.uid
+      type="user"
+    }
     await createEvent(type, orgId, name, location, startTime, endTime, attendees, authorId, description);
     router.back()
   };
