@@ -23,7 +23,7 @@ import { getUserAttributes, getPostsByTime, getGroupById, getFollowingPosts } fr
 const tabs = ["Following", "Community"];
 
 export default function Home() {
-  const { loading, isLogged, isVerified, orgId } = useGlobalContext();
+  const { loading, isLogged, isVerified, orgId, userRole } = useGlobalContext();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUser, setCurrentUser] = useState({});
   const [posts, setPosts] = useState([]);
@@ -77,7 +77,7 @@ export default function Home() {
   const getPosts = useCallback(async (fetchPosts) => {
     try {
       setPostsLoading(true);
-      const posts = await fetchPosts(orgId);
+      const posts = await fetchPosts(orgId, userRole);
       const combinedPosts = await combinePosts(posts);
       setPosts(combinedPosts);
     } catch (error) {
