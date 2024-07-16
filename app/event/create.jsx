@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import { DateTimePicker } from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import BackHeader from "../../components/BackHeader";
 import { useGlobalContext } from "../../context/globalProvider";

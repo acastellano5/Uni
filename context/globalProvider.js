@@ -86,7 +86,7 @@ export async function getUserRole(user,orgId) {
     try {
         const docRef = (await usersCollection.where('id','==',user).get()).docs[0].data().orgs[orgId].role
         console.log(docRef,"cant");
-
+        return docRef
 
     } catch (error) {
         console.log(error);
