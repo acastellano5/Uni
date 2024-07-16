@@ -31,7 +31,6 @@ const CreateEvent = () => {
     fetchCurrentUser();
   }, []);
 
-  deleteUserEvent('0e9d70fe-540b-44b7-bf69-fc8cbf5ce5ba',orgId)
   const [form, setForm] = useState({
     name: "",
     location: "",

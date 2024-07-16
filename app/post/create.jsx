@@ -35,7 +35,6 @@ const create = () => {
 
   // getting orgId from global context
   const { orgId, userRole} = useGlobalContext();
-  deleteUserEvent('0e9d70fe-540b-44b7-bf69-fc8cbf5ce5ba',orgId)
 
 
   const params = useLocalSearchParams();
