@@ -34,8 +34,8 @@ const create = () => {
   //getEventById("f0677ddd-050c-4443-90cd-42b7853ed90d",20030049)
 
   // getting orgId from global context
-  const { orgId } = useGlobalContext();
-  getCommunityEvents(orgId)
+  const { orgId, userRole} = useGlobalContext();
+  getCommunityEvents(orgId, userRole)
 
   const params = useLocalSearchParams();
   const { authorType, groupId } = params
