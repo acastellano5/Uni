@@ -56,7 +56,6 @@ const EventsPage = () => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("executing")
       fetchEvents()
     }, [currentUserId, activeTab])
   );
