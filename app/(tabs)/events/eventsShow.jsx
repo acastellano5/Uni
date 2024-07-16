@@ -15,8 +15,9 @@ import EventInfo from "../../../components/events/EventInfo";
 import BackHeader from "../../../components/BackHeader";
 import Attending from "../../../components/events/Attending";
 import { useLocalSearchParams } from "expo-router";
-import { getEventById } from "../../../lib/useFirebase";
+import { getEventById, isAttended } from "../../../lib/useFirebase";
 import { useGlobalContext } from "../../../context/globalProvider";
+import AttendBtn from "../../../components/events/AttendBtn";
 
 const tabs = ["Info", "Attending"];
 
@@ -31,15 +32,23 @@ const eventsShow = () => {
   // fetch event by id
   const [event, setEvent] = useState({});
   const [loading, setLoading] = useState(true); // loader state
+  const [ isAttending, setIsAttending ] = useState(null)
 
   useEffect(() => {
-    const fetchEvent = async () => {
+    const fetchEventInfo = async () => {
+      // fetch event
       const event = await getEventById(eventId, orgId);
       setEvent(event);
+
+      // fetch is attending status
+      const attendingEvent = await isAttended(eventId)
+      setIsAttending(attendingEvent)
+
       setLoading(false); // set loading to false after data is fetched
+
     };
 
-    fetchEvent();
+    fetchEventInfo();
   }, []);
 
   // setting tabs state
@@ -81,14 +90,15 @@ const eventsShow = () => {
               <Text className="text-white text-lg font-semibold">{author}</Text>
             </View>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               className="bg-primary py-2 px-4 rounded"
               activeOpacity={0.8}
             >
               <Text className="text-white text-lg font-semibold">
                 Attending
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <AttendBtn attendingStatus={isAttending} setAttendingStatus={setIsAttending} eventId={event.eventId}/>
           </View>
         </SafeAreaView>
 
