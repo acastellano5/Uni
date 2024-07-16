@@ -6,13 +6,13 @@ import { getEventByUser, getGroupById, getUserAttributes } from "../../lib/useFi
 import { getCurrentUser } from "../../lib/firebase";
 import { useGlobalContext } from "../../context/globalProvider";
 
-const Calendar = ({ tab }) => {
+const Calendar = ({ events }) => {
   // get orgId from global context
   const { orgId } = useGlobalContext();
 
   const [currentUserId, setCurrentUserId] = useState("");
   const [items, setItems] = useState({});
-  const [loading, setLoading] = useState(true); // State to manage loading indicator
+  const [loading, setLoading] = useState(true);
 
   // fetch the current user id and set it to state
   useEffect(() => {
@@ -30,26 +30,20 @@ const Calendar = ({ tab }) => {
 
   // fetch and render events
   useEffect(() => {
-    const fetchEvents = async () => {
-      setLoading(true); // Show loading indicator
-      //fetch for your events page
-      if (currentUserId && tab === "Your Events") {
-        try {
-          const events = await getEventByUser(currentUserId, orgId);
+    setLoading(true)
+    const formatFetchedEvents = async () => {
+      try {
           const formattedEvents = await formatEvents(events); // Format events to the required format
           setItems(formattedEvents); // Set the formatted events to state
         } catch (error) {
-          console.error("Error fetching events:", error);
+          console.error("Error formatting events:", error);
         } finally {
-          setLoading(false); // Hide loading indicator
+          setLoading(false)
         }
-      } else if (currentUserId && tab === "Community") {
-        console.log("render community events here")
-      }
     };
 
-    fetchEvents();
-  }, [currentUserId, tab]);
+    formatFetchedEvents();
+  }, [events]);
 
   useEffect(() => {
     loadItems({ timestamp: new Date().getTime() });
@@ -78,35 +72,40 @@ const Calendar = ({ tab }) => {
     setItems(newItems);
   };
 
-  // Function to format the events retrieved from the API
-  const formatEvents = async (events) => {
-    const formatted = {};
-    for (const event of events) {
-      const { startTime, endTime, name, eventId, authorType, authorId } = event;
-      const date = new Date(startTime.seconds * 1000).toISOString().split("T")[0];
-      let author = ""
-  
-      if (!formatted[date]) {
-        formatted[date] = [];
-      }
-  
-      if (authorType === "group") {
-        const group = await getGroupById(authorId, orgId); // Use 'await' inside an async function
-        author = group.name
-      } else if (authorType === "user") {
-        const user = await getUserAttributes(authorId, orgId)
-        author = user.fullName
-      }
-  
-      formatted[date].push({
-        name,
-        eventId,
-        author,
-        time: `${new Date(startTime.seconds * 1000).toLocaleTimeString()} - ${new Date(endTime.seconds * 1000).toLocaleTimeString()}`,
-      });
+// Function to format the events retrieved from the API
+const formatEvents = async (events) => {
+  const formatted = {};
+  for (const event of events) {
+    const { startTime, endTime, name, eventId, authorType, authorId } = event;
+    const date = new Date(startTime.seconds * 1000).toISOString().split("T")[0];
+    let author = "";
+
+    if (!formatted[date]) {
+      formatted[date] = [];
     }
-    return formatted;
-  };
+
+    if (authorType === "group") {
+      const group = await getGroupById(authorId, orgId); // Use 'await' inside an async function
+      author = group.name;
+    } else if (authorType === "user") {
+      const user = await getUserAttributes(authorId, orgId);
+      author = user.fullName;
+    }
+
+    // Format start and end time without seconds
+    const startTimeFormatted = new Date(startTime.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const endTimeFormatted = new Date(endTime.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    formatted[date].push({
+      name,
+      eventId,
+      author,
+      time: `${startTimeFormatted} - ${endTimeFormatted}`,
+    });
+  }
+  return formatted;
+};
+
   
 
   // Function to render each item in the agenda

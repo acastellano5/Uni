@@ -16,6 +16,7 @@ const RootLayout = () => {
         <Stack.Screen name="post" options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="aiChat" options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="group" options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="event" options={{ headerShown: false, gestureEnabled: false }} />
       </Stack>
       </GlobalProvider>
   );
