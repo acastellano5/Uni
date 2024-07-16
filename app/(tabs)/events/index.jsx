@@ -17,7 +17,7 @@ import { getCurrentUser } from "../../../lib/firebase";
 import { getEventByUser, getCommunityEvents } from "../../../lib/useFirebase";
 import { useFocusEffect } from "expo-router";
 
-const tabs = ["Your Events", "Community"];
+const tabs = ["My Events", "Community"];
 
 const EventsPage = () => {
   const { orgId } = useGlobalContext();
@@ -42,7 +42,7 @@ const EventsPage = () => {
   }, []);
 
   const fetchEvents = async () => {
-    if (currentUserId && activeTab === "Your Events") {
+    if (currentUserId && activeTab === "My Events") {
       try {
         const userEvents = await getEventByUser(currentUserId, orgId);
         setEvents(userEvents);
