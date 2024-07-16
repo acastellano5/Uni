@@ -12,7 +12,7 @@ import background from "../../assets/images/soccerbg.png";
 import TabsDisplay from "../../components/TabsDisplay";
 import EventInfo from "../../components/events/EventInfo";
 import Attending from "../../components/events/Attending";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   getEventById,
   isAttended,
@@ -39,16 +39,20 @@ const EventsShow = () => {
 
   const fetchEventInfo = useCallback(async () => {
     const event = await getEventById(eventId, orgId);
-    const attendingEvent = await isAttended(eventId);
-    const moderatorStatus =
-      event.authorType === "group"
-        ? await isUserModerator(event.authorId, orgId)
-        : false;
+    if (event) {
+      const attendingEvent = await isAttended(eventId);
+      const moderatorStatus =
+        event.authorType === "group"
+          ? await isUserModerator(event.authorId, orgId)
+          : false;
 
-    setEvent(event);
-    setIsAttending(attendingEvent);
-    setIsModerator(moderatorStatus);
-    setLoading(false);
+      setEvent(event);
+      setIsAttending(attendingEvent);
+      setIsModerator(moderatorStatus);
+      setLoading(false);
+    } else {
+      router.dismiss()
+    }
   }, [eventId, orgId]);
 
   useEffect(() => {
@@ -81,8 +85,15 @@ const EventsShow = () => {
         <SafeAreaView className="w-11/12 mx-auto h-full justify-between z-10">
           <EventHeader event={event} moderatorStatus={isModerator} />
           <View className="flex-row justify-between items-center">
-            <View className="bg-tertiary py-2 px-4 rounded" style={styles.authorContainer}>
-              <Text style={styles.authorText} numberOfLines={1} ellipsizeMode="tail">
+            <View
+              className="bg-tertiary py-2 px-4 rounded"
+              style={styles.authorContainer}
+            >
+              <Text
+                style={styles.authorText}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
                 {author}
               </Text>
             </View>
@@ -106,7 +117,11 @@ const EventsShow = () => {
           textStyles="text-lg"
           tabBarStyles="mb-6 w-11/12"
         />
-        {activeTab === "Info" ? <EventInfo event={event} /> : <Attending attendees={event.attendees} />}
+        {activeTab === "Info" ? (
+          <EventInfo event={event} />
+        ) : (
+          <Attending attendees={event.attendees} />
+        )}
       </View>
     </ScrollView>
   );
