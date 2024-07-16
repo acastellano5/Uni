@@ -193,14 +193,14 @@ const CreateEvent = () => {
                   <CustomButton
                     title="OK"
                     handlePress={confirmStartTime}
-                    containerStyles="bg-yellow-500 p-2 ml-2"
-                    textStyles="text-white"
+                    containerStyles="border border-primary p-2 ml-2"
+                    textStyles="text-primary"
                   />
                   <CustomButton
                     title="Clear"
                     handlePress={clearStartTime}
-                    containerStyles="bg-darkGray p-2 ml-1"
-                    textStyles="text-white"
+                    containerStyles="border border-darkGray p-2 ml-1"
+                    textStyles="text-darkGray"
                   />
                 </View>
               )}
@@ -216,7 +216,7 @@ const CreateEvent = () => {
             <View className="mb-3">
               <CustomButton
                 handlePress={() => setShowEndTimePicker(true)}
-                title="Select End Time (Optional)"
+                title="Select End Time"
                 containerStyles="border border-primary w-full mb-3"
                 textStyles="text-primary text-base py-2"
               />
@@ -234,14 +234,14 @@ const CreateEvent = () => {
                   <CustomButton
                     title="OK"
                     handlePress={confirmEndTime}
-                    containerStyles="bg-yellow-500 p-2 ml-2"
-                    textStyles="text-white"
+                    containerStyles="border border-primary p-2 ml-2"
+                    textStyles="text-primary"
                   />
                   <CustomButton
                     title="Clear"
                     handlePress={clearEndTime}
-                    containerStyles="bg-darkGray p-2 ml-1"
-                    textStyles="text-white"
+                    containerStyles="border border-darkGray p-2 ml-1"
+                    textStyles="text-darkGray"
                   />
                 </View>
               )}
