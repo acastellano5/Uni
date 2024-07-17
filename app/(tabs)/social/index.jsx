@@ -35,7 +35,6 @@ export default function Home() {
     const fetchFilteredUsers = async () => {
       setIsLoading(true);
       const users = await filterUserByRole(orgId, activeTab);
-      console.log(users[0])
       setOrgUsers(users);
       setIsFilterApplied(true);
       setSearchValue(""); // Clear the search bar when a filter is applied

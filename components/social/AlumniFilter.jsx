@@ -13,7 +13,6 @@ import {
 import CustomButton from "../CustomButton";
 import { filterUsers } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
-import { router } from "expo-router";
 const AlumniFilter = ({ setUsers, dismissFilter }) => {
   const { orgId } = useGlobalContext();
 
