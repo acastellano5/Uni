@@ -68,7 +68,12 @@ export const interestsData = [
   { label: "Flight", value: "Flight" }
 ];
 
-
+export const currentClassesData = [
+  { label: "2028", value: "2028" },
+  { label: "2027", value: "2027" },
+  { label: "2026", value: "2026" },
+  { label: "2025", value: "2025" }
+]
 
 export const classData = [
   { label: "2028", value: "2028" },
