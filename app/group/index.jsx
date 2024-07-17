@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import TabsDisplay from "../../components/TabsDisplay";
 import GroupInfo from "../../components/groups/GroupInfo";
 import GroupMembers from "../../components/groups/GroupMembers";
+import GroupEvents from "../../components/groups/GroupEvents";
 import BackHeader from "../../components/BackHeader";
 import CustomButton from "../../components/CustomButton";
 import {
@@ -124,9 +125,11 @@ const GroupHome = () => {
       case "Info":
         return <GroupInfo group={group} />;
       case "Members":
-        return (
-          <GroupMembers members={group.members} moderators={group.moderators} />
-        );
+        return <GroupMembers members={group.members} moderators={group.moderators} />
+
+      case "Events": 
+        return <GroupEvents group={group}/>
+      
       default:
         return null;
     }
@@ -193,7 +196,7 @@ const GroupHome = () => {
             setActiveTab={setActiveTab}
             containerStyles="py-3 w-1/3"
             textStyles="text-lg"
-            tabBarStyles="mb-6 w-11/12"
+            tabBarStyles="mb-5 w-11/12"
           />
           {displayTabContent()}
         </View>

@@ -162,7 +162,7 @@ export default function Groups() {
           tabs={tabs}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          containerStyles="py-3 w-3/6"
+          containerStyles="py-2 w-3/6"
           textStyles="text-base"
           tabBarStyles="w-10/12 mt-3"
         />

@@ -114,7 +114,7 @@ const EventsShow = () => {
           tabs={tabs}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          containerStyles="py-3"
+          containerStyles="py-3 w-3/6"
           textStyles="text-lg"
           tabBarStyles="mb-6 w-11/12"
         />
