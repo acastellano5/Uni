@@ -29,7 +29,7 @@ const EventHeader = ({ event, moderatorStatus }) => {
             if (event.authorType === "user") {
                 deleteUserEvent(event.eventId, orgId)
             } else if (event.authorType === "group") {
-                deleteGroupEvent(event.eventId, orgId)
+                deleteGroupEvent(event.authorId, event.eventId, orgId)
             }
             router.dismiss()
           }}
