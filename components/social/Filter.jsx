@@ -19,17 +19,18 @@ const Filter = ({
   animationType,
   presentationStyle,
   category,
+  setUsers
 }) => {
   const displayFilterContent = () => {
     switch (category) {
       case "Student":
-        return <StudentFilter />;
+        return <StudentFilter setUsers={setUsers} dismissFilter={onRequestClose}/>;
 
       case "Alumni":
-        return <AlumniFilter />;
+        return <AlumniFilter setUsers={setUsers} dismissFilter={onRequestClose}/>;
 
       case "Faculty/Staff":
-        return <FacultyFilter />;
+        return <FacultyFilter setUsers={setUsers} dismissFilter={onRequestClose}/>;
 
       default:
         return null;

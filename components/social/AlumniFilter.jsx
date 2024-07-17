@@ -13,7 +13,8 @@ import {
 import CustomButton from "../CustomButton";
 import { filterUsers } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
-const AlumniFilter = () => {
+import { router } from "expo-router";
+const AlumniFilter = ({ setUsers, dismissFilter }) => {
   const { orgId } = useGlobalContext();
 
   const [form, setForm] = useState({
@@ -24,10 +25,11 @@ const AlumniFilter = () => {
     college: "",
   });
 
-
-  useEffect(() => {
-    console.log(form)
-  }, [form])
+  const handleApply = async () => {
+    const users = await filterUsers("Alumni", form, orgId);
+    setUsers(users)
+    dismissFilter();
+  };
   return (
     <>
       <View className="mt-3 mb-3 flex-row justify-center items-center">
@@ -80,9 +82,7 @@ const AlumniFilter = () => {
         title="Apply"
         containerStyles="bg-primary py-3 w-4/12 mx-auto"
         textStyles="text-white font-semibold"
-        handlePress={() => {
-          console.log(form), filterUsers("Alumni", form, orgId);
-        }}
+        handlePress={handleApply}
       />
     </>
   );
