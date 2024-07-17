@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { MultiSelect } from "react-native-element-dropdown";
 
-const MultiSelectComponent = ({title, placeholder, data, focusedColor, defaultSelected, onItemSelect}) => {
+const MultiSelectComponent = ({title, placeholder, data, focusedColor, defaultSelected, onItemSelect, containerStyles}) => {
   const [selected, setSelected] = useState(defaultSelected || []);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -26,7 +26,7 @@ const MultiSelectComponent = ({title, placeholder, data, focusedColor, defaultSe
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} className={containerStyles}>
     {renderLabel()}
       <MultiSelect
         style={[styles.dropdown, isFocus && { borderColor: {focusedColor} }]}

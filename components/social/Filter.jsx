@@ -9,6 +9,7 @@ import {
 import React from "react";
 import StudentFilter from "./StudentFilter";
 import AlumniFilter from "./AlumniFilter";
+import ParentFilter from "./ParentFilter"
 import FacultyFilter from "./FacultyFilter";
 import { AntDesign } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -31,6 +32,9 @@ const Filter = ({
 
       case "Faculty/Staff":
         return <FacultyFilter setUsers={setUsers} dismissFilter={onRequestClose}/>;
+
+      case "Parent": 
+      return <ParentFilter setUsers={setUsers} dismissFilter={onRequestClose}/>;
 
       default:
         return null;
