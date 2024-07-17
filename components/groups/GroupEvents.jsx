@@ -39,9 +39,17 @@ const GroupEvents = ({ group }) => {
         <ActivityIndicator size="large" color="#22c55e" />
       ) : (
         <View className="flex-row flex-wrap mt-3">
-          {groupEvents.map((event, index) => (
-            <GroupEventIcon key={index} event={event} groupName={group.name}/>
-          ))}
+          {groupEvents.length > 0 ? (
+            groupEvents.map((event, index) => (
+              <GroupEventIcon
+                key={index}
+                event={event}
+                groupName={group.name}
+              />
+            ))
+          ) : (
+            <Text className="w-fit mx-auto mt-3 text-base text-darkGray">No events</Text>
+          )}
         </View>
       )}
     </View>
