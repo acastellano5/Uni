@@ -65,6 +65,7 @@ export const interestsData = [
   { label: "Entrepreneurship", value: "Entrepreneurship" },
   { label: "Public Speaking", value: "Public Speaking" },
   { label: "Debate", value: "Debate" },
+  { label: "Flight", value: "Flight" }
 ];
 
 
@@ -454,24 +455,24 @@ export const collegesData = [
 
 
 export const departmentsData = [
-  { label: "Art", value: "art" },
-  { label: "Biology", value: "biology" },
-  { label: "Chemistry", value: "chemistry" },
-  { label: "Computer Science", value: "computer_science" },
-  { label: "English", value: "english" },
-  { label: "History", value: "history" },
-  { label: "Mathematics", value: "mathematics" },
-  { label: "Music", value: "music" },
-  { label: "Physical Education", value: "physical_education" },
-  { label: "Physics", value: "physics" },
-  { label: "Psychology", value: "psychology" },
-  { label: "Sociology", value: "sociology" },
-  { label: "Technology", value: "technology" },
-  { label: "Administration", value: "administration" },
-  { label: "Counseling", value: "counseling" },
-  { label: "Librarian", value: "librarian" },
-  { label: "Nurse", value: "nurse" },
-  { label: "Special Education", value: "special_education" },
+  { label: "Art", value: "Art" },
+  { label: "Biology", value: "Biology" },
+  { label: "Chemistry", value: "Chemistry" },
+  { label: "Computer Science", value: "Computer Science" },
+  { label: "English", value: "English" },
+  { label: "History", value: "History" },
+  { label: "Mathematics", value: "Mathematics" },
+  { label: "Music", value: "Music" },
+  { label: "Physical Education", value: "Physical Education" },
+  { label: "Physics", value: "Physics" },
+  { label: "Psychology", value: "Psychology" },
+  { label: "Sociology", value: "Sociology" },
+  { label: "Technology", value: "Technology" },
+  { label: "Administration", value: "Administration" },
+  { label: "Counseling", value: "Counseling" },
+  { label: "Librarian", value: "Librarian" },
+  { label: "Nurse", value: "Nurse" },
+  { label: "Special Education", value: "Special Education" },
 ];
 
 
