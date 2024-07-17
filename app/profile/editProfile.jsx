@@ -31,9 +31,7 @@ const EditProfile = () => {
 
   // set interests state
   const [interests, setInterests] = useState(user.interests);
-  useEffect(() => {
-    setInterests(user.interests);
-  }, []);
+
 
   // set form state
   const [form, setForm] = useState({
@@ -43,16 +41,13 @@ const EditProfile = () => {
   });
 
   useEffect(() => {
-    const formattedInterests = interests.map((interest) =>
-      interest
-        .replace(/_/g, " ")
-        .split(" ")
-        .map((i) => i.charAt(0).toUpperCase() + i.slice(1))
-        .join(" ")
-    );
+    console.log(interests)
+  }, [interests]);
+
+  useEffect(() => {
     setForm({
       ...form,
-      interests: formattedInterests,
+      interests,
     });
   }, [interests]);
 
@@ -107,7 +102,7 @@ const EditProfile = () => {
             placeholder="Select interest(s)"
             data={interestsData}
             defaultSelected={interests}
-            setList={setInterests}
+            onItemSelect={setInterests}
           />
 
           {/* bio */}
