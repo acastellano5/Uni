@@ -116,7 +116,7 @@ export default function Home() {
           tabs={tabs}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          containerStyles="py-3"
+          containerStyles="py-3 w-3/6"
           textStyles="text-base"
           tabBarStyles="w-10/12"
         />

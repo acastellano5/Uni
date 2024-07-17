@@ -30,7 +30,7 @@ import {
 import { useGlobalContext } from "../../context/globalProvider";
 import { AntDesign } from "@expo/vector-icons";
 
-const tabs = ["Info", "Members"];
+const tabs = ["Info", "Members", "Events"];
 
 const GroupHome = () => {
   const { orgId } = useGlobalContext();
@@ -191,7 +191,7 @@ const GroupHome = () => {
             tabs={tabs}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            containerStyles="py-3"
+            containerStyles="py-3 w-1/3"
             textStyles="text-lg"
             tabBarStyles="mb-6 w-11/12"
           />

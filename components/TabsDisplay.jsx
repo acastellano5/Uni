@@ -16,7 +16,7 @@ const TabsDisplay = ({ tabs, activeTab, setActiveTab, containerStyles, textStyle
           key={item}
           name={item}
           activeTab={activeTab}
-          containerStyles={`rounded-lg w-3/6 ${containerStyles}`}
+          containerStyles={`rounded-lg ${containerStyles}`}
           textStyles={`${textStyles} font-bold text-center`}
           onHandleSearchType={() => setActiveTab(item)}
           activeBackground="#000"

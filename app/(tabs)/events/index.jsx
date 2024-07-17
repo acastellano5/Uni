@@ -76,7 +76,7 @@ const EventsPage = () => {
           tabs={tabs}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          containerStyles="py-2"
+          containerStyles="py-2 w-3/6"
           textStyles="text-base"
           tabBarStyles="w-10/12"
         />
