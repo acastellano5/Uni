@@ -178,6 +178,7 @@ export default function Home() {
             <View className="w-11/12 mx-auto mt-3">
               <TouchableOpacity
                 activeOpacity={0.8}
+                className="self-start"
                 onPress={() => {
                   if (isSearchResult) {
                     handleClearSearch();
