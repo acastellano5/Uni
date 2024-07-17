@@ -22,7 +22,7 @@ const Filter = ({
 }) => {
   const displayFilterContent = () => {
     switch (category) {
-      case "Students":
+      case "Student":
         return <StudentFilter />;
 
       case "Alumni":
