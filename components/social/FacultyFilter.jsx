@@ -43,6 +43,7 @@ const FacultyFilter = ({ setUsers, dismissFilter }) => {
           focusedColor="#22c55e"
           title="Department"
           placeholder="Filter by Department"
+          containerStyles="mb-2"
           onItemSelect={(e) => {
             setForm({ ...form, department: e.value });
           }}
@@ -50,6 +51,7 @@ const FacultyFilter = ({ setUsers, dismissFilter }) => {
         <MultiSelectDropDown
           title="Interests"
           placeholder="Filter by Interests"
+          containerStyles="mb-2"
           data={interestsData}
           onItemSelect={(e) => {
             setForm({ ...form, interests: e });

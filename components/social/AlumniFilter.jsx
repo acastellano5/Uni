@@ -42,12 +42,14 @@ const AlumniFilter = ({ setUsers, dismissFilter }) => {
           onItemSelect={(e) => {
             setForm({ ...form, class: e.value });
           }}
+          containerStyles="mb-2"
           focusedColor="#22c55e"
           title="Class"
           placeholder="Filter by Class"
         />
         <MultiSelectDropDown
           title="Interests"
+          containerStyles="mb-2"
           onItemSelect={(e) => {
             setForm({ ...form, interests: e });
           }}
@@ -56,6 +58,7 @@ const AlumniFilter = ({ setUsers, dismissFilter }) => {
         />
         <SingleSelectDropdown
           data={statesData}
+          containerStyles="mb-2"
           onItemSelect={(e) => setForm({ ...form, state: e.value })}
           focusedColor="#22c55e"
           title="State"
@@ -63,6 +66,7 @@ const AlumniFilter = ({ setUsers, dismissFilter }) => {
         />
         <SingleSelectDropdown
           data={jobFieldsData}
+          containerStyles="mb-2"
           onItemSelect={(e) => setForm({ ...form, field: e.value })}
           focusedColor="#22c55e"
           title="Field"
