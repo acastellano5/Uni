@@ -180,7 +180,7 @@ const CreateEvent = () => {
                 textStyles="text-primary text-base py-2"
               />
               {showStartTimePicker && (
-                <View className="flex-row mb-3">
+                <View className="flex-row mb-3 right-2">
                   <DateTimePicker
                     testID="startTimePicker"
                     value={tempStartTime}
@@ -221,7 +221,7 @@ const CreateEvent = () => {
                 textStyles="text-primary text-base py-2"
               />
               {showEndTimePicker && (
-                <View className="flex-row mb-3">
+                <View className="flex-row mb-3 right-2">
                   <DateTimePicker
                     testID="endTimePicker"
                     value={tempEndTime}
