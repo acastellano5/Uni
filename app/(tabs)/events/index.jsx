@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "../../../components/events/Calendar";
 import Header from "../../../components/Header";
 import TabsDisplay from "../../../components/TabsDisplay";
@@ -14,20 +14,20 @@ import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useGlobalContext } from "../../../context/globalProvider";
 import { getCurrentUser } from "../../../lib/firebase";
-import { getEventByUser, getCommunityEvents } from "../../../lib/useFirebase";
-import { useFocusEffect } from "@react-navigation/native";
+import { getEventByUser, getCommunityEvents, getUserAttributes, getGroupById } from "../../../lib/useFirebase";
 
 const tabs = ["My Events", "Community"];
 
 const EventsPage = () => {
-  const { orgId, needsReload, setNeedsReload } = useGlobalContext();
+  const { orgId } = useGlobalContext();
 
   // setting tabs state
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUserId, setCurrentUserId] = useState("");
   const [events, setEvents] = useState(null);
+  // const [ myEvents, setMyEvents ] = useState(null)
+  // const [ communityEvents, setCommunityEvents ] = useState(null)
   const [eventsLoading, setEventsLoading] = useState(true);
-  const isMounted = useRef(false);
 
   // fetch the current user id and set it to state
   useEffect(() => {
@@ -44,32 +44,73 @@ const EventsPage = () => {
   }, []);
 
   const fetchEvents = async () => {
-    if (currentUserId && activeTab === "My Events") {
+    setEventsLoading(true)
+    let events = []
+
+    if (activeTab === "My Events") {
       try {
-        const userEvents = await getEventByUser(currentUserId, orgId);
-        setEvents(userEvents);
+        events = await getEventByUser(currentUserId, orgId)
+        events = await formatEvents(events)
+        setEvents(events)
       } catch (error) {
-        console.error("Error fetching user events:", error);
-      } finally {
-        setEventsLoading(false);
+        console.log("Error fetching my events:", error)
       }
-    } else if (currentUserId && activeTab === "Community") {
+    } else {
       try {
-        const communityEvents = await getCommunityEvents(orgId);
-        setEvents(communityEvents);
+        events = await getCommunityEvents(orgId)
+        events = await formatEvents(events)
+        setEvents(events)
       } catch (error) {
-        console.error("Error fetching community events:", error);
-      } finally {
-        setEventsLoading(false);
+        console.log("Error fetching community events:", error)
       }
     }
-  };
+
+    setEventsLoading(false)
+  }
 
   useEffect(() => {
     if (currentUserId) {
       fetchEvents();
     }
-  }, [activeTab, currentUserId]);
+  }, [currentUserId, activeTab]);
+
+
+
+  const formatEvents = async (events) => {
+    const formatted = {};
+    const promises = events.map(async (event) => {
+      const { startTime, endTime, name, eventId, authorType, authorId } = event;
+      const date = new Date(startTime.seconds * 1000).toISOString().split("T")[0];
+      let author = "";
+
+      if (!formatted[date]) {
+        formatted[date] = [];
+      }
+
+      if (authorType === "group") {
+        const group = await getGroupById(authorId, orgId);
+        author = group.name;
+      } else if (authorType === "user") {
+        const user = await getUserAttributes(authorId, orgId);
+        author = user.fullName;
+      }
+
+      const startTimeFormatted = new Date(startTime.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const endTimeFormatted = new Date(endTime.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      formatted[date].push({
+        name,
+        eventId,
+        authorId,
+        author,
+        time: `${startTimeFormatted} - ${endTimeFormatted}`,
+      });
+    });
+
+    await Promise.all(promises);
+    return formatted;
+  };
+  
 
   return (
     <SafeAreaView style={styles.container} className="bg-secondary">
@@ -89,7 +130,7 @@ const EventsPage = () => {
         {eventsLoading ? (
           <ActivityIndicator size="large" color="#22c55e" />
         ) : (
-          <Calendar events={events} />
+          <Calendar events={ events } currentUserId={currentUserId}/>
         )}
       </View>
 

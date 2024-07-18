@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   FlatList,
@@ -21,14 +21,13 @@ import { getCurrentUser } from "../../../lib/firebase";
 const tabs = ["Following", "Community"];
 
 export default function Home() {
-  const { loading, isLogged, isVerified, orgId, userRole, needsReload, setNeedsReload } = useGlobalContext();
+  const { loading, isLogged, isVerified, orgId, userRole } = useGlobalContext();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUser, setCurrentUser] = useState({});
   const [followingPosts, setFollowingPosts] = useState([]);
   const [communityPosts, setCommunityPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const isMounted = useRef(false);
 
   useEffect(() => {
     if (!loading && isLogged && isVerified) {
