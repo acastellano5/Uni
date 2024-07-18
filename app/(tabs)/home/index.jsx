@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
+  Text,
   View,
   FlatList,
   TouchableOpacity,
@@ -8,6 +9,7 @@ import {
   RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from '@react-navigation/native';
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 
@@ -24,8 +26,7 @@ export default function Home() {
   const { loading, isLogged, isVerified, orgId, userRole } = useGlobalContext();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUser, setCurrentUser] = useState({});
-  const [followingPosts, setFollowingPosts] = useState([]);
-  const [communityPosts, setCommunityPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -73,17 +74,12 @@ export default function Home() {
     return posts;
   }, [orgId]);
 
-  const fetchPosts = useCallback(async () => {
+  const getPosts = useCallback(async (fetchPosts) => {
     try {
       setPostsLoading(true);
-      const [following, community] = await Promise.all([
-        getFollowingPosts(orgId, userRole),
-        getPostsByTime(orgId, userRole),
-      ]);
-      const combinedFollowingPosts = await combinePosts(following);
-      const combinedCommunityPosts = await combinePosts(community);
-      setFollowingPosts(combinedFollowingPosts);
-      setCommunityPosts(combinedCommunityPosts);
+      const posts = await fetchPosts(orgId, userRole);
+      const combinedPosts = await combinePosts(posts);
+      setPosts(combinedPosts);
     } catch (error) {
       console.log(error);
     } finally {
@@ -91,46 +87,34 @@ export default function Home() {
     }
   }, [combinePosts, orgId, userRole]);
 
+  const getCommunityPosts = useCallback(() => getPosts(getPostsByTime), [getPosts]);
+  const getFollowingTabPosts = useCallback(() => getPosts(getFollowingPosts), [getPosts]);
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    try {
-      if (activeTab === "Following") {
-        const following = await getFollowingPosts(orgId, userRole);
-        const combinedFollowingPosts = await combinePosts(following);
-        setFollowingPosts(combinedFollowingPosts);
-      } else {
-        const community = await getPostsByTime(orgId, userRole);
-        const combinedCommunityPosts = await combinePosts(community);
-        setCommunityPosts(combinedCommunityPosts);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setRefreshing(false);
-    }
-  }, [activeTab, combinePosts, orgId, userRole]);
+    activeTab === "Following" ? await getFollowingTabPosts() : await getCommunityPosts();
+    setRefreshing(false);
+  }, [activeTab, getFollowingTabPosts, getCommunityPosts]);
 
   const handlePostDelete = useCallback((postId) => {
-    if (activeTab === "Following") {
-      setFollowingPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
-    } else {
-      setCommunityPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
-    }
-  }, [activeTab]);
+    setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
+  }, []);
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
-      fetchPosts();
+      activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
     }
-  }, [currentUser, fetchPosts]);
+  }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts]);
 
-  const renderItem = ({ item }) => (
+  const renderItem = useMemo(() => ({ item }) => (
     <Post
       containerStyles="w-10/12 mx-auto mb-10"
       post={item}
       onDelete={handlePostDelete}
     />
-  );
+  ), [handlePostDelete]);
+
+  const keyExtractor = useCallback((item) => item.postId.toString(), []);
 
   return (
     <SafeAreaView className="h-full bg-secondary">
@@ -142,15 +126,15 @@ export default function Home() {
           setActiveTab={setActiveTab}
           containerStyles="py-3 w-3/6"
           textStyles="text-base"
-          tabBarStyles="w-10/12 mb-2"
+          tabBarStyles="w-10/12"
         />
         {postsLoading && !refreshing ? (
           <ActivityIndicator size="large" color="#22c55e" />
         ) : (
           <FlatList
-            data={activeTab === "Following" ? followingPosts : communityPosts}
+            data={posts}
             renderItem={renderItem}
-            keyExtractor={(item) => item.postId.toString()}
+            keyExtractor={keyExtractor}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
@@ -159,7 +143,8 @@ export default function Home() {
                 tintColor="#22c55e"
               />
             }
-            contentContainerStyle={{ paddingBottom: 100 }}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingTop: 12 }}
           />
         )}
         <TouchableOpacity
