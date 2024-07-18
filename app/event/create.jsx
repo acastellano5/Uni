@@ -101,7 +101,7 @@ const CreateEvent = () => {
       type="user"
     }
     await createEvent(type, orgId, name, location, startTime, endTime, attendees, authorId, description);
-    router.back()
+    router.push("/events")
   };
 
   return (

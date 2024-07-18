@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Calendar from "../../../components/events/Calendar";
 import Header from "../../../components/Header";
 import TabsDisplay from "../../../components/TabsDisplay";
@@ -15,17 +15,19 @@ import { router } from "expo-router";
 import { useGlobalContext } from "../../../context/globalProvider";
 import { getCurrentUser } from "../../../lib/firebase";
 import { getEventByUser, getCommunityEvents } from "../../../lib/useFirebase";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
 
 const tabs = ["My Events", "Community"];
 
 const EventsPage = () => {
-  const { orgId } = useGlobalContext();
+  const { orgId, needsReload, setNeedsReload } = useGlobalContext();
 
   // setting tabs state
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUserId, setCurrentUserId] = useState("");
   const [events, setEvents] = useState(null);
+  const [eventsLoading, setEventsLoading] = useState(true);
+  const isMounted = useRef(false);
 
   // fetch the current user id and set it to state
   useEffect(() => {
@@ -48,22 +50,26 @@ const EventsPage = () => {
         setEvents(userEvents);
       } catch (error) {
         console.error("Error fetching user events:", error);
+      } finally {
+        setEventsLoading(false);
       }
     } else if (currentUserId && activeTab === "Community") {
       try {
         const communityEvents = await getCommunityEvents(orgId);
         setEvents(communityEvents);
       } catch (error) {
-        console.error("Error fetching community events:", error)
+        console.error("Error fetching community events:", error);
+      } finally {
+        setEventsLoading(false);
       }
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
+  useEffect(() => {
+    if (currentUserId) {
       fetchEvents();
-    }, [currentUserId, activeTab])
-  );
+    }
+  }, [activeTab, currentUserId]);
 
   return (
     <SafeAreaView style={styles.container} className="bg-secondary">
@@ -80,24 +86,24 @@ const EventsPage = () => {
           textStyles="text-base"
           tabBarStyles="w-10/12"
         />
-        {events ? (
-          <Calendar events={events}/>
-        ) : (
+        {eventsLoading ? (
           <ActivityIndicator size="large" color="#22c55e" />
+        ) : (
+          <Calendar events={events} />
         )}
       </View>
 
       {/* Create Button */}
-        <TouchableOpacity
-          style={styles.createButton}
-          activeOpacity={0.8}
-          className="bg-white shadow-lg"
-          onPress={() => {
-            router.push("/event/create");
-          }}
-        >
-          <Feather name="plus" size={24} color="#22c55e" />
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.createButton}
+        activeOpacity={0.8}
+        className="bg-white shadow-lg"
+        onPress={() => {
+          router.push("/event/create");
+        }}
+      >
+        <Feather name="plus" size={24} color="#22c55e" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

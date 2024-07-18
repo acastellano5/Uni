@@ -101,18 +101,6 @@ export default function Home() {
     setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (!isMounted.current || needsReload) {
-        if (Object.keys(currentUser).length > 0) {
-          activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
-          isMounted.current = true;
-          setNeedsReload(false)
-        }
-      }
-    }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts, needsReload])
-  );
-
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
