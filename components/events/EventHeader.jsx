@@ -15,7 +15,8 @@ const EventHeader = ({ event, moderatorStatus }) => {
     } else if (event.authorType === "group") {
       deleteGroupEvent(event.authorId, event.eventId, orgId);
     }
-    router.replace('/events');
+
+    router.dismiss()
   };
 
   return (

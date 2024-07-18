@@ -83,7 +83,7 @@ const EventsShow = () => {
     <ScrollView showsVerticalScrollIndicator={false} className="bg-white">
       <ImageBackground className="w-full h-[40vh] pb-5" source={background}>
         <SafeAreaView className="w-11/12 mx-auto h-full justify-between z-10">
-          <EventHeader event={event} moderatorStatus={isModerator} />
+          <EventHeader event={event} moderatorStatus={isModerator}/>
           <View className="flex-row justify-between items-center">
             <View
               className="bg-tertiary py-2 px-4 rounded"

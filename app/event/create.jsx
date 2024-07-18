@@ -6,7 +6,7 @@ import BackHeader from "../../components/BackHeader";
 import { useGlobalContext } from "../../context/globalProvider";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { createEvent } from "../../lib/useFirebase";
+import { createEvent, getGroupById, getUserAttributes } from "../../lib/useFirebase";
 import { getCurrentUser } from "../../lib/firebase";
 import { router, useLocalSearchParams } from "expo-router";
 
@@ -93,15 +93,23 @@ const CreateEvent = () => {
     let attendees = currentUser.uid
     let authorId
     let type
+    let author
     if (eventType === "group") {
       type="group"
       authorId=groupId
+      author = await getGroupById(groupId, orgId)
+      author = author.name
     } else {
-      authorId = currentUser.uid
       type="user"
+      authorId = currentUser.uid
+      author = await getUserAttributes(authorId)
+      author = author.fullName
     }
-    await createEvent(type, orgId, name, location, startTime, endTime, attendees, authorId, description);
-    router.push("/events")
+    const event = await createEvent(type, orgId, name, location, startTime, endTime, attendees, authorId, description);
+    router.replace({
+      pathname: '/event',
+      params: { eventId: event.eventId, author }
+    })
   };
 
   return (
