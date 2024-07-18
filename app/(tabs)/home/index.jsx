@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
-  Text,
   View,
-  ScrollView,
+  FlatList,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useFocusEffect } from '@react-navigation/native';
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 
@@ -17,8 +15,8 @@ import Header from "../../../components/Header";
 import Post from "../../../components/post/Post";
 import TabsDisplay from "../../../components/TabsDisplay";
 import { useGlobalContext } from "../../../context/globalProvider";
-import { getCurrentUser } from "../../../lib/firebase";
 import { getUserAttributes, getPostsByTime, getGroupById, getFollowingPosts } from "../../../lib/useFirebase";
+import { getCurrentUser } from "../../../lib/firebase";
 
 const tabs = ["Following", "Community"];
 
@@ -26,7 +24,8 @@ export default function Home() {
   const { loading, isLogged, isVerified, orgId, userRole, needsReload, setNeedsReload } = useGlobalContext();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUser, setCurrentUser] = useState({});
-  const [posts, setPosts] = useState([]);
+  const [followingPosts, setFollowingPosts] = useState([]);
+  const [communityPosts, setCommunityPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const isMounted = useRef(false);
@@ -75,37 +74,64 @@ export default function Home() {
     return posts;
   }, [orgId]);
 
-  const getPosts = useCallback(async (fetchPosts) => {
+  const fetchPosts = useCallback(async () => {
     try {
       setPostsLoading(true);
-      const posts = await fetchPosts(orgId, userRole);
-      const combinedPosts = await combinePosts(posts);
-      setPosts(combinedPosts);
+      const [following, community] = await Promise.all([
+        getFollowingPosts(orgId, userRole),
+        getPostsByTime(orgId, userRole),
+      ]);
+      const combinedFollowingPosts = await combinePosts(following);
+      const combinedCommunityPosts = await combinePosts(community);
+      setFollowingPosts(combinedFollowingPosts);
+      setCommunityPosts(combinedCommunityPosts);
     } catch (error) {
       console.log(error);
     } finally {
       setPostsLoading(false);
     }
-  }, [combinePosts, orgId]);
-
-  const getCommunityPosts = useCallback(() => getPosts(getPostsByTime), [getPosts]);
-  const getFollowingTabPosts = useCallback(() => getPosts(getFollowingPosts), [getPosts]);
+  }, [combinePosts, orgId, userRole]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    activeTab === "Following" ? await getFollowingTabPosts() : await getCommunityPosts();
-    setRefreshing(false);
-  }, [activeTab, getFollowingTabPosts, getCommunityPosts]);
+    try {
+      if (activeTab === "Following") {
+        const following = await getFollowingPosts(orgId, userRole);
+        const combinedFollowingPosts = await combinePosts(following);
+        setFollowingPosts(combinedFollowingPosts);
+      } else {
+        const community = await getPostsByTime(orgId, userRole);
+        const combinedCommunityPosts = await combinePosts(community);
+        setCommunityPosts(combinedCommunityPosts);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [activeTab, combinePosts, orgId, userRole]);
 
   const handlePostDelete = useCallback((postId) => {
-    setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
-  }, []);
+    if (activeTab === "Following") {
+      setFollowingPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
+    } else {
+      setCommunityPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
-      activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
+      fetchPosts();
     }
-  }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts]);
+  }, [currentUser, fetchPosts]);
+
+  const renderItem = ({ item }) => (
+    <Post
+      containerStyles="w-10/12 mx-auto mb-10"
+      post={item}
+      onDelete={handlePostDelete}
+    />
+  );
 
   return (
     <SafeAreaView className="h-full bg-secondary">
@@ -117,35 +143,26 @@ export default function Home() {
           setActiveTab={setActiveTab}
           containerStyles="py-3 w-3/6"
           textStyles="text-base"
-          tabBarStyles="w-10/12"
+          tabBarStyles="w-10/12 mb-2"
         />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          className="mt-3"
-          keyboardShouldPersistTaps={'always'}
-          keyboardDismissMode="on-drag"
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              colors={["#22c55e"]}
-              tintColor="#22c55e"
-            />
-          }
-        >
-          {postsLoading && !refreshing ? (
-            <ActivityIndicator size="large" color="#22c55e" />
-          ) : (
-            posts.map((post, index) => (
-              <Post
-                key={post.postId || index}
-                containerStyles="w-10/12 mx-auto mb-10"
-                post={post}
-                onDelete={handlePostDelete}
+        {postsLoading && !refreshing ? (
+          <ActivityIndicator size="large" color="#22c55e" />
+        ) : (
+          <FlatList
+            data={activeTab === "Following" ? followingPosts : communityPosts}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.postId.toString()}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={["#22c55e"]}
+                tintColor="#22c55e"
               />
-            ))
-          )}
-        </ScrollView>
+            }
+            contentContainerStyle={{ paddingBottom: 100 }}
+          />
+        )}
         <TouchableOpacity
           style={styles.addBtn}
           activeOpacity={0.9}
