@@ -6,9 +6,16 @@ import { StatusBar } from "expo-status-bar";
 const GroupLayout = () => {
   return (
     <>
-      <Stack screenOptions={{gestureEnabled: false}}>
+      <Stack screenOptions={{ gestureEnabled: false }}>
         <Stack.Screen
           name="index"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="manage"
           options={{
             headerShown: false,
           }}

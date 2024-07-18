@@ -1,4 +1,4 @@
-import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
+import { StyleSheet, View, ActivityIndicator, Text, ScrollView, RefreshControl } from "react-native";
 import React, { useState, useEffect } from "react";
 import GroupToggle from "./GroupToggle";
 import {
@@ -8,7 +8,7 @@ import {
 import { useGlobalContext } from "../../context/globalProvider";
 import GroupEventIcon from "./GroupEventIcon";
 
-const GroupEvents = ({ group }) => {
+const GroupEvents = ({ group, onRefresh, refreshing }) => {
   const { orgId } = useGlobalContext();
   const [activeTab, setActiveTab] = useState("Previous");
   const [loading, setLoading] = useState(true);
@@ -29,10 +29,18 @@ const GroupEvents = ({ group }) => {
     };
 
     fetchEvents();
-  }, [activeTab]);
+  }, [activeTab, group]);
 
   return (
-    <View className="w-11/12 mx-auto">
+    <ScrollView showsVerticalScrollIndicator={false} className="h-full" refreshControl={
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        colors={["#22c55e"]}
+        tintColor="#22c55e"
+      />
+    }>
+      <View className="w-11/12 mx-auto">
       <GroupToggle activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {loading ? (
@@ -53,6 +61,7 @@ const GroupEvents = ({ group }) => {
         </View>
       )}
     </View>
+    </ScrollView>
   );
 };
 

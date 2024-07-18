@@ -45,6 +45,7 @@ const GroupHome = () => {
   const [isFollowingGroup, setIsFollowingGroup] = useState(false);
   const [isModerator, setIsModerator] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchGroup = async () => {
     if (!id) {
@@ -120,15 +121,21 @@ const GroupHome = () => {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true)
+    await fetchGroup()
+    setRefreshing(false)
+  }
+
   const displayTabContent = () => {
     switch (activeTab) {
       case "Info":
-        return <GroupInfo group={group} />;
+        return <GroupInfo group={group} onRefresh={onRefresh} refreshing={refreshing}/>;
       case "Members":
-        return <GroupMembers members={group.members} moderators={group.moderators} />
+        return <GroupMembers members={group.members} moderators={group.moderators} onRefresh={onRefresh} refreshing={refreshing}/>
 
       case "Events": 
-        return <GroupEvents group={group}/>
+        return <GroupEvents group={group} onRefresh={onRefresh} refreshing={refreshing}/>
       
       default:
         return null;
@@ -145,7 +152,6 @@ const GroupHome = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView showsVerticalScrollIndicator={false} className="bg-white">
         <ImageBackground
           className="w-full h-[40vh] pb-5"
           source={{ uri: `${group.image}` }}
@@ -203,7 +209,6 @@ const GroupHome = () => {
           />
           {displayTabContent()}
         </View>
-      </ScrollView>
       {isModerator ? (
         <TouchableOpacity
           style={styles.floatingButton}
