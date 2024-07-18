@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Text,
   View,
@@ -23,12 +23,13 @@ import { getUserAttributes, getPostsByTime, getGroupById, getFollowingPosts } fr
 const tabs = ["Following", "Community"];
 
 export default function Home() {
-  const { loading, isLogged, isVerified, orgId, userRole } = useGlobalContext();
+  const { loading, isLogged, isVerified, orgId, userRole, needsReload, setNeedsReload } = useGlobalContext();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUser, setCurrentUser] = useState({});
   const [posts, setPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const isMounted = useRef(false);
 
   useEffect(() => {
     if (!loading && isLogged && isVerified) {
@@ -102,11 +103,21 @@ export default function Home() {
 
   useFocusEffect(
     useCallback(() => {
-      if (Object.keys(currentUser).length > 0) {
-        activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
+      if (!isMounted.current || needsReload) {
+        if (Object.keys(currentUser).length > 0) {
+          activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
+          isMounted.current = true;
+          setNeedsReload(false)
+        }
       }
-    }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts])
+    }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts, needsReload])
   );
+
+  useEffect(() => {
+    if (Object.keys(currentUser).length > 0) {
+      activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
+    }
+  }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts]);
 
   return (
     <SafeAreaView className="h-full bg-secondary">

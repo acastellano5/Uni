@@ -13,30 +13,34 @@ import { FontAwesome } from "@expo/vector-icons";
 const PostContent = ({ post, cuid, onDelete }) => {
   const { orgId } = useGlobalContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [likeCount, setLikeCount ] = useState(post.likes.length)
+  const [likeCount, setLikeCount] = useState(post.likes.length);
 
-  const postedAtDate = post.source === "PostSection" 
-    ? new Date(post.postedAt * 1000) 
-    : new Date(post.postedAt.seconds * 1000);
+  const postedAtDate =
+    post.source === "PostSection"
+      ? new Date(post.postedAt * 1000)
+      : new Date(post.postedAt.seconds * 1000);
 
   const navigateToProfile = () => {
     const route = post.type === "user" ? "/profile/profileShow" : "/group";
-    const params = post.type === "user" ? { uid: post.author } : { id: post.author };
+    const params =
+      post.type === "user" ? { uid: post.author } : { id: post.author };
     router.push({ pathname: route, params });
   };
 
   const handleDelete = async () => {
     Alert.alert("Delete Post", "Are you sure you want to delete this post?", [
       { text: "Cancel", style: "cancel" },
-      { text: "Yes", onPress: async () => {
+      {
+        text: "Yes",
+        onPress: async () => {
           try {
             await delPost(orgId, post.postId);
             onDelete(post.postId);
           } catch (error) {
             console.error("Error deleting post:", error);
           }
-        }
-      }
+        },
+      },
     ]);
   };
 
@@ -48,38 +52,51 @@ const PostContent = ({ post, cuid, onDelete }) => {
           <TouchableOpacity activeOpacity={0.8} onPress={navigateToProfile}>
             <FontAwesome name="user-circle" size={30} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity className="ml-5" activeOpacity={0.8} onPress={navigateToProfile}>
+          <TouchableOpacity
+            className="ml-5"
+            activeOpacity={0.8}
+            onPress={navigateToProfile}
+          >
             <Text>{post.authorName}</Text>
             <Text>{post.authorType}</Text>
           </TouchableOpacity>
         </View>
-        {cuid === post.author || cuid === post.writtenBy && (
+        {cuid === post.author || cuid === post.writtenBy ? (
           <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
-            <FontAwesome name="trash-o" size={24} color="red" />
-          </TouchableOpacity>
-        )}
+              <FontAwesome name="trash-o" size={24} color="red" />
+            </TouchableOpacity>
+        ) : null}
       </View>
       {/* post content */}
-      <Image source={{ uri: post.content }} resizeMode="cover" className="w-full h-[200] rounded-md" />
+      <Image
+        source={{ uri: post.content }}
+        resizeMode="cover"
+        className="w-full h-[200] rounded-md"
+      />
       <View className="mt-3">
         <Text className="text-base font-semibold mb-1">
-          {likeCount === 1 ? (
-            `${likeCount} like`
-          ) : (
-            `${likeCount} likes`
-          )}
-
+          {likeCount === 1 ? `${likeCount} like` : `${likeCount} likes`}
         </Text>
         <View className="flex-row items-center">
           {/* like button */}
-          <LikeButton postId={post.postId} likeCount={likeCount} setLikeCount={setLikeCount}/>
+          <LikeButton
+            postId={post.postId}
+            likeCount={likeCount}
+            setLikeCount={setLikeCount}
+          />
           {/* comment button */}
-          <CommentButton setIsModalVisible={setIsModalVisible} initialComments={post.comments.length}/>
+          <CommentButton
+            setIsModalVisible={setIsModalVisible}
+            initialComments={post.comments.length}
+          />
         </View>
       </View>
       <Text className="mt-3">{post.caption}</Text>
       {/* opens up comments */}
-      <TouchableOpacity className="mt-3" onPress={() => setIsModalVisible(true)}>
+      <TouchableOpacity
+        className="mt-3"
+        onPress={() => setIsModalVisible(true)}
+      >
         <Text className="font-semibold text-darkGray">View Comments</Text>
       </TouchableOpacity>
       {/* date of post */}
