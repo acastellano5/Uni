@@ -1,9 +1,9 @@
 import { router } from "expo-router";
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
 import { Agenda } from "react-native-calendars";
 
-const Calendar = ({ events, currentUserId }) => {
+const Calendar = ({ events, currentUserId, onRefresh, refreshing }) => {
   const [items, setItems] = useState({});
   const [selectedDate, setSelectedDate] = useState(timeToString(Date.now()));
 
@@ -69,6 +69,9 @@ const Calendar = ({ events, currentUserId }) => {
         renderEmptyDate={renderEmptyDate}
         rowHasChanged={(r1, r2) => r1.name !== r2.name}
         showClosingKnob={true}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#22c55e"]} tintColor="#22c55e"/>
+        }
         theme={{
           selectedDayBackgroundColor: "#22c55e",
           calendarBackground: "#F5F5F5",
