@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -10,13 +10,25 @@ const EventHeader = ({ event, moderatorStatus }) => {
   const { user, orgId } = useGlobalContext();
 
   const handleEventDelete = async () => {
-    if (event.authorType === "user") {
-      deleteUserEvent(event.eventId, orgId);
-    } else if (event.authorType === "group") {
-      deleteGroupEvent(event.authorId, event.eventId, orgId);
-    }
-
-    router.dismiss()
+    Alert.alert("Delete Event", "Are you sure you want to delete this event?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Yes",
+        onPress: async () => {
+          try {
+            if (event.authorType === "user") {
+              deleteUserEvent(event.eventId, orgId);
+            } else if (event.authorType === "group") {
+              deleteGroupEvent(event.authorId, event.eventId, orgId);
+            }
+          } catch (error) {
+            console.log("Error deleting event: ", error);
+          } finally {
+            router.dismiss();
+          }
+        },
+      },
+    ]);
   };
 
   return (

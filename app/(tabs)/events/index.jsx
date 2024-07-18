@@ -14,22 +14,24 @@ import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useGlobalContext } from "../../../context/globalProvider";
 import { getCurrentUser } from "../../../lib/firebase";
-import { getEventByUser, getCommunityEvents, getUserAttributes, getGroupById } from "../../../lib/useFirebase";
+import {
+  getEventByUser,
+  getCommunityEvents,
+  getUserAttributes,
+  getGroupById,
+} from "../../../lib/useFirebase";
 
 const tabs = ["My Events", "Community"];
 
 const EventsPage = () => {
   const { orgId } = useGlobalContext();
 
-  // setting tabs state
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUserId, setCurrentUserId] = useState("");
   const [events, setEvents] = useState(null);
-  // const [ myEvents, setMyEvents ] = useState(null)
-  // const [ communityEvents, setCommunityEvents ] = useState(null)
   const [eventsLoading, setEventsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  // fetch the current user id and set it to state
   useEffect(() => {
     const fetchCurrentUserId = async () => {
       try {
@@ -44,29 +46,29 @@ const EventsPage = () => {
   }, []);
 
   const fetchEvents = async () => {
-    setEventsLoading(true)
-    let events = []
+    setEventsLoading(true);
+    let events = [];
 
     if (activeTab === "My Events") {
       try {
-        events = await getEventByUser(currentUserId, orgId)
-        events = await formatEvents(events)
-        setEvents(events)
+        events = await getEventByUser(currentUserId, orgId);
+        events = await formatEvents(events);
+        setEvents(events);
       } catch (error) {
-        console.log("Error fetching my events:", error)
+        console.log("Error fetching my events:", error);
       }
     } else {
       try {
-        events = await getCommunityEvents(orgId)
-        events = await formatEvents(events)
-        setEvents(events)
+        events = await getCommunityEvents(orgId);
+        events = await formatEvents(events);
+        setEvents(events);
       } catch (error) {
-        console.log("Error fetching community events:", error)
+        console.log("Error fetching community events:", error);
       }
     }
 
-    setEventsLoading(false)
-  }
+    setEventsLoading(false);
+  };
 
   useEffect(() => {
     if (currentUserId) {
@@ -74,13 +76,13 @@ const EventsPage = () => {
     }
   }, [currentUserId, activeTab]);
 
-
-
   const formatEvents = async (events) => {
     const formatted = {};
     const promises = events.map(async (event) => {
       const { startTime, endTime, name, eventId, authorType, authorId } = event;
-      const date = new Date(startTime.seconds * 1000).toISOString().split("T")[0];
+      const date = new Date(startTime.seconds * 1000)
+        .toISOString()
+        .split("T")[0];
       let author = "";
 
       if (!formatted[date]) {
@@ -95,8 +97,12 @@ const EventsPage = () => {
         author = user.fullName;
       }
 
-      const startTimeFormatted = new Date(startTime.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const endTimeFormatted = new Date(endTime.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const startTimeFormatted = new Date(
+        startTime.seconds * 1000
+      ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      const endTimeFormatted = new Date(
+        endTime.seconds * 1000
+      ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
       formatted[date].push({
         name,
@@ -110,15 +116,18 @@ const EventsPage = () => {
     await Promise.all(promises);
     return formatted;
   };
-  
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchEvents();
+    setRefreshing(false);
+  };
 
   return (
     <SafeAreaView style={styles.container} className="bg-secondary">
-      {/* header */}
       <Header />
 
       <View style={styles.contentContainer} className="mt-5">
-        {/* tabs */}
         <TabsDisplay
           tabs={tabs}
           activeTab={activeTab}
@@ -127,14 +136,21 @@ const EventsPage = () => {
           textStyles="text-base"
           tabBarStyles="w-10/12"
         />
-        {eventsLoading ? (
-          <ActivityIndicator size="large" color="#22c55e" />
-        ) : (
-          <Calendar events={ events } currentUserId={currentUserId}/>
-        )}
+
+        <View style={styles.flexContainer}>
+          {eventsLoading ? (
+            <ActivityIndicator size="large" color="#22c55e" />
+          ) : (
+            <Calendar
+              events={events}
+              currentUserId={currentUserId}
+              onRefresh={onRefresh}
+              refreshing={refreshing}
+            />
+          )}
+        </View>
       </View>
 
-      {/* Create Button */}
       <TouchableOpacity
         style={styles.createButton}
         activeOpacity={0.8}
@@ -159,7 +175,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 18,
-    overflow: "hidden", // Ensures the child components are not clipped
+    overflow: "hidden",
+  },
+  flexContainer: {
+    flex: 1,
+  },
+  calendarContainer: {
+    flex: 1,
   },
   createButton: {
     position: "absolute",
