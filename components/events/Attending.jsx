@@ -5,6 +5,7 @@ import { getUserAttributes } from "../../lib/useFirebase";
 import AttendeeCard from "./AttendeeCard";
 
 const Attending = ({ attendees }) => {
+  console.log(attendees)
   const [attending, setAttending] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
 
