@@ -16,11 +16,7 @@ const ChatHeader = ({ title }) => {
           <Ionicons name="chevron-back" size={24} color="white" />
         </TouchableOpacity>
 
-        <Text className="text-2xl font-semibold text-white">{title}</Text>
-
-        <TouchableOpacity activeOpacity={0.8} onPress={() => router.push("/profile/myProfile")}>
-          <FontAwesome name="user-circle" size={27} color="white" />
-        </TouchableOpacity>
+        <Text className="text-2xl font-semibold text-white mx-auto right-4">{title}</Text>
       </View>
     </View>
   )

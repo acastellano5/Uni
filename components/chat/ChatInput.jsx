@@ -1,8 +1,7 @@
-import { View, TouchableOpacity, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, View, TouchableOpacity, TextInput, Text, Keyboard } from "react-native";
+import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-// yeah we gotta use axios so fetch doesn't be mean to me
-import axios from 'axios';
+import axios from "axios";
 
 const ChatInput = ({ addMessage, addr, model, apiKey }) => {
   const [input, setInput] = useState("");
@@ -11,40 +10,89 @@ const ChatInput = ({ addMessage, addr, model, apiKey }) => {
     addMessage("right", input);
     setInput("");
     try {
-      const { data } = await axios.post(addr, {
-        question: input,
-        model: model,
-        key: apiKey
-      },
-      {
-        headers: {
-          "Content-Type": "application/json"
+      const { data } = await axios.post(
+        addr,
+        {
+          question: input,
+          model: model,
+          key: apiKey,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
       addMessage("left", data);
     } catch (err) {
       addMessage("left", "Error fetching response.");
       console.error(err);
     }
   };
+
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    // Function to handle keyboard visibility change
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+
+    // Cleanup listeners on unmount
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
-    // View with the same height as the input below it, preventing messages from being hidden
-    <View className="h-16">
-      <View className="absolute bottom-0 w-full" behavior="position" >
-        <View className="flex-row items-center justify-between bg-darkWhite p-3">
-          <TextInput
-            placeholder="Type a message..."
-            value={input}
-            className="flex-1 w-10/12 bg-gray-200 rounded-full p-2 br-10 mr-3"
-            onChangeText={value => setInput(value)}
-          />
-          <TouchableOpacity onPress={sendMessage}>
-            <FontAwesome name="send" size={24} color="#22c55e" />
-          </TouchableOpacity>
-        </View>
-      </View>
+
+    <View style={styles.chatInputContainer}>
+      <TextInput
+        style={styles.chatInput}
+        placeholder="Type a message..."
+        value={input}
+        multiline={true}
+        onChangeText={value => setInput(value)}
+        onSubmitEditing={sendMessage}
+      />
+      <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+        <Text style={styles.sendButtonText} className="text-primary">
+          Send
+        </Text>
+      </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 
 export default ChatInput;
+
+const styles = StyleSheet.create({
+  chatInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    paddingBottom: 45,
+    borderTopWidth: 1,
+    borderColor: "#dcdcdc",
+    backgroundColor: "#fff",
+  },
+  chatInput: {
+    flex: 1,
+    height: 40,
+    borderColor: "#dcdcdc",
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+  },
+  sendButton: {
+    marginLeft: 10,
+  },
+  sendButtonText: {
+    fontWeight: "bold",
+  },
+})
