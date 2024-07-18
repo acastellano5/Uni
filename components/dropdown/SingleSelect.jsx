@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-const DropdownComponent = ({ title, data, onItemSelect, focusedColor, placeholder, containerStyles, isSearchable }) => {
+const DropdownComponent = ({ title, data, onItemSelect, focusedColor, placeholder, containerStyles, isSearchable, selectedValue }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -30,6 +30,7 @@ const DropdownComponent = ({ title, data, onItemSelect, focusedColor, placeholde
         placeholder={!isFocus ? placeholder : "..."}
         search={isSearchable}
         searchPlaceholder="Search..."
+        value={selectedValue ? selectedValue : null}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {

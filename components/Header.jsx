@@ -14,11 +14,18 @@ const Header = ({ textStyles }) => {
         <FontAwesome name="user-circle" size={27} color="white" />
       </TouchableOpacity>
 
-      <Text className={`text-2xl font-semibold text-white ${textStyles}`}>
+      <Text
+        className={`text-2xl font-semibold text-center w-3/6 text-white ${textStyles}`}
+        numberOfLines={1}
+        ellipsizeMode="tail"
+      >
         Salesianum
       </Text>
 
-      <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/aiChat')}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => router.push("/aiChat")}
+      >
         <Image source={logo} className="h-[30px] w-[30px] ml-3" />
       </TouchableOpacity>
     </View>
