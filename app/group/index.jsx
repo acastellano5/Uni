@@ -175,7 +175,9 @@ const GroupHome = () => {
                     )}
                   </TouchableOpacity>
                 ) : null}
-                <TouchableOpacity
+
+                {group.canJoin ? (
+                  <TouchableOpacity
                   onPress={handleJoinOrLeaveGroup}
                   className="bg-white py-2 px-3 rounded"
                   activeOpacity={0.8}
@@ -184,6 +186,7 @@ const GroupHome = () => {
                     {isInGroup || isModerator ? "Leave" : "Join"}
                   </Text>
                 </TouchableOpacity>
+                ) : null}
               </View>
             </View>
           </SafeAreaView>
