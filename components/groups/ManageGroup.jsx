@@ -23,7 +23,7 @@ const ManageGroup = ({group, setGroupContent, fetchGroup}) => {
     const displayContent = () => {
         switch (activeTab) {
             case "Info":
-                return <EditInfo group={group} groupInfo={groupInfo} setGroupInfo={setGroupInfo}/>
+                return <EditInfo group={group} groupInfo={groupInfo} setGroupInfo={setGroupInfo} fetchGroup={ fetchGroup }/>
         
             case "Members":
             return <EditMembers group={group} fetchGroup={fetchGroup}/>

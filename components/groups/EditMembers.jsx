@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 import { getUserAttributes } from "../../lib/useFirebase";
 import ManageMemberCard from "./ManageMemberCard";
 import AddUsers from "./AddUsers";
+import { useGlobalContext } from "../../context/globalProvider";
 
 const editMembers = ({ group, fetchGroup }) => {
   const isEffected = false;
   const [loading, setLoading] = useState(true);
+  const { orgId } = useGlobalContext()
   const [ isModalVisible, setIsModalVisible ] = useState(false)
 
   // make requests to fetch members from database
@@ -50,13 +52,13 @@ const editMembers = ({ group, fetchGroup }) => {
       >
         <Text className="text-white py-1 px-2">Add People</Text>
       </TouchableOpacity>
-        <ScrollView>
         <View className="flex-row flex-wrap bg-white pt-3 px-2 rounded mt-3">
+        <ScrollView showsVerticalScrollIndicator={false}>
         {fetchedModerators.map((moderator, index) => (
           <ManageMemberCard
             person={moderator}
-            group={group.id}
-            orgId={group}
+            groupId={group.id}
+            orgId={orgId}
             reactor={isEffected}
             addUser={false}
             fetchGroup={fetchGroup}
@@ -68,22 +70,24 @@ const editMembers = ({ group, fetchGroup }) => {
         {fetchedMembers.map((member, index) => (
           <ManageMemberCard
             person={member}
-            group={group}
-            orgId={group}
+            groupId={group.id}
+            orgId={orgId}
             role="Member"
             addUser={false}
             fetchGroup={fetchGroup}
             key={index}
           />
         ))}
-      </View>
         </ScrollView>
+      </View>
 
       <AddUsers
         visible={isModalVisible}
-        onRequestClose={() => setIsModalVisible(false)}
+        setIsVisible={setIsModalVisible}
         animationType="slide"
         presentationStyle="formSheet"
+        fetchGroup={fetchGroup}
+        groupId={group.id}
       />
     </>
   );

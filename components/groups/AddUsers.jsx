@@ -18,6 +18,9 @@ const AddUsers = ({
   onRequestClose,
   animationType,
   presentationStyle,
+  fetchGroup, 
+  groupId,
+  setIsVisible
 }) => {
   const { orgId } = useGlobalContext();
 
@@ -27,6 +30,8 @@ const AddUsers = ({
 
   const handleClearSearch = async () => {
     setSearchValue("");
+    setResults([])
+    setIsResults(false)
   };
 
   const onSubmitSearch = async () => {
@@ -41,15 +46,22 @@ const AddUsers = ({
     }
   };
 
+  const onCloseModal = () => {
+    setIsVisible(false)
+    setResults([])
+    setSearchValue("")
+    setIsResults(false)
+  }
+
   return (
     <Modal
       visible={visible}
-      onRequestClose={onRequestClose}
+      onRequestClose={onCloseModal}
       animationType={animationType}
       presentationStyle={presentationStyle}
     >
       <View className="mt-5 w-10/12 mx-auto">
-        <TouchableOpacity onPress={onRequestClose} className="self-end">
+        <TouchableOpacity onPress={onCloseModal} className="self-end">
           <AntDesign name="close" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -71,7 +83,7 @@ const AddUsers = ({
           {isResults ? (
             results.length > 0 ? (
               results.map((person, index) => (
-                <ManageMemberCard person={person} key={index} addUser={true} />
+                <ManageMemberCard person={person} key={index} addUser={true} fetchGroup={fetchGroup} groupId={groupId} orgId={orgId}/>
               ))
             ) : (
               <Text className="text-center text-darkGray text-base mt-5">

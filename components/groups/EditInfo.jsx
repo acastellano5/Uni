@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import FormField from "../FormField";
 import SingleSelect from "../dropdown/SingleSelect";
 import CustomButton from "../CustomButton"
 import { editGroup } from "../../lib/useFirebase";
 
-const EditInfo = ({ group, groupInfo, setGroupInfo }) => {
+const EditInfo = ({ group, groupInfo, setGroupInfo, fetchGroup}) => {
   const groupTypes = [
     "Academic",
     "Faith, Justice, Wellness",
@@ -16,10 +16,20 @@ const EditInfo = ({ group, groupInfo, setGroupInfo }) => {
     label: type,
     value: type,
   }));
+
+  useEffect(() => {
+    console.log(groupInfo)
+  }, [ groupInfo ])
+
+  const onSavePress = async () => {
+    await editGroup(group,groupInfo)
+    fetchGroup()
+
+  }
   return (
     <ScrollView className="h-full" showsVerticalScrollIndicator={false}>
       <FormField
-        title="Banner"
+        title="Image Banner"
         placeholder="Paste image url (for now)"
         value={groupInfo.image}
         isEditable={true}
@@ -69,7 +79,7 @@ const EditInfo = ({ group, groupInfo, setGroupInfo }) => {
         })}
       />
 
-        <CustomButton containerStyles="mb-2 bg-primary py-2 mt-2 mb-20" textStyles="text-white text-base" handlePress={() => {editGroup(group,groupInfo)}} title="Save"/>
+        <CustomButton containerStyles="mb-2 bg-primary py-2 mt-2 mb-20" textStyles="text-white text-base" handlePress={onSavePress} title="Save"/>
     </ScrollView>
   );
 };
