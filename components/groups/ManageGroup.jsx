@@ -19,7 +19,6 @@ const ManageGroup = ({group, setGroupContent}) => {
 
 
     useEffect(() => {
-        console.log(groupInfo)
     }, [groupInfo])
     const displayContent = () => {
         switch (activeTab) {
