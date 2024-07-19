@@ -35,7 +35,6 @@ const create = () => {
 
   // getting orgId from global context
   const { orgId} = useGlobalContext();
-  getAllGroups(orgId,"Student")
   const params = useLocalSearchParams();
   const { authorType, groupId } = params
   //getGroupsByUser('lbNMpnLjx9bU1mROL6AjtSQdub73',orgId)
