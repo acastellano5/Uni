@@ -3,8 +3,9 @@ import React from "react";
 import { useGlobalContext } from "../../context/globalProvider";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
 import { AntDesign } from "@expo/vector-icons";
+import { removeGroupMember } from "../../lib/useFirebase";
 
-const ManageMemberCard = ({ person }) => {
+const ManageMemberCard = ({ person, groupId, orgId}) => {
 
     const { user } = useGlobalContext()
     const currentUserId = user.uid
@@ -22,8 +23,9 @@ const ManageMemberCard = ({ person }) => {
       </View>
 
       {currentUserId !== person.id ? (
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity activeOpacity={0.8} onPress={()=> {removeGroupMember(groupId,person,orgId)}}>
           <AntDesign name="closecircleo" size={24} color="red" />
+          
         </TouchableOpacity>
       ) : null}
     </View>

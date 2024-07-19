@@ -4,6 +4,7 @@ import { getUserAttributes } from "../../lib/useFirebase";
 import ManageMemberCard from "./ManageMemberCard";
 
 const editMembers = ({ group }) => {
+  const isEffected = false
   const [loading, setLoading] = useState(true);
 
   // make requests to fetch members from database
@@ -34,7 +35,7 @@ const editMembers = ({ group }) => {
     };
 
     fetchModerators();
-  }, [group]);
+  }, [group, isEffected]);
 
   return (
     <>
@@ -47,11 +48,11 @@ const editMembers = ({ group }) => {
 
       <View className="flex-row flex-wrap bg-white p-2 rounded mt-3">
         {fetchedModerators.map((moderator, index) => (
-          <ManageMemberCard person={moderator} key={index}/>
+          <ManageMemberCard person={moderator} group={group.id} orgId={group} reactor={isEffected} key={index}/>
         ))}
 
         {fetchedMembers.map((member, index) => (
-          <ManageMemberCard person={member} key={index}/>
+          <ManageMemberCard person={member} group={group} orgId={group} key={index}/>
         ))}
       </View>
 

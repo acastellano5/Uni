@@ -142,7 +142,7 @@ const CommentsSection = ({
             style={styles.sendButton}
             onPress={handleSendComment}
           >
-            <Text style={styles.sendButtonText} className="text-yellow-500">
+            <Text style={styles.sendButtonText} className="text-green-500">
               Send
             </Text>
           </TouchableOpacity>
