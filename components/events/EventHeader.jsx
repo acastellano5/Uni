@@ -49,7 +49,7 @@ const EventHeader = ({ event, moderatorStatus }) => {
           className="bg-tertiary p-1 px-2 rounded-lg"
           onPress={handleEventDelete}
         >
-          <FontAwesome name="trash-o" size={24} color="red" />
+          <FontAwesome name="trash-o" size={24} color="white" />
         </TouchableOpacity>
       ) : null}
     </View>
