@@ -24,7 +24,7 @@ const GroupHeader = ({ containerStyles, title, isModerator, setGroupContent }) =
             <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => setGroupContent("manage group")}
-            className="bg-tertiary w-8 py-1 flex items-center rounded"
+            className="bg-primary w-8 py-1 flex items-center rounded"
           >
             <Ionicons name="settings-outline" size={24} color="white" />
           </TouchableOpacity>

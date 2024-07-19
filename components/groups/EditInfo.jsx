@@ -68,7 +68,7 @@ const EditInfo = ({ group, groupInfo, setGroupInfo }) => {
         })}
       />
 
-        <CustomButton containerStyles="mb-2 bg-primary py-2 mt-2 mb-20" textStyles="text-white text-base" title="Save"/>
+        <CustomButton containerStyles="mb-2 bg-primary py-2 mt-2 mb-20" textStyles="text-white text-base" handlePress={() => {console.log(group,", ",groupInfo)}} title="Save"/>
     </ScrollView>
   );
 };
