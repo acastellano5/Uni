@@ -17,21 +17,8 @@ import { useLocalSearchParams } from "expo-router";
 
 const create = () => {
   // getting orgId from global context
-<<<<<<< Updated upstream
-  const { orgId} = useGlobalContext();
-  const params = useLocalSearchParams();
-  const { authorType, groupId } = params
-  //getGroupsByUser('lbNMpnLjx9bU1mROL6AjtSQdub73',orgId)
-  //createEvent('org',orgId,"Test","Salesianum",'2024-08-09','2024-08-10',[orgId],orgId,"its coool")
-  //getGroupsByUser('lbNMpnLjx9bU1mROL6AjtSQdub73',orgId,true)
-  //createEvent('user', orgId, "Soccer Practice", "Salesianum", '2024-08-11', '2024-08-11', 'lbNMpnLjx9bU1mROL6AjtSQdub73','lbNMpnLjx9bU1mROL6AjtSQdub73',"Go to Soccer Practice")
-    useEffect(() => {
-    console.log(orgId)
-  })
-=======
   const { orgId } = useGlobalContext();
   const { authorType, groupId } = useLocalSearchParams();
->>>>>>> Stashed changes
   const [image, setImage] = useState(null);
 
   useEffect(() => {
