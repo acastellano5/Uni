@@ -131,7 +131,8 @@ export default function Home() {
         {postsLoading && !refreshing ? (
           <ActivityIndicator size="large" color="#22c55e" />
         ) : (
-          <FlatList
+          posts.length > 0 ? (
+            <FlatList
             data={posts}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
@@ -146,6 +147,9 @@ export default function Home() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingTop: 12 }}
           />
+          ) : (
+            <Text className="text-center text-darkGray text-base mt-10">No posts yet.</Text>
+          )
         )}
         <TouchableOpacity
           style={styles.addBtn}
