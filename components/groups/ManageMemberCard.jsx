@@ -13,11 +13,23 @@ import { AntDesign } from "@expo/vector-icons";
 import { removeGroupMember } from "../../lib/useFirebase";
 import { router } from "expo-router";
 
-const ManageMemberCard = ({ person, groupId, orgId, addUser, role }) => {
+const ManageMemberCard = ({
+  person,
+  groupId,
+  orgId,
+  addUser,
+  role,
+  fetchGroup,
+}) => {
   const { user } = useGlobalContext();
   const currentUserId = user.uid;
+  const onRemoveUser = async () => {
+    await removeGroupMember(orgId, groupId, person.id);
+    fetchGroup()
+  };
+
   return (
-    <View className="flex-row justify-between items-center w-full">
+    <View className="flex-row justify-between items-center w-full mb-3">
       <View className="flex-row items-center">
         <TouchableOpacity
           onPress={() =>
@@ -56,9 +68,7 @@ const ManageMemberCard = ({ person, groupId, orgId, addUser, role }) => {
       ) : currentUserId !== person.id ? (
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => {
-            removeGroupMember(groupId, person, orgId);
-          }}
+          onPress={onRemoveUser}
         >
           <AntDesign name="closecircleo" size={24} color="red" />
         </TouchableOpacity>

@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import { getUserAttributes } from "../../lib/useFirebase";
 import ManageMemberCard from "./ManageMemberCard";
 import AddUsers from "./AddUsers";
 
-const editMembers = ({ group }) => {
+const editMembers = ({ group, fetchGroup }) => {
   const isEffected = false;
   const [loading, setLoading] = useState(true);
   const [ isModalVisible, setIsModalVisible ] = useState(false)
@@ -50,8 +50,8 @@ const editMembers = ({ group }) => {
       >
         <Text className="text-white py-1 px-2">Add People</Text>
       </TouchableOpacity>
-
-      <View className="flex-row flex-wrap bg-white p-2 rounded mt-3">
+        <ScrollView>
+        <View className="flex-row flex-wrap bg-white pt-3 px-2 rounded mt-3">
         {fetchedModerators.map((moderator, index) => (
           <ManageMemberCard
             person={moderator}
@@ -59,6 +59,7 @@ const editMembers = ({ group }) => {
             orgId={group}
             reactor={isEffected}
             addUser={false}
+            fetchGroup={fetchGroup}
             role="Moderator"
             key={index}
           />
@@ -71,10 +72,12 @@ const editMembers = ({ group }) => {
             orgId={group}
             role="Member"
             addUser={false}
+            fetchGroup={fetchGroup}
             key={index}
           />
         ))}
       </View>
+        </ScrollView>
 
       <AddUsers
         visible={isModalVisible}

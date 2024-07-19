@@ -6,7 +6,7 @@ import EditInfo from './EditInfo'
 import EditMembers from './EditMembers'
 import TabsDisplay from '../TabsDisplay'
 
-const ManageGroup = ({group, setGroupContent}) => {
+const ManageGroup = ({group, setGroupContent, fetchGroup}) => {
 
     const tabs = ["Info", "Members"]
     const [ activeTab, setActiveTab ] = useState(tabs[0])
@@ -26,7 +26,7 @@ const ManageGroup = ({group, setGroupContent}) => {
                 return <EditInfo group={group} groupInfo={groupInfo} setGroupInfo={setGroupInfo}/>
         
             case "Members":
-            return <EditMembers group={group}/>
+            return <EditMembers group={group} fetchGroup={fetchGroup}/>
             
             default:
                 return <Text>It doesn't work</Text>
