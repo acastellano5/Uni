@@ -110,14 +110,21 @@ const create = () => {
             title="Create"
             containerStyles="bg-primary py-3"
             textStyles="text-white text-base font-semibold"
-            handlePress={() => {
+            handlePress={async () => {
               if (authorType === "group") {
                 createGroupPost(groupId, form.postUrl, form.caption, orgId);
               } else if (authorType === "user") {
                 if (image) {
-                  uploadToFirebase(image,"test")
+                  const task = await uploadToFirebase(image,"test")
+                  createUserPost(task, form.caption, orgId);
+
+
+                  
+
                 }
+                else {
                 createUserPost(form.postUrl, form.caption, orgId);
+                }
               }
               router.push("/home");
             }}
