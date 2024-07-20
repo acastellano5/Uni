@@ -107,7 +107,7 @@ const CreatePost = () => {
                 createGroupPost(groupId, form.postUrl, form.caption, orgId);
               } else if (authorType === "user") {
                 if (image) {
-                  const task = await uploadToFirebase(image, "test");
+                  const task = await uploadToFirebase(image);
                   createUserPost(task, form.caption, orgId);
                 } else {
                   createUserPost(form.postUrl, form.caption, orgId);
