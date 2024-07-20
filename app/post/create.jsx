@@ -85,12 +85,12 @@ const CreatePost = () => {
 
           <Text className="text-base font-medium mb-2">Image (optional)</Text>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={pickImage} className="border border-primary">
+            <TouchableOpacity style={styles.button} onPress={pickImage} className="border border-primary" activeOpacity={0.8}>
               <Ionicons name="image-outline" size={24} color="#22c55e" />
               <Text style={styles.buttonText} className="text-primary">Pick an Image</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={takePhoto} className="border border-primary">
+            <TouchableOpacity style={styles.button} onPress={takePhoto} className="border border-primary" activeOpacity={0.8}>
               <Ionicons name="camera-outline" size={24} color="#22c55e" />
               <Text style={styles.buttonText} className="text-primary">Take a Photo</Text>
             </TouchableOpacity>
