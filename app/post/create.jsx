@@ -9,7 +9,8 @@ import { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import {
   createUserPost,
-  createGroupPost
+  createGroupPost,
+  uploadToFirebase
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router } from "expo-router";
@@ -113,6 +114,9 @@ const create = () => {
               if (authorType === "group") {
                 createGroupPost(groupId, form.postUrl, form.caption, orgId);
               } else if (authorType === "user") {
+                if (image) {
+                  uploadToFirebase(image,"test")
+                }
                 createUserPost(form.postUrl, form.caption, orgId);
               }
               router.push("/home");
