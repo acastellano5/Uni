@@ -32,6 +32,10 @@ const FollowingModal = ({
     setSearchValue("");
   };
 
+  const onValidateSearch = () => {
+    setSearchValue("");
+  }
+
   const onSubmitSearch = async () => {
     const users = await getUsersFollowing(orgId, searchValue)
     console.log("*******")
@@ -63,6 +67,7 @@ const FollowingModal = ({
           onClearSearch={handleClearSearch}
           handleChangeText={(e) => setSearchValue(e)}
           handleSubmitEditing={onSubmitSearch}
+          onValidateSearch={onValidateSearch}
           needFilter={false}
           containerStyles="w-full"
         />

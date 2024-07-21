@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,6 +13,7 @@ const SearchBar = ({
   handleSubmitEditing,
   onClearSearch,
   needFilter,
+  onValidateSearch
 }) => {
   const isDisabled = isFilterDisabled;
   return (
@@ -36,7 +37,14 @@ const SearchBar = ({
           className="mr-3 left-4"
           onChangeText={handleChangeText}
           value={textValue}
-          onSubmitEditing={handleSubmitEditing}
+          onSubmitEditing={() => {
+            if (textValue.trim() === "") {  
+              Alert.alert("Validation Error", "Search field cannot be empty.");
+              onValidateSearch()
+              return;  
+            }  
+            handleSubmitEditing()
+          }}
         />
 
         {/* clear search field button */}

@@ -82,6 +82,12 @@ export default function Home() {
     setIsLoading(false);
   };
 
+  const onValidateSearch = () => {
+    setSearchValue("");
+    setIsSearchResult(false);
+    setActiveTab("");
+  }
+
   const handleClearFilter = async () => {
     setActiveTab("");
     setIsFilterApplied(false);
@@ -118,6 +124,7 @@ export default function Home() {
             onClearSearch={handleClearSearch}
             handleChangeText={(e) => setSearchValue(e)}
             handleSubmitEditing={onSubmitSearch}
+            onValidateSearch={onValidateSearch}
             needFilter={true}
           />
 

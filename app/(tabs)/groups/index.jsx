@@ -145,6 +145,13 @@ export default function Groups() {
     fetchAllGroups(isRefreshing);
   };
 
+  const onValidateSearch = () => {
+    setSearchValue("");
+    setIsSearchResult(false);
+    setSearchResults([]);
+    setIsFilterApplied(false);
+  }
+
   const onRefresh = () => {
     setRefreshing(true);
     if (activeTab === "All") {
@@ -180,6 +187,7 @@ export default function Groups() {
               handleChangeText={setSearchValue}
               handleSubmitEditing={onSubmitSearch}
               onClearSearch={() => resetGroups()}
+              onValidateSearch={onValidateSearch}
               filterOnPress={() => setIsFilterVisible(true)}
               needFilter={true}
             />
