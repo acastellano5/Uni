@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, ActivityIndicator, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
@@ -89,27 +89,34 @@ const CreateEvent = () => {
   };
 
   const onCreatePress = async () => {
-    const { name, location, startTime, endTime, description } = form
-    let attendees = currentUser.uid
-    let authorId
-    let type
-    let author
+    const { name, location, startTime, endTime, description } = form;
+    
+    // Check if required fields are filled
+    if (!name || !startTime || !endTime) {
+      Alert.alert("Error", "Event name, start time, and end time are required.");
+      return;
+    }
+    
+    let attendees = currentUser.uid;
+    let authorId;
+    let type;
+    let author;
     if (eventType === "group") {
-      type="group"
-      authorId=groupId
-      author = await getGroupById(groupId, orgId)
-      author = author.name
+      type="group";
+      authorId=groupId;
+      author = await getGroupById(groupId, orgId);
+      author = author.name;
     } else {
-      type="user"
-      authorId = currentUser.uid
-      author = await getUserAttributes(authorId)
-      author = author.fullName
+      type="user";
+      authorId = currentUser.uid;
+      author = await getUserAttributes(authorId);
+      author = author.fullName;
     }
     const event = await createEvent(type, orgId, name, location, startTime, endTime, attendees, authorId, description);
     router.replace({
       pathname: '/event',
       params: { eventId: event.eventId, author }
-    })
+    });
   };
 
   return (
