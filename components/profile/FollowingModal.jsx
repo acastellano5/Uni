@@ -38,9 +38,8 @@ const FollowingModal = ({
 
   const onSubmitSearch = async () => {
     const users = await getUsersFollowing(orgId, searchValue)
-    console.log("*******")
+    console.log(orgId, searchValue)
     console.log(users)
-    console.log("*******")
     setSearchValue("");
   };
 
