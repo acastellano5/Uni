@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Image,
   StyleSheet,
+  Alert,
 } from "react-native";
 import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -53,6 +54,10 @@ const EditProfile = () => {
 
   const onSavePress = async () => {
     const { fullName, bio, interests } = form
+    if (fullName.trim() === "") {  
+      Alert.alert("Validation Error", "You must provide your full name.");  
+      return;  
+    }
     await editProfile(fullName, bio, interests)
     router.dismiss()
   };
