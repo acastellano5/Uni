@@ -21,7 +21,7 @@ const FollowingModal = ({
   following,
   fetchFollowing,
 }) => {
-    const { orgId } = useGlobalContext
+    const { orgId } = useGlobalContext()
   const [searchValue, setSearchValue] = useState("");
 
   const onCloseModal = () => {
