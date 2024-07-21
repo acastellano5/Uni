@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";  
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from "react-native";  
 import React, { useState, useEffect } from "react";  
 import { SafeAreaView } from "react-native-safe-area-context";  
 import { Ionicons } from "@expo/vector-icons";  
@@ -19,9 +19,8 @@ const CreatePost = () => {
   const { authorType, groupId } = useLocalSearchParams();  
   const [image, setImage] = useState(null);  
   const [form, setForm] = useState({  
-    caption: "pool day",  
-    postUrl:  
-      "https://leisurepoolsusa.com/wp-content/uploads/2020/06/best-type-of-swimming-pool-for-my-home_2.jpg",  
+    text: "",  
+    postUrl: "",  
   });  
   
   useEffect(() => {  
@@ -64,6 +63,24 @@ const CreatePost = () => {
       setImage(result.assets[0].uri);  
     }  
   };  
+
+  const onCreatePress = async () => {  
+    if (form.text.trim() === "") {  
+      Alert.alert("Validation Error", "You must provide text for the post.");  
+      return;  
+    }  
+    if (authorType === "group") {  
+      createGroupPost(groupId, form.postUrl, form.text, orgId);  
+    } else if (authorType === "user") {  
+      if (image) {  
+        const task = await uploadToFirebase(image);  
+        createUserPost(task, form.text, orgId);  
+      } else {  
+        createUserPost(form.postUrl, form.text, orgId);  
+      }  
+    }  
+    router.push("/home");  
+  }
   
   return (  
     <SafeAreaView className="h-full bg-secondary">  
@@ -73,11 +90,11 @@ const CreatePost = () => {
           <Text className="text-3xl text-center font-semibold">Create Post</Text>  
   
           <FormField  
-            title="Caption"  
-            value={form.caption}  
-            handleChangeText={(e) => setForm({ ...form, caption: e })}  
+            title="Text"  
+            value={form.text}  
+            handleChangeText={(e) => setForm({ ...form, text: e })}  
             otherStyles="mb-5"  
-            placeholder="Caption..."  
+            placeholder="Type here..."  
             labelStyles="text-base font-medium"  
             isEditable={true}  
           />  
@@ -102,19 +119,7 @@ const CreatePost = () => {
             title="Create"  
             containerStyles="bg-primary py-3"  
             textStyles="text-white text-base font-semibold"  
-            handlePress={async () => {  
-              if (authorType === "group") {  
-                createGroupPost(groupId, form.postUrl, form.caption, orgId);  
-              } else if (authorType === "user") {  
-                if (image) {  
-                  const task = await uploadToFirebase(image);  
-                  createUserPost(task, form.caption, orgId);  
-                } else {  
-                  createUserPost(form.postUrl, form.caption, orgId);  
-                }  
-              }  
-              router.push("/home");  
-            }}  
+            handlePress={onCreatePress}  
           />  
         </View>  
       </View>  
