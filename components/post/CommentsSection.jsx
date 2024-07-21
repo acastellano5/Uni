@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Alert
 } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -26,7 +27,7 @@ const CommentsSection = ({
   animationType,
   presentationStyle,
   post,
-  currentUserId
+  currentUserId,
 }) => {
   const { orgId } = useGlobalContext();
   const [commentText, setCommentText] = useState("");
@@ -70,7 +71,10 @@ const CommentsSection = ({
   };
 
   const handleSendComment = async () => {
-    if (commentText.trim() !== "") {
+    if (commentText.trim() === "") {
+      Alert.alert("Validation Error", "You must provide text to comment.");
+      return;
+    } else {
       await createComment(post.postId, commentText);
       setCommentText("");
       Keyboard.dismiss();
