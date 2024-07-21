@@ -21,11 +21,13 @@ import {
   getGroupById,
   ifUserFollowed,
   unfollowUser,
-  getPostByAuthor
+  getPostByAuthor,
+  getFollowing
 } from "../../lib/useFirebase";
 import { getCurrentUser } from "../../lib/firebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { useFocusEffect } from "@react-navigation/native";
+import FollowingModal from "../../components/profile/FollowingModal";
 
 const ProfileShow = () => {
   // getting orgId from global context
@@ -40,11 +42,15 @@ const ProfileShow = () => {
 
   // settings modal state
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+  const [isFollowingVisible, setIsFollowingVisible] = useState(false);
 
   // set groups state
   const [groups, setGroups] = useState([]);
   // set posts state
   const [posts, setPosts] = useState([]);
+
+  // set following state
+  const [ following, setFollowing ] = useState([])
 
   // set current user state
   const [currentUserId, setCurrentUserId] = useState("");
@@ -52,17 +58,24 @@ const ProfileShow = () => {
   // fetch the user's post
   const fetchUserPosts = async () => {
     let userPosts = await getPostByAuthor(uid, orgId);
-    userPosts = await Promise.all(userPosts.map(async (post) => {
-      const author = await getUserAttributes(uid);
-      return {
-        ...post,
-        type: 'user',
-        authorName: author.fullName,
-        authorId: author.id,
-        authorType: author.orgs[orgId].role
-      };
-    }));
+    userPosts = await Promise.all(
+      userPosts.map(async (post) => {
+        const author = await getUserAttributes(uid);
+        return {
+          ...post,
+          type: "user",
+          authorName: author.fullName,
+          authorId: author.id,
+          authorType: author.orgs[orgId].role,
+        };
+      })
+    );
     setPosts(userPosts);
+  };
+
+  const fetchUserFollowing = async () => {
+    const followingUsers = await getFollowing(uid, orgId, true)
+    setFollowing(followingUsers)
   }
 
   // fetch user info and groups
@@ -91,7 +104,11 @@ const ProfileShow = () => {
         setGroups(fetchedGroups);
 
         // fetch posts the user has
-        fetchUserPosts()
+        fetchUserPosts();
+
+
+        // fetch following users
+        fetchUserFollowing()
 
         // fetch current user info
         const user = await getCurrentUser();
@@ -119,7 +136,7 @@ const ProfileShow = () => {
 
   return (
     <SafeAreaView className="h-full bg-black">
-      <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum"/>
+      <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" />
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         {loading ? (
@@ -164,14 +181,23 @@ const ProfileShow = () => {
                   />
                 </View>
               ) : (
-                <View className="flex-row mb-4">
+                <View className="flex-row justify-center mb-4">
                   <CustomButton
                     title="Edit"
                     textStyles="text-primary text-sm font-semibold"
-                    handlePress={() => router.push({
-                      pathname: "./editProfile",
-                      params: user
-                    })}
+                    handlePress={() =>
+                      router.push({
+                        pathname: "./editProfile",
+                        params: user,
+                      })
+                    }
+                  />
+
+                  <CustomButton
+                    title="Following"
+                    containerStyles="ml-2"
+                    textStyles="text-yellow-500 text-sm font-semibold"
+                    handlePress={() => setIsFollowingVisible(true)}
                   />
                   <CustomButton
                     title="Settings"
@@ -184,7 +210,11 @@ const ProfileShow = () => {
             </View>
 
             {/* bio section */}
-            <View className={`bg-white w-11/12 mx-auto px-3 py-2 rounded-lg mb-10 ${currentUserId !== uid ? "mt-5" : null}`}>
+            <View
+              className={`bg-white w-11/12 mx-auto px-3 py-2 rounded-lg mb-10 ${
+                currentUserId !== uid ? "mt-5" : null
+              }`}
+            >
               <Text className="text-lg font-medium mb-1">Bio</Text>
               <View className="bg-lightGreen mb-3 rounded-lg">
                 {/* for passing in bio */}
@@ -203,7 +233,7 @@ const ProfileShow = () => {
               {/* classes section */}
               <InfoBox title="Classes" />
 
-              <PostSection posts={posts}/>
+              <PostSection posts={posts} />
 
               <Settings
                 visible={isSettingsVisible}
@@ -212,6 +242,15 @@ const ProfileShow = () => {
                 }}
                 animationType="slide"
                 presentationStyle="formSheet"
+              />
+
+              <FollowingModal 
+                visible={isFollowingVisible}
+                setIsVisible={setIsFollowingVisible}
+                animationType="slide"
+                presentationStyle="formSheet"
+                following={following}
+                fetchFollowing={fetchUserFollowing}
               />
             </View>
           </ScrollView>
