@@ -9,7 +9,8 @@ import * as ImagePicker from "expo-image-picker";
 import {  
   createUserPost,  
   createGroupPost,  
-  uploadToFirebase,  
+  uploadToFirebase,
+  getUsersFollowing,  
 } from "../../lib/useFirebase";  
 import { useGlobalContext } from "../../context/globalProvider";  
 import { router, useLocalSearchParams } from "expo-router";  
@@ -18,6 +19,7 @@ const CreatePost = () => {
   const { orgId } = useGlobalContext();  
   const { authorType, groupId } = useLocalSearchParams();  
   const [image, setImage] = useState(null);  
+  getUsersFollowing(orgId,"Sca",'TxyMAuuQjUglpvLUEynhZ31MMRx1')
   const [form, setForm] = useState({  
     text: "",  
     postUrl: "",  
