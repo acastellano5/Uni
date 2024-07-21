@@ -13,7 +13,7 @@ const FollowingCard = ({ person, isFollowing }) => {
 
   const onFollowOrUnfollow = async () => {
     if (following) {
-      Alert.alert(`Unfollow ${person.fullName}`, `Do you want to unfollow ${person.fullName}?`, [
+      Alert.alert(`Unfollow ${person.fullName}`, `Are you sure you want to unfollow ${person.fullName}?`, [
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),

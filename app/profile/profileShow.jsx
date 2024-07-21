@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Image,
   StyleSheet,
+  Alert,
 } from "react-native";
 import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -169,8 +170,17 @@ const ProfileShow = () => {
                         followUser(user.id, orgId);
                         setIsFollowing(true);
                       } else {
-                        unfollowUser(user.id, orgId);
-                        setIsFollowing(false);
+                        Alert.alert(`Unfollow ${user.fullName}`, `Are you sure you want to unfollow ${user.fullName}?`, [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel",
+                          },
+                          { text: "Yes", onPress: async () => {
+                              await unfollowUser(user.id, orgId) 
+                              setIsFollowing(false);
+                          }},
+                        ]);
                       }
                     }}
                   />
