@@ -87,6 +87,7 @@ const FollowingModal = ({
                         person={user}
                         key={index}
                         isFollowing={true}
+                        setIsVisible={setIsVisible}
                       />
                     ))
                   ) : (
@@ -108,6 +109,7 @@ const FollowingModal = ({
                         person={user}
                         key={index}
                         isFollowing={true}
+                        setIsVisible={setIsVisible}
                       />
                     ))}
                   </View>
