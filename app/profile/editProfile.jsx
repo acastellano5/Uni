@@ -10,7 +10,6 @@ import {
 import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
-import ProfilePic from "../../assets/images/profilepic.jpeg";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import MultiSelect from "../../components/dropdown/MultiSelect";
@@ -18,6 +17,7 @@ import { useLocalSearchParams, router } from "expo-router";
 import { useGlobalContext } from "../../context/globalProvider";
 import { interestsData } from "../../assets/data";
 import { editProfile } from "../../lib/useFirebase";
+import ProfileUpload from "../../components/imageUpload/ProfileUpload";
 
 const EditProfile = () => {
   // getting orgId from global context
@@ -38,12 +38,9 @@ const EditProfile = () => {
   const [form, setForm] = useState({
     fullName: user.fullName,
     bio: user.bio,
+    profilePicture: user.profilePicture,
     interests,
   });
-
-  useEffect(() => {
-    console.log(interests)
-  }, [interests]);
 
   useEffect(() => {
     setForm({
@@ -79,11 +76,11 @@ const EditProfile = () => {
           {/* change photo */}
           <View className="items-center">
             <Image
-              source={ProfilePic}
+              source={{ uri: form.profilePicture }}
               style={styles.profilePic}
               className="mb-3"
             />
-            <CustomButton title="Change Photo" textStyles={"text-yellow-500"} />
+            <ProfileUpload form={form} setForm={setForm} containerStyles="w-10/12 mx-auto"/>
           </View>
 
           {/* edit name */}
@@ -145,6 +142,7 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     borderRadius: 45,
+    objectFit: 'cover'
   },
 });
 
