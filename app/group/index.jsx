@@ -37,26 +37,6 @@ const index = () => {
   }, [id]);
 
 
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   useEffect(() => {
-//     console.log(id);
-//   }, [id]);
-
   const displayGroupContent = () => {
     switch (groupContent) {
       case "show group":
@@ -70,7 +50,9 @@ const index = () => {
     }
   };
 
-  return <>{displayGroupContent()}</>;
+  return <>
+  {displayGroupContent()}
+  </>;
 };
 
 export default index;

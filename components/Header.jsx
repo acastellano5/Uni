@@ -14,13 +14,15 @@ const Header = ({ textStyles }) => {
         <FontAwesome name="user-circle" size={27} color="white" />
       </TouchableOpacity>
 
-      <Text
-        className={`text-2xl font-semibold text-center w-3/6 text-white ${textStyles}`}
-        numberOfLines={1}
-        ellipsizeMode="tail"
-      >
-        Salesianum
-      </Text>
+      <TouchableOpacity activeOpacity={0.8} className="w-3/6" onPress={() => router.push('/org')}>
+        <Text
+          className={`text-2xl font-semibold text-center text-white ${textStyles}`}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          Salesianum
+        </Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         activeOpacity={0.8}
