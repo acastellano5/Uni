@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, ActivityIndicator, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  ActivityIndicator,
+  Alert
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
@@ -6,20 +14,20 @@ import BackHeader from "../../components/BackHeader";
 import { useGlobalContext } from "../../context/globalProvider";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { createEvent, getGroupById, getUserAttributes } from "../../lib/useFirebase";
+import {
+  createEvent,
+  getGroupById,
+  getUserAttributes,
+} from "../../lib/useFirebase";
 import { getCurrentUser } from "../../lib/firebase";
 import { router, useLocalSearchParams } from "expo-router";
+import ImageUpload from "../../components/imageUpload/ImageUpload";
 
 const CreateEvent = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const { orgId } = useGlobalContext();
-  const { eventType, groupId } = useLocalSearchParams()
-
-  useEffect(() => {
-    console.log(eventType)
-    console.log(groupId)
-  }, [eventType])
+  const { eventType, groupId } = useLocalSearchParams();
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -36,13 +44,19 @@ const CreateEvent = () => {
     location: "",
     startTime: null,
     endTime: null,
-    description: ""
+    description: "",
+    image: ""
   });
+
+  useEffect(() => {
+    console.log(form)
+  }, [ form ])
 
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [tempStartTime, setTempStartTime] = useState(new Date());
   const [tempEndTime, setTempEndTime] = useState(new Date());
+
 
   const onChangeStartTime = (event, selectedDate) => {
     const currentDate = selectedDate || tempStartTime;
@@ -90,32 +104,45 @@ const CreateEvent = () => {
 
   const onCreatePress = async () => {
     const { name, location, startTime, endTime, description } = form;
-    
+
     // Check if required fields are filled
     if (!name || !startTime || !endTime) {
-      Alert.alert("Error", "Event name, start time, and end time are required.");
+      Alert.alert(
+        "Error",
+        "Event name, start time, and end time are required."
+      );
       return;
     }
-    
+
     let attendees = currentUser.uid;
     let authorId;
     let type;
     let author;
     if (eventType === "group") {
-      type="group";
-      authorId=groupId;
+      type = "group";
+      authorId = groupId;
       author = await getGroupById(groupId, orgId);
       author = author.name;
     } else {
-      type="user";
+      type = "user";
       authorId = currentUser.uid;
       author = await getUserAttributes(authorId);
       author = author.fullName;
     }
-    const event = await createEvent(type, orgId, name, location, startTime, endTime, attendees, authorId, description);
+    const event = await createEvent(
+      type,
+      orgId,
+      name,
+      location,
+      startTime,
+      endTime,
+      attendees,
+      authorId,
+      description
+    );
     router.replace({
-      pathname: '/event',
-      params: { eventId: event.eventId, author }
+      pathname: "/event",
+      params: { eventId: event.eventId, author },
     });
   };
 
@@ -140,7 +167,7 @@ const CreateEvent = () => {
 
             {/* event name field */}
             <FormField
-              title="Event Name"
+              title="Event Name*"
               placeholder="Event Name"
               value={form.name}
               isEditable={true}
@@ -190,7 +217,7 @@ const CreateEvent = () => {
               {/* select start time field */}
               <CustomButton
                 handlePress={() => setShowStartTimePicker(true)}
-                title="Select Start Time"
+                title="Select Start Time*"
                 containerStyles="border border-primary w-full mb-2"
                 textStyles="text-primary text-base py-2"
               />
@@ -228,10 +255,10 @@ const CreateEvent = () => {
             </View>
 
             {/* select end time field */}
-            <View className="mb-3">
+            <View className="mb-1">
               <CustomButton
                 handlePress={() => setShowEndTimePicker(true)}
-                title="Select End Time"
+                title="Select End Time*"
                 containerStyles="border border-primary w-full mb-3"
                 textStyles="text-primary text-base py-2"
               />
@@ -268,6 +295,9 @@ const CreateEvent = () => {
               )}
             </View>
 
+
+            <ImageUpload title="Event Banner" form={form} setForm={setForm}/>
+
             {/* create event button */}
             <CustomButton
               title="Create"
@@ -284,4 +314,5 @@ const CreateEvent = () => {
 
 export default CreateEvent;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+});
