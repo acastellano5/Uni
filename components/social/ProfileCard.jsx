@@ -9,20 +9,20 @@ const ProfileCard = ({ user }) => {
     <View className="w-1/3 p-1">
       <TouchableOpacity
         activeOpacity={0.8}
+        className="bg-white p-1 pb-2 rounded-lg flex-1"
         onPress={() =>
           router.push({
             pathname: "/profile/profileShow",
             params: { uid: user.id },
           })
+          
         }
       >
-        <View className="bg-white p-1 pb-2 rounded-lg">
           <Image
             source={ProfilePic}
             className="w-full h-[10vh] object-cover rounded-lg mb-3"
           />
           <Text className="text-center">{user.fullName}</Text>
-        </View>
       </TouchableOpacity>
     </View>
   );

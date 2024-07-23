@@ -203,6 +203,7 @@ export default function Home() {
 
           <View
             className={`${!isSearchResult && !isFilterApplied ? "mt-5" : "mt-3"} w-11/12 mx-auto flex-row flex-wrap mb-20`}
+            style={{alignItems: "stretch"}}
           >
             {isLoading && !refreshing ? (
               <View style={styles.loaderContainer}>
