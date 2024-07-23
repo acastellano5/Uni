@@ -1,9 +1,19 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";  
 import * as ImagePicker from "expo-image-picker";
 
 const ImageUpload = ({ title, form, setForm }) => {
+  const [imageAspectRatio, setImageAspectRatio] = useState(1);
+
+  useEffect(() => {
+
+    if (form.image) {
+      Image.getSize(form.image, (width, height) => {
+        setImageAspectRatio(width / height);
+      });
+    }
+  }, [form.image]);
 
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -77,7 +87,13 @@ const ImageUpload = ({ title, form, setForm }) => {
         </TouchableOpacity>
       </View>
 
-      {form.image && <Image source={{ uri: form.image }} style={styles.image} />}
+      {form.image && <Image source={{ uri: form.image }} style={{
+          width: "100%",
+          height: undefined,
+          aspectRatio: imageAspectRatio,
+          resizeMode: imageAspectRatio > 1 ? "cover" : "contain",
+          marginBottom: 15
+        }} />}
     </>
   );
 };
@@ -99,11 +115,5 @@ const styles = StyleSheet.create({
       },  
       buttonText: {  
         marginLeft: 10,  
-      },  
-      image: {  
-        width: 200,  
-        height: 200,  
-        alignSelf: "center",  
-        marginBottom: 15,  
       }
 });
