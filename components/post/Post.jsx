@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
+import { View, Text, Image, TouchableOpacity, Alert, Dimensions } from "react-native";
 import React, { useState, useEffect } from "react";
 import Comments from "./CommentsSection";
 import { router } from "expo-router";
@@ -14,6 +14,7 @@ const PostContent = ({ post, cuid, onDelete }) => {
   const { orgId } = useGlobalContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes.length);
+  const [imageAspectRatio, setImageAspectRatio] = useState(1);
 
   const postedAtDate =
     post.source === "PostSection"
@@ -44,6 +45,12 @@ const PostContent = ({ post, cuid, onDelete }) => {
     ]);
   };
 
+  useEffect(() => {
+    Image.getSize(post.content, (width, height) => {
+      setImageAspectRatio(width / height);
+    });
+  }, [post.content]);
+
   return (
     <>
       <View className="flex-row justify-between mb-3">
@@ -71,7 +78,12 @@ const PostContent = ({ post, cuid, onDelete }) => {
       <Image
         source={{ uri: post.content }}
         className="rounded-md"
-        style={{ width: "100%", height: undefined, aspectRatio: 1, resizeMode: "contain" }}
+        style={{
+          width: "100%",
+          height: undefined,
+          aspectRatio: imageAspectRatio,
+          resizeMode: imageAspectRatio > 1 ? "cover" : "contain"
+        }}
       />
       <View className="mt-3">
         <Text className="text-base font-semibold mb-1">
