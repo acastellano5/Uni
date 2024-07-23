@@ -63,15 +63,15 @@ const PostContent = ({ post, cuid, onDelete }) => {
         </View>
         {cuid === post.author || cuid === post.writtenBy ? (
           <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
-              <FontAwesome name="trash-o" size={24} color="red" />
-            </TouchableOpacity>
+            <FontAwesome name="trash-o" size={24} color="red" />
+          </TouchableOpacity>
         ) : null}
       </View>
       {/* post content */}
       <Image
         source={{ uri: post.content }}
-        resizeMode="cover"
-        className="w-full h-[200] rounded-md"
+        className="rounded-md"
+        style={{ width: "100%", height: undefined, aspectRatio: 1, resizeMode: "contain" }}
       />
       <View className="mt-3">
         <Text className="text-base font-semibold mb-1">
