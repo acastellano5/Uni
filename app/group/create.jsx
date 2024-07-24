@@ -5,9 +5,7 @@ import BackHeader from "../../components/BackHeader";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import {
-  createUserPost,
-  createGroupPost,
-  uploadToFirebase,
+  createGroup
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router, useLocalSearchParams } from "expo-router";
@@ -24,22 +22,17 @@ const CreateGroup = () => {
     category: "",
   });
 
+  useEffect(() => {
+    console.log(form)
+  }, [ form ])
+
   const onCreatePress = async () => {
-    if (form.text.trim() === "") {
-      Alert.alert("Validation Error", "You must provide text for the post.");
+    if (form.name.trim() === "" || form.image.trim() === "" || form.description.trim() === "" || form.category.trim() === "") {
+      Alert.alert("Validation Error", "Please complete all required fields.");
       return;
     }
-    if (authorType === "group") {
-      createGroupPost(groupId, form.image, form.text, orgId);
-    } else if (authorType === "user") {
-      if (form.image) {
-        const task = await uploadToFirebase(form.image);
-        createUserPost(task, form.text, orgId);
-      } else {
-        createUserPost(form.image, form.text, orgId);
-      }
-    }
-    router.push("/home");
+    
+    await createGroup()
   };
 
   return (
@@ -52,7 +45,7 @@ const CreateGroup = () => {
           </Text>
 
           <FormField
-            title="Enter Name"
+            title="Enter Name*"
             value={form.name}
             handleChangeText={(e) => setForm({ ...form, name: e })}
             otherStyles="mb-3"
@@ -62,7 +55,7 @@ const CreateGroup = () => {
           />
 
           <SingleSelect
-            title="Category"
+            title="Category*"
             placeholder="Select Category"
             containerStyles="mb-3"
             data={[
@@ -80,7 +73,7 @@ const CreateGroup = () => {
           />
 
           <FormField
-            title="Description"
+            title="Description*"
             placeholder="Max 300 characters"
             isEditable={true}
             isMultiLine={true}
@@ -95,7 +88,7 @@ const CreateGroup = () => {
             }}
           />
 
-          <ImageUpload title="Image Banner" form={form} setForm={setForm} />
+          <ImageUpload title="Image Banner*" form={form} setForm={setForm} />
 
           <CustomButton
             title="Create"
