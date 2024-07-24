@@ -49,6 +49,10 @@ const CreateGroup = () => {
     if (form.type === "School Group") {
       setShowCategory(true);
     } else {
+      setForm({
+        ...form,
+        category: null,
+      });
       setShowCategory(false);
     }
   }, [form.type]);
@@ -64,18 +68,23 @@ const CreateGroup = () => {
       Alert.alert("Validation Error", "Please complete all required fields.");
       return;
     }
-  
+
     if (form.type === "School Group" && form.category.trim() === "") {
       Alert.alert("Validation Error", "Please complete all required fields.");
       return;
     }
 
-
-  
-    const group = await createGroup(orgId, form.name, form.category, form.description, form.image, form.roles, form.perms)
-    console.log(group)
+    const group = await createGroup(
+      orgId,
+      form.name,
+      form.category,
+      form.description,
+      form.image,
+      form.roles,
+      form.perms
+    );
+    console.log(group);
   };
-  
 
   return (
     <SafeAreaView className="h-full bg-secondary">
