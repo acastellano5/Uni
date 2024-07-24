@@ -16,20 +16,20 @@ const CreateGroup = () => {
   const [showCategory, setShowCategory] = useState(false);
   const roles = [
     {
-      value: "Parent",
-      label: "Parent",
+      value: "Student",
+      label: "Student",
     },
     {
       value: "Alumni",
       label: "Alumni",
     },
     {
-      value: "Student",
-      label: "Student",
-    },
-    {
       value: "Faculty/Staff",
       label: "Faculty/Staff",
+    },
+    {
+      value: "Parent",
+      label: "Parent",
     },
   ];
   const [form, setForm] = useState({
@@ -114,9 +114,9 @@ const CreateGroup = () => {
             containerStyles="mb-3"
             data={[
               { value: "School Group", label: "School Group" },
-              { value: "Faculty Group", label: "Faculty Group" },
-              { value: "Parent Group", label: "Parent Group" },
               { value: "Alumni Group", label: "Alumni Group" },
+              { value: "Faculty Group", label: "Faculty Group" },
+              { value: "Parent Group", label: "Parent Group" }
             ]}
             selectedValue={form.type} // Add this line
             onItemSelect={(item) => {
