@@ -46,7 +46,7 @@ const CreateGroup = () => {
   }, [form]);
 
   useEffect(() => {
-    if (form.type === "School Group") {
+    if (form.type === "School") {
       setShowCategory(true);
     } else {
       setForm({
@@ -69,7 +69,7 @@ const CreateGroup = () => {
       return;
     }
 
-    if (form.type === "School Group" && form.category.trim() === "") {
+    if (form.type === "School" && form.category.trim() === "") {
       Alert.alert("Validation Error", "Please complete all required fields.");
       return;
     }
@@ -113,10 +113,10 @@ const CreateGroup = () => {
             placeholder="Select Type"
             containerStyles="mb-3"
             data={[
-              { value: "School Group", label: "School Group" },
-              { value: "Alumni Group", label: "Alumni Group" },
-              { value: "Faculty Group", label: "Faculty Group" },
-              { value: "Parent Group", label: "Parent Group" }
+              { value: "School", label: "School Group" },
+              { value: "Alumni", label: "Alumni Group" },
+              { value: "Faculty", label: "Faculty Group" },
+              { value: "Parent", label: "Parent Group" }
             ]}
             selectedValue={form.type} // Add this line
             onItemSelect={(item) => {
