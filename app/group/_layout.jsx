@@ -13,6 +13,13 @@ const GroupLayout = () => {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen
+          name="create"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
       <StatusBar style="dark" />
     </>

@@ -5,10 +5,12 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
+  TouchableOpacity
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
+import { Feather } from "@expo/vector-icons";
 import SearchBar from "../../../components/SearchBar";
 import GroupSection from "../../../components/groups/GroupSection";
 import {
@@ -23,6 +25,7 @@ import BackButton from "../../../components/BackButton";
 import GroupFilter from "../../../components/groups/GroupFilter";
 import { useGlobalContext } from "../../../context/globalProvider";
 import TabsDisplay from "../../../components/TabsDisplay";
+import { router } from "expo-router";
 
 const tabs = ["My Groups", "All"];
 const groupTypes = [
@@ -251,6 +254,14 @@ export default function Groups() {
             groupTypes={groupTypes}
           />
         </ScrollView>
+
+        <TouchableOpacity
+          style={styles.addBtn}
+          activeOpacity={0.8}
+          onPress={() => router.push({ pathname: "/group/create" })}
+        >
+          <Feather name="plus" size={24} color="white" />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -262,5 +273,16 @@ const styles = StyleSheet.create({
     color: "#000",
     textAlign: "center",
     marginTop: 20,
+  },
+  addBtn: {
+    position: "absolute",
+    bottom: 38,
+    right: 20,
+    backgroundColor: "#22c55e",
+    borderRadius: 50,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

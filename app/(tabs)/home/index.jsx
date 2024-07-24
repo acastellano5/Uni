@@ -153,7 +153,7 @@ export default function Home() {
         )}
         <TouchableOpacity
           style={styles.addBtn}
-          activeOpacity={0.9}
+          activeOpacity={0.8}
           onPress={() => router.push({ pathname: "/post/create", params: { authorType: "user" } })}
         >
           <Feather name="plus" size={24} color="white" />
