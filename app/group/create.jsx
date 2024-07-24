@@ -74,7 +74,7 @@ const CreateGroup = () => {
       return;
     }
 
-    const group = await createGroup(
+    const groupId = await createGroup(
       orgId,
       form.name,
       form.category,
@@ -83,7 +83,11 @@ const CreateGroup = () => {
       form.roles,
       form.type
     );
-    console.log(group);
+    
+    router.replace({
+      pathname: "/group",
+      params: { id: groupId }
+    })
   };
 
   return (
