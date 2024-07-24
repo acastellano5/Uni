@@ -4,42 +4,86 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import {
-  createGroup
-} from "../../lib/useFirebase";
+import { createGroup } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router, useLocalSearchParams } from "expo-router";
 import ImageUpload from "../../components/imageUpload/ImageUpload";
 import SingleSelect from "../../components/dropdown/SingleSelect";
+import MultiSelect from "../../components/dropdown/MultiSelect";
 
 const CreateGroup = () => {
   const { orgId } = useGlobalContext();
-  const { authorType, groupId } = useLocalSearchParams();
+  const [showCategory, setShowCategory] = useState(false);
+  const roles = [
+    {
+      value: "Parent",
+      label: "Parent",
+    },
+    {
+      value: "Alumni",
+      label: "Alumni",
+    },
+    {
+      value: "Student",
+      label: "Student",
+    },
+    {
+      value: "Faculty/Staff",
+      label: "Faculty/Staff",
+    },
+  ];
   const [form, setForm] = useState({
     name: "",
     image: "",
     description: "",
     category: "",
+    roles: [],
+    perms: [],
+    type: "",
   });
 
   useEffect(() => {
-    console.log(form)
-  }, [ form ])
+    console.log(form);
+  }, [form]);
+
+  useEffect(() => {
+    if (form.type === "School Group") {
+      setShowCategory(true);
+    } else {
+      setShowCategory(false);
+    }
+  }, [form.type]);
 
   const onCreatePress = async () => {
-    if (form.name.trim() === "" || form.image.trim() === "" || form.description.trim() === "" || form.category.trim() === "") {
+    if (
+      form.name.trim() === "" ||
+      form.image.trim() === "" ||
+      form.description.trim() === "" ||
+      form.roles.length === 0 ||
+      form.perms.length === 0 ||
+      form.type.trim() === ""
+    ) {
       Alert.alert("Validation Error", "Please complete all required fields.");
       return;
     }
-    
-    await createGroup()
+  
+    if (form.type === "School Group" && form.category.trim() === "") {
+      Alert.alert("Validation Error", "Please complete all required fields.");
+      return;
+    }
+  
+    const group = await createGroup(orgId, name, category, description, image, roles, perms)
   };
+  
 
   return (
     <SafeAreaView className="h-full bg-secondary">
       <BackHeader containerStyles="w-11/12 mx-auto" />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pb-10">
-        <ScrollView className="w-10/12 mx-auto top-[30]" showsVerticalScrollIndicator={false}>
+        <ScrollView
+          className="w-10/12 mx-auto top-[30]"
+          showsVerticalScrollIndicator={false}
+        >
           <Text className="text-3xl mb-3 text-center font-semibold">
             Create Group
           </Text>
@@ -55,21 +99,62 @@ const CreateGroup = () => {
           />
 
           <SingleSelect
-            title="Category*"
-            placeholder="Select Category"
+            title="Type*"
+            placeholder="Select Type"
             containerStyles="mb-3"
             data={[
-              { value: "Athletic", label: "Athletic" },
-              { value: "Academic", label: "Academic" },
-              { value: "Art", label: "Art" },
+              { value: "School Group", label: "School Group" },
+              { value: "Faculty Group", label: "Faculty Group" },
+              { value: "Parent Group", label: "Parent Group" },
+              { value: "Alumni Group", label: "Alumni Group" },
             ]}
-            selectedValue={form.category} // Add this line
+            selectedValue={form.type} // Add this line
             onItemSelect={(item) => {
               setForm({
                 ...form,
-                category: item.value,
+                type: item.value,
               });
             }}
+          />
+
+          {showCategory ? (
+            <SingleSelect
+              title="Category*"
+              placeholder="Select Category"
+              containerStyles="mb-3"
+              data={[
+                { value: "Athletic", label: "Athletic" },
+                { value: "Academic", label: "Academic" },
+                { value: "Art", label: "Art" },
+              ]}
+              selectedValue={form.category} // Add this line
+              onItemSelect={(item) => {
+                setForm({
+                  ...form,
+                  category: item.value,
+                });
+              }}
+            />
+          ) : null}
+
+          <MultiSelect
+            title="Who can view this group*"
+            containerStyles="mb-3"
+            onItemSelect={(e) => {
+              setForm({ ...form, roles: e });
+            }}
+            placeholder="Select roles"
+            data={roles}
+          />
+
+          <MultiSelect
+            title="Who can join this group*"
+            containerStyles="mb-3"
+            onItemSelect={(e) => {
+              setForm({ ...form, perms: e });
+            }}
+            placeholder="Select roles"
+            data={roles}
           />
 
           <FormField
