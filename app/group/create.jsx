@@ -81,7 +81,7 @@ const CreateGroup = () => {
       form.description,
       form.image,
       form.roles,
-      form.perms
+      form.type
     );
     console.log(group);
   };
