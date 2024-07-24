@@ -33,13 +33,12 @@ const CreateGroup = () => {
     },
   ];
   const [form, setForm] = useState({
-    name: "",
-    image: "",
-    description: "",
-    category: "",
-    roles: [],
-    perms: [],
-    type: "",
+    name: null,
+    image: null,
+    description: null,
+    category: null,
+    roles: null,
+    type: null,
   });
 
   useEffect(() => {
@@ -60,7 +59,6 @@ const CreateGroup = () => {
       form.image.trim() === "" ||
       form.description.trim() === "" ||
       form.roles.length === 0 ||
-      form.perms.length === 0 ||
       form.type.trim() === ""
     ) {
       Alert.alert("Validation Error", "Please complete all required fields.");
@@ -71,8 +69,11 @@ const CreateGroup = () => {
       Alert.alert("Validation Error", "Please complete all required fields.");
       return;
     }
+
+
   
-    const group = await createGroup(orgId, name, category, description, image, roles, perms)
+    const group = await createGroup(orgId, form.name, form.category, form.description, form.image, form.roles, form.perms)
+    console.log(group)
   };
   
 
@@ -142,16 +143,6 @@ const CreateGroup = () => {
             containerStyles="mb-3"
             onItemSelect={(e) => {
               setForm({ ...form, roles: e });
-            }}
-            placeholder="Select roles"
-            data={roles}
-          />
-
-          <MultiSelect
-            title="Who can join this group*"
-            containerStyles="mb-3"
-            onItemSelect={(e) => {
-              setForm({ ...form, perms: e });
             }}
             placeholder="Select roles"
             data={roles}
