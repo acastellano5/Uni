@@ -4,6 +4,7 @@ import FormField from "../FormField";
 import SingleSelect from "../dropdown/SingleSelect";
 import CustomButton from "../CustomButton"
 import { editGroup } from "../../lib/useFirebase";
+import ImageUpload from "../imageUpload/ImageUpload";
 
 const EditInfo = ({ group, groupInfo, setGroupInfo, fetchGroup}) => {
   const groupTypes = [
@@ -28,18 +29,6 @@ const EditInfo = ({ group, groupInfo, setGroupInfo, fetchGroup}) => {
   }
   return (
     <ScrollView className="h-full" showsVerticalScrollIndicator={false}>
-      <FormField
-        title="Image Banner"
-        placeholder="Paste image url (for now)"
-        value={groupInfo.image}
-        isEditable={true}
-        otherStyles="mb-2"
-        handleChangeText={(e) => setGroupInfo({
-            ...groupInfo, 
-            image: e
-        })}
-      />
-
       <FormField
         title="Name"
         placeholder="Group Name"
@@ -79,7 +68,9 @@ const EditInfo = ({ group, groupInfo, setGroupInfo, fetchGroup}) => {
         })}
       />
 
-        <CustomButton containerStyles="mb-2 bg-primary py-2 mt-2 mb-20" textStyles="text-white text-base" handlePress={onSavePress} title="Save"/>
+      <ImageUpload title="Group Banner" form={groupInfo} setForm={setGroupInfo}/>
+
+        <CustomButton containerStyles="bg-primary py-2 mt-2 mb-[200px]" textStyles="text-white text-base" handlePress={onSavePress} title="Save"/>
     </ScrollView>
   );
 };
