@@ -15,7 +15,7 @@ import database from '@react-native-firebase/database';
 import ChatList from '../../../components/messaging/ChatList';
 import ChatTabs from '../../../components/messaging/ChatTabs';
 
-const tabs = ["DM", "Groups", "Classes", "Alerts"];
+const tabs = ["DMs", "Groups", "Classes", "Alerts"];
 
 
 export default function Messages() {
@@ -24,7 +24,7 @@ export default function Messages() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const displayTabContent = () => {
     switch (activeTab) {
-      case "DM":
+      case "DMs":
         return <ChatList filter={activeTab}/>;
 
       case "Groups":
