@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import auth from '@react-native-firebase/auth';
 import ChatHeader from "../../components/chat/ChatHeader";
 import ChatName from "../../components/chat/ChatName";
 import {
@@ -63,7 +63,9 @@ const chat = () => {
         <ChatHeader title="Messages" />
 
         <View className="bg-darkWhite mt-5 pt-5 h-full rounded-t-3xl">
-          <ChatName name={isLoading ? "Loading" : chat.users.filter((val) => { return val !== "You" }).join(", ")} profileName="" />
+          {/* If chat.users.length === 2, get userID of OTHER user, and make that profileName */}
+          <ChatName name={isLoading ? "Loading" : chat.users.filter((val) => { return val !== "You" }).join(", ")} profileName={isLoading ? "" : (chat.users.length === 2 ? chat.userIDs.find((user) => user !== auth().currentUser.uid) : "")} />
+
           <ScrollView
             className="mt-5 pl-5 pr-5 flex-1"
             ref={scrollViewRef}
@@ -108,9 +110,6 @@ const chat = () => {
           </ScrollView>
           <ChatInput
             addMessage={addMessage}
-            addr="https://server.benti.dev:9443/api/get_answer"
-            model="salesianum"
-            apiKey="key1"
           />
         </View>
       </KeyboardAvoidingView>

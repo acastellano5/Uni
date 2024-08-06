@@ -3,16 +3,30 @@ import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 
-const ChatInput = ({ addMessage }) => {
+const AIChatInput = ({ addMessage, addr, model, apiKey }) => {
   const [input, setInput] = useState("");
   const sendMessage = async () => {
     if (!input.trim()) return;
     addMessage("right", input);
     setInput("");
     try {
-      
+      const { data } = await axios.post(
+        addr,
+        {
+          question: input,
+          model: model,
+          key: apiKey,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      addMessage("left", data);
     } catch (err) {
-      
+      addMessage("left", "Error fetching response.");
+      console.error(err);
     }
   };
 
@@ -55,7 +69,7 @@ const ChatInput = ({ addMessage }) => {
   );
 };
 
-export default ChatInput;
+export default AIChatInput;
 
 const styles = StyleSheet.create({
   chatInputContainer: {

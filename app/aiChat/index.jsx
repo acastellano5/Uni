@@ -15,7 +15,7 @@ import {
   ChatMessageLeft,
   ChatMessageRight,
 } from "../../components/chat/ChatMessages";
-import ChatInput from "../../components/chat/ChatInput";
+import AIChatInput from "../../components/chat/AIChatInput";
 
 const aiChat = () => {
   const scrollViewRef = useRef();
@@ -62,7 +62,7 @@ const aiChat = () => {
               )
             )}
           </ScrollView>
-          <ChatInput
+          <AIChatInput
             addMessage={addMessage}
             addr="https://server.benti.dev:9443/api/get_answer"
             model="salesianum"
