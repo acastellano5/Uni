@@ -1,18 +1,18 @@
 import { StyleSheet, View, TouchableOpacity, TextInput, Text, Keyboard } from "react-native";
 import React, { useState, useEffect } from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import axios from "axios";
+import { sendChatMessage } from "../../lib/useFirebase";
 
-const ChatInput = ({ addMessage }) => {
+const ChatInput = ({ id }) => {
   const [input, setInput] = useState("");
   const sendMessage = async () => {
     if (!input.trim()) return;
-    addMessage("right", input);
-    setInput("");
     try {
-      
+      var sent = await sendChatMessage(id, input)
+      if (!sent) return alert("Failed to send message");
+
+      setInput("");
     } catch (err) {
-      
+      alert("Failed to send message");
     }
   };
 

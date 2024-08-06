@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, Text, View, ActivityIndicator, Image } from 're
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { getUserChatList, getChats } from '../../lib/useFirebase';
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import logo from "../../assets/images/logo.png";
 
@@ -46,36 +46,50 @@ const ChatList = ({ filter }) => {
             </View>
           ) : (
             <View>
-            {filter == "DMs" ? <AIChatMessageCard lastMsgData={"Hello! How can I help you today?"}></AIChatMessageCard> : null}
-            {(chats.length > 0) ? chats.map((chat) => (
-              <View>
-                <MessageCard lastMsgData={chat.lastMsg.msg} lastMsgTimestamp={chat.lastMsg.timestamp} author={chat.lastMsg.author} users={chat.users} chatID={chat.id} />
-                {/* Placeholder at bottom, because of menu */}
-                <View style={{ height: 120 }} />
-              </View>
-            )) : (
-              <View className="flex items-center justify-center mt-10">
-                <Text className="text-[#333] text-lg font-semibold">Your {filter} will appear here.</Text>
-              </View>
-            )}
-          </View>
-        )}
+              {/* New message */}
+              <NewMessageCard filter={filter} />
+              {filter == "DMs" ? <AIChatMessageCard lastMsgData={"Hello! How can I help you today?"}></AIChatMessageCard> : null}
+              {(chats.length > 0) ? chats.map((chat) => (
+                <View>
+                  <MessageCard lastMsgData={chat.lastMsg.msg} lastMsgTimestamp={chat.lastMsg.timestamp} author={chat.lastMsg.author} users={chat.users} chatID={chat.id} />
+                </View>
+              )) : (
+                <View className="flex items-center justify-center mt-10">
+                  <Text className="text-[#333] text-lg font-semibold">Your {filter} will appear here.</Text>
+                </View>
+              )}
+              <View style={{ height: 120 }} />
+            </View>
+          )}
       </ScrollView>
-
     </View>
   )
 }
 
 const MessageCard = ({ lastMsgData, lastMsgTimestamp, author, users, chatID }) => {
-  const formatTimestamp = (timestamp) =>  {
+  const formatTimestamp = (timestamp) => {
+    timestamp = timestamp.toMillis();
     const now = Date.now();
+    const msInHour = 60 * 60 * 1000;
     const msInDay = 24 * 60 * 60 * 1000;
+    const msInMinute = 60 * 1000;
     const today = new Date(now).setHours(0, 0, 0, 0);
-    
+
     const date = new Date(timestamp);
+    const diffInMs = now - timestamp;
+    const diffInMinutes = Math.floor(diffInMs / msInMinute);
+    const diffInHours = Math.floor(diffInMs / msInHour);
     const isToday = timestamp >= today;
-    
-    if (isToday) {
+
+    if (diffInMs <= 5 * msInHour) {
+      if (diffInMinutes < 1) {
+        return "Now";
+      } else if (diffInMinutes < 60) {
+        return `${diffInMinutes}m ago`;
+      } else {
+        return `${diffInHours}h ago`;
+      }
+    } else if (isToday) {
       // Time formatting (12-hour format)
       const hours = date.getHours();
       const minutes = date.getMinutes();
@@ -90,7 +104,8 @@ const MessageCard = ({ lastMsgData, lastMsgTimestamp, author, users, chatID }) =
       const year = date.getFullYear().toString().slice(-2); // Get last 2 digits of the year
       return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
     }
-  }
+  };
+
 
   return(
      <TouchableOpacity className="w-full flex-row items-center justify-start py-2 mt-2" activeOpacity={.6} onPress={() => router.push({
@@ -120,9 +135,6 @@ const MessageCard = ({ lastMsgData, lastMsgTimestamp, author, users, chatID }) =
 }
 
 const AIChatMessageCard = ({}) => {
-  const shortStr = (str, len) => {
-    return (str.length > len) ? str.slice(0, len).trim() + "..." : str;
-  }
   return(
      <TouchableOpacity className="w-full flex-row items-center justify-start py-2 mt-2" activeOpacity={.6} onPress={() => router.push("/aiChat")}>
       <View className="rounded-full flex items-center border-2 border-primary ml-5 mr-1 justify-center bg-[#000000] h-[50px] w-[50px]">
@@ -142,6 +154,25 @@ const AIChatMessageCard = ({}) => {
             Now
           </Text>
         </View>
+      </View>
+     </TouchableOpacity>
+  )
+}
+
+const NewMessageCard = ({ filter }) => {
+  return(
+     <TouchableOpacity className="w-full flex-row items-center justify-start py-2 mt-2" activeOpacity={.6} onPress={() => router.push({
+        pathname: "/newMessage",
+        params: { filter: filter }
+     })}>
+      <View className="rounded-full flex items-center border-2 border-primary ml-5 mr-1 justify-center bg-[#000000] h-[50px] w-[50px]">
+        <Feather name="message-circle" size={30} color="white" />
+      </View>
+      
+      <View className="flex-1 flex items-start justify-center ml-4">
+        <Text className="text-[#333] text-base font-semibold capitalize mr-5" numberOfLines={1}>
+          New Message...
+        </Text>
       </View>
      </TouchableOpacity>
   )

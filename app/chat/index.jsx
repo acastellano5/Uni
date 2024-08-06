@@ -22,25 +22,36 @@ import { getChat } from "../../lib/useFirebase";
 
 const chat = () => {
   const scrollViewRef = useRef();
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const { chatID } = useLocalSearchParams();
   const [chat, setChat] = useState(null);
+
+  const reload = async () => {
+    setChat(await getChat(chatID, addMessage));
+  };
 
   useEffect(() => {
     if (scrollViewRef.current) scrollViewRef.current.scrollToEnd({ animated: true });
   }, [messages]);
 
-  const addMessage = (type, message) => {
+  // when user leaves this page, call chat.unsubscribe()
+  useEffect(() => {
+    return () => {
+      if (chat) chat.unsubscribe();
+    }
+  }, [chat]);
+
+  const addMessage = (message) => {
     setMessages((prevMessages) => [
       ...prevMessages,
-      { type: type, value: message },
+      message
     ]);
   };
 
   useLayoutEffect(() => {
     const load = async () => {
-      setChat(await getChat(chatID));
+      setChat(await getChat(chatID, addMessage));
     }
     load();
   }, [chatID]);
@@ -109,7 +120,7 @@ const chat = () => {
             )}
           </ScrollView>
           <ChatInput
-            addMessage={addMessage}
+            id={chatID}
           />
         </View>
       </KeyboardAvoidingView>
