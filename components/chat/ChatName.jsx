@@ -5,9 +5,9 @@ import { router } from "expo-router";
 
 const ChatName = ({ name, profileName }) => {
   return (
-    <TouchableOpacity className="flex-row items-center justify-center" onPress={() => router.push(`/profiles/${profileName}`)}>
+    <TouchableOpacity className="flex-row items-center justify-center" /* onPress={() => router.push(`/profiles/${profileName}`)} */>
       <FontAwesome name="user-circle" size={30} color="black" />
-      <Text className="text-2xl font-semibold text-center ml-3">{name}</Text>
+      <Text className="text-2xl font-semibold text-center ml-3" style={{ maxWidth: "65%"}} numberOfLines={1}>{name}</Text>
     </TouchableOpacity>
   )
 }

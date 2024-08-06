@@ -3,7 +3,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  View
+  View,
+  Text
 } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -49,6 +50,10 @@ const aiChat = () => {
             ref={scrollViewRef}
             contentContainerStyle={{ flexGrow: 1 }}
           >
+            {/* Small piece of text with message "This chat is non-persistent" */}
+            <Text className="text-[#333] text-sm text-center text-[#888888] mb-3 mt-1">
+              This chat is non-persistent.
+            </Text>
             {messages.map((message, index) =>
               message.type == "left" ? (
                 <ChatMessageLeft key={index} message={message.value} />
