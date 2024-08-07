@@ -1,7 +1,7 @@
-import { ScrollView, StyleSheet, Text, View, ActivityIndicator, Image } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, ActivityIndicator, Image, RefreshControl } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
-import { getUserChatList, getChats } from '../../lib/useFirebase';
+import { getUserChatList, getChats, getChat, sendChatMessage } from '../../lib/useFirebase';
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import logo from "../../assets/images/logo.png";
@@ -10,16 +10,15 @@ const ChatList = ({ filter }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [chatList, setChatList] = useState([]);
   const [chats, setChats] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setChatList(await getUserChatList())
+  });
 
   useLayoutEffect(() => {
     const load = async () => {
-      setChatList(
-        await getUserChatList()
-        .catch((err) => {
-          console.error(err);
-          return [];
-        })
-      );
+      setChatList(await getUserChatList());
     };
     
     load();
@@ -27,18 +26,25 @@ const ChatList = ({ filter }) => {
 
   useEffect(() => {
     const load = async () => {
-      setIsLoading(true);
+      if (!refreshing) setIsLoading(true);
       setChats((await getChats(chatList, filter)));
       setIsLoading(false);
+      setRefreshing(false);
     };
     
     load();
   }, [chatList, filter]);
 
 
+  const debug = async (num) => {
+    if (num == 0) sendChatMessage("ed945878-81a6-4dd6-9658-72338ab95a38", "debug :)")
+    if (num == 1) sendChatMessage("4a710132-e999-404b-9f61-040a55220684", "debug :)")
+  }
+
+
   return (
     <View>
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {isLoading ? (
             <View>
               <View style={{ height: 120 }} />
@@ -46,6 +52,12 @@ const ChatList = ({ filter }) => {
             </View>
           ) : (
             <View>
+              {/* Small, subtle text */}
+              <View className="flex items-center justify-center mt-2 mb-[-20px]">
+                <Text className="text-[#333] text-sm text-center text-[#888888] mb-3 mt-1">
+                  Swipe down to refresh
+                </Text>
+              </View>
               {/* New message */}
               <NewMessageCard filter={filter} />
               {filter == "DMs" ? <AIChatMessageCard lastMsgData={"Hello! How can I help you today?"}></AIChatMessageCard> : null}
@@ -161,7 +173,7 @@ const AIChatMessageCard = ({}) => {
 
 const NewMessageCard = ({ filter }) => {
   return(
-     <TouchableOpacity className="w-full flex-row items-center justify-start py-2 mt-2" activeOpacity={.6} onPress={() => router.push({
+     <TouchableOpacity className="w-full flex-row items-center justify-start py-2 mt-0" activeOpacity={.6} onPress={() => router.push({
         pathname: "/newMessage",
         params: { filter: filter }
      })}>
