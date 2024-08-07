@@ -19,53 +19,17 @@ const tabs = ["DMs", "Groups", "Classes", "Alerts"];
 
 
 export default function Messages() {
-  const [search, setsearch] = useState('')
-  const [allUser, setAllUser] = useState([])
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const displayTabContent = () => {
-    switch (activeTab) {
-      case "DMs":
-        return <ChatList filter={activeTab}/>;
 
-      case "Groups":
-        return <ChatList filter={activeTab}/>;
-      
-      case "Classes":
-        return <ChatList filter={activeTab}/>;
-      
-      case "Alerts":
-        return <ChatList filter={activeTab}/>
-      default:
-        return null;
-    }
-  };
   return (
     <SafeAreaView className="h-full bg-secondary">
       <Header title="Home" />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-3">
         <ChatTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab}/>
-        
-        {displayTabContent()}
-
-      
+        <ChatList filter={activeTab}/>
       </View>
-
     </SafeAreaView>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-  },
-});
+const styles = StyleSheet.create({});
