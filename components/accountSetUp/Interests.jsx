@@ -4,7 +4,7 @@ import CustomButton from "../CustomButton";
 import FormField from "../FormField";
 import MultiSelect from "../dropdown/MultiSelect";
 import { interestsData } from "../../assets/data";
-
+import { setAccountBio } from "../../lib/firebase"; 
 const Interests = ({ handleNextPress, handleSkipPress }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -38,7 +38,7 @@ const Interests = ({ handleNextPress, handleSkipPress }) => {
           title="Next"
           containerStyles="bg-primary py-2 px-8 ml-3"
           textStyles="text-base"
-          handlePress={handleNextPress}
+          handlePress={()=>setAccountBio("Hi",["Skiing"]).then(handleNextPress)}
         />
       </View>
     </ScrollView>

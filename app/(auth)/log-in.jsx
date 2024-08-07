@@ -80,6 +80,7 @@ const LogIn = () => {
             handlePress={async () => {
               try {
                 const stuff = await loginWithEmail(form.email,form.password);
+                
                 console.log(stuff,"is the Resuly");
                 if (stuff=="nV") {
                   router.push("/(auth)/verifyEmail")

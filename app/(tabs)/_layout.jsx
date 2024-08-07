@@ -36,10 +36,14 @@ const TabIcon = ({ icon, color, name, focused, iconType }) => {
 };
 
 const TabLayout = () => {
-  const { loading, isLogged, isVerified } = useGlobalContext();
+  const { loading, isLogged, isVerified, orgId } = useGlobalContext();
+  console.log(orgId);
   if (!loading && isLogged && isVerified) {
   } else {
     router.replace("//index");
+  }
+  if (!loading && isLogged && isVerified&& !orgId) {
+    router.replace("../(auth)/accountSetUp/schoolsIndex");
   }
   const Tab = createBottomTabNavigator();
   // if (!loading && !isLogged) router.replace('//index');

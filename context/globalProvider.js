@@ -5,7 +5,7 @@ import firestore, {
     Timestamp,
     query,
 } from "@react-native-firebase/firestore";
-import { initializeVars } from "../lib/useFirebase";
+import { getUserOrgs, initializeVars } from "../lib/useFirebase";
 const GlobalContext = createContext()
 const db = firestore();
 
@@ -19,7 +19,8 @@ const GlobalProvider =  ({children}) => {
     const [loading, setLoading] = useState(true);
     const [isVerified, setIsVerified] = useState(false);
     const [needsReload, setNeedsReload] = useState(false);
-    const [orgId, setOrgId] = useState(20030049);
+    const [orgId, setOrgId] = useState();
+    
 
 
 
@@ -28,13 +29,17 @@ const GlobalProvider =  ({children}) => {
 
         setLoading(false)
         setUser(user);
+        setOrgId(await getUserOrgs(user.uid))
+        console.log(orgId,"YWYW");
+
+        console.log(user.uid);
 
         if (initializing) setInitializing(false);
         if (user) {
             setIsVerified(true)
             setIsLogged(true)
             setLoading(false)
-            setOrgId(20030049)
+            setOrgId(await getUserOrgs(user.uid))
             initializeVars()
 
             if (user.emailVerified) {
@@ -56,6 +61,7 @@ const GlobalProvider =  ({children}) => {
     useEffect(() => {
 
         const subscriber = auth().onUserChanged(onAuthStateChanged);
+
         return subscriber; // unsubscribe on unmount
     }, []);
 

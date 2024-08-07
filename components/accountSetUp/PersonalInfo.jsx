@@ -4,7 +4,7 @@ import FormField from "../FormField";
 import SingleSelect from "../dropdown/SingleSelect";
 import CustomButton from "../CustomButton";
 import { router } from "expo-router";
-
+import { setAccountName } from "../../lib/firebase"; 
 const genderOptions = [
   { label: "Male", value: "Male" },
   { label: "Female", value: "Female" },
@@ -37,7 +37,7 @@ const PersonalInfo = ({ handleNextPress }) => {
           />
 
           {/* Next Button */}
-          <CustomButton title="Next" containerStyles="bg-primary py-3 mt-10" textStyles="text-base" handlePress={handleNextPress}/>
+          <CustomButton title="Next" containerStyles="bg-primary py-3 mt-10" textStyles="text-base" handlePress={()=>{setAccountName("Nathan", "Reid", "Male").then(handleNextPress)}}/>
     </>
   );
 };

@@ -29,10 +29,11 @@ if (!loading && isLogged && isVerified && orgId){
   return <Redirect href={"/(tabs)/home"}/>
 
 } else {
-  /*if (!loading && isLogged && isVerified && !orgId) {
+  if (!loading && isLogged && isVerified && !orgId) {
+    console.log(orgId);
     return <Redirect href={"/(auth)/accountSetUp/schoolsIndex"}/>
   }
-*/
+
 }
 
   return (
