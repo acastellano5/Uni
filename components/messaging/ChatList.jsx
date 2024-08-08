@@ -1,9 +1,9 @@
 import { ScrollView, StyleSheet, Text, View, ActivityIndicator, Image, RefreshControl } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
-import { getUserChatList, getChats, getChat, sendChatMessage } from '../../lib/useFirebase';
+import { getUserChatList, getChatPreviews, sendChatMessage } from '../../lib/useFirebase';
 import { FontAwesome, Feather } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import logo from "../../assets/images/logo.png";
 
 const ChatList = ({ filter }) => {
@@ -11,10 +11,7 @@ const ChatList = ({ filter }) => {
   const [chatList, setChatList] = useState([]);
   const [chats, setChats] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
-  const onRefresh = React.useCallback(async () => {
-    setChatList(await getUserChatList())
-  });
+  const navigation = useNavigation();
 
   useLayoutEffect(() => {
     const load = async () => {
@@ -26,20 +23,42 @@ const ChatList = ({ filter }) => {
 
   useEffect(() => {
     const load = async () => {
-      if (!refreshing) setIsLoading(true);
-      setChats((await getChats(chatList, filter)));
+      setIsLoading(true);
+      
+      // sort by timestamp value
+      var newChats = (await getChatPreviews(chatList, reloadChatPreview)).sort((a, b) => (a.lastMsg && b.lastMsg) ? b.lastMsg.timestamp - a.lastMsg.timestamp : 0);
+      setChats(newChats);
+      
+
       setIsLoading(false);
       setRefreshing(false);
     };
     
     load();
-  }, [chatList, filter]);
+  }, [chatList]);
 
+  const onRefresh = React.useCallback(async () => {
+    for (var chat of chats) await chat.unsubscribe();
+    setChatList(await getUserChatList());
+  });
 
-  const debug = async (num) => {
-    if (num == 0) sendChatMessage("ed945878-81a6-4dd6-9658-72338ab95a38", "debug :)")
-    if (num == 1) sendChatMessage("4a710132-e999-404b-9f61-040a55220684", "debug :)")
-  }
+  const reloadChatPreview = async (id, newMsg) => {
+    setChats((prevChats) => {
+      const newChats = [...prevChats];
+      for (let i = 0; i < newChats.length; i++) {
+        if (newChats[i].id === id) newChats[i].lastMsg = newMsg;
+      }
+      return newChats.sort((a, b) => (a.lastMsg && b.lastMsg) ? b.lastMsg.timestamp - a.lastMsg.timestamp : 0);
+    });
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      for (var chat of chats) chat.unsubscribe();
+    });
+
+    return unsubscribe;
+  }, []);
 
 
   return (
@@ -52,7 +71,6 @@ const ChatList = ({ filter }) => {
             </View>
           ) : (
             <View>
-              {/* Small, subtle text */}
               <View className="flex items-center justify-center mt-2 mb-[-20px]">
                 <Text className="text-[#333] text-sm text-center text-[#888888] mb-3 mt-1">
                   Swipe down to refresh
@@ -62,9 +80,11 @@ const ChatList = ({ filter }) => {
               <NewMessageCard filter={filter} />
               {filter == "DMs" ? <AIChatMessageCard lastMsgData={"Hello! How can I help you today?"}></AIChatMessageCard> : null}
               {(chats.length > 0) ? chats.map((chat) => (
-                <View>
-                  <MessageCard lastMsgData={chat.lastMsg.msg} lastMsgTimestamp={chat.lastMsg.timestamp} author={chat.lastMsg.author} users={chat.users} chatID={chat.id} />
-                </View>
+                (chat.type == filter) ? (
+                  <View key={chat.id}>
+                    <MessageCard lastMsgData={chat.lastMsg.msg} lastMsgTimestamp={chat.lastMsg.timestamp} author={chat.lastMsg.author} users={chat.users} chatID={chat.id} />
+                  </View>
+                ) : null
               )) : (
                 <View className="flex items-center justify-center mt-10">
                   <Text className="text-[#333] text-lg font-semibold">Your {filter} will appear here.</Text>
