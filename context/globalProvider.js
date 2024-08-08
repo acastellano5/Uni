@@ -5,7 +5,7 @@ import firestore, {
     Timestamp,
     query,
 } from "@react-native-firebase/firestore";
-import { getUserOrgs, initializeVars } from "../lib/useFirebase";
+import { getUserOrgs, initializeVars, isUserSetup } from "../lib/useFirebase";
 const GlobalContext = createContext()
 const db = firestore();
 
@@ -20,7 +20,7 @@ const GlobalProvider =  ({children}) => {
     const [isVerified, setIsVerified] = useState(false);
     const [needsReload, setNeedsReload] = useState(false);
     const [orgId, setOrgId] = useState();
-    
+    const [isSetup, setIsSetUp] = useState(false);
 
 
 
@@ -29,9 +29,10 @@ const GlobalProvider =  ({children}) => {
 
         setLoading(false)
         setUser(user);
+        console.log(user);
         setOrgId(await getUserOrgs(user.uid))
+        setIsSetUp(await isUserSetup(user.uid))
         console.log(orgId,"YWYW");
-
         console.log(user.uid);
 
         if (initializing) setInitializing(false);
@@ -39,6 +40,7 @@ const GlobalProvider =  ({children}) => {
             setIsVerified(true)
             setIsLogged(true)
             setLoading(false)
+            setIsSetUp(await isUserSetup(user.uid))
             setOrgId(await getUserOrgs(user.uid))
             initializeVars()
 
@@ -80,6 +82,8 @@ const GlobalProvider =  ({children}) => {
         setIsVerified,
         needsReload,
         setNeedsReload,
+        isSetup,
+        setIsSetUp
     }}
     >
     {children}

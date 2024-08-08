@@ -64,7 +64,7 @@ const DeleteAccount = ({ setScreen }) => {
 
 
       {/* delete account button */}
-      <CustomButton title="Delete" containerStyles="bg-red-500 py-3" textStyles="text-white font-medium" handlePress={()=>delAccount(form.email.toLowerCase(),form.password)}/>
+      <CustomButton title="Delete" containerStyles="bg-red-500 py-3" textStyles="text-white font-medium" handlePress={()=>{delAccount(form.email.toLowerCase(),form.password)}}/>
     </View>
   );
 };
