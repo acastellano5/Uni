@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Uni",
-    "slug": "Uni",
+    "name": "Centro",
+    "slug": "Centro",
     "scheme": "your-app-scheme",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Image.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": true,
       "googleServicesFile": "./GoogleService-Info.plist",
-      "bundleIdentifier": "com.uni.uniapp"
+      "bundleIdentifier": "com.centro.centroapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +23,7 @@
         "backgroundColor": "#ffffff"
       },
       "googleServicesFile": "./google-services.json",
-      "package": "com.uni.uniapp"
+      "package": "com.centro.centroapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
