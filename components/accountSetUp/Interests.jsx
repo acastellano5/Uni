@@ -8,8 +8,8 @@ import { interestsData } from "../../assets/data";
 import { setAccountBio } from "../../lib/firebase"; 
 const Interests = ({ handleNextPress, handleSkipPress }) => {
   const [form, setForm] = useState({
-    bio: null,
-    interests: [null],
+    bio: "",
+    interests: [],
 
   });
   return (
@@ -45,7 +45,7 @@ const Interests = ({ handleNextPress, handleSkipPress }) => {
           title="Skip"
           containerStyles="bg-tertiary py-2 px-8"
           textStyles="text-base"
-          handlePress={handleSkipPress}
+          handlePress={()=>setAccountBio(form.bio,form.interests).then(handleNextPress)}
         />
 
         <CustomButton
