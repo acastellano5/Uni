@@ -15,6 +15,7 @@ const ChatList = ({ filter }) => {
 
   useLayoutEffect(() => {
     const load = async () => {
+      for (var chat of chats) await chat.unsubscribe();
       setChatList(await getUserChatList());
     };
     

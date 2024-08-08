@@ -2,6 +2,7 @@ import {
   StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
   View,
   Text,
@@ -17,7 +18,7 @@ import {
   ChatMessageRight,
 } from "../../components/chat/ChatMessages";
 import ChatInput from "../../components/chat/ChatInput";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { getChat } from "../../lib/useFirebase";
 
 const chat = () => {
@@ -26,21 +27,22 @@ const chat = () => {
   const [messages, setMessages] = useState([]);
   const { chatID } = useLocalSearchParams();
   const [chat, setChat] = useState(null);
+  const navigation = useNavigation();
 
-  const reload = async () => {
-    setChat(await getChat(chatID, addMessage));
-  };
+  useLayoutEffect(() => {
+    Keyboard.addListener('keyboardDidShow', () => {
+      if (scrollViewRef.current) scrollViewRef.current.scrollToEnd({ animated: true });
+    });
+    const load = async () => {
+      var newChat = await getChat(chatID, addMessage);
+      setChat(newChat);
+    }
+    load();
+  }, []);
 
   useEffect(() => {
     if (scrollViewRef.current) scrollViewRef.current.scrollToEnd({ animated: true });
   }, [messages]);
-
-  // when user leaves this page, call chat.unsubscribe()
-  useEffect(() => {
-    return () => {
-      if (chat) chat.unsubscribe();
-    }
-  }, [chat]);
 
   const addMessage = (message) => {
     setMessages((prevMessages) => [
@@ -49,13 +51,6 @@ const chat = () => {
     ]);
   };
 
-  useLayoutEffect(() => {
-    const load = async () => {
-      setChat(await getChat(chatID, addMessage));
-    }
-    load();
-  }, [chatID]);
-
   useEffect(() => {
     if (chat) {
       setIsLoading(true);
@@ -63,6 +58,15 @@ const chat = () => {
       setIsLoading(false);
     }
   }, [chat]);
+
+  // when user leaves this page, call chat.unsubscribe()
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      if (chat) chat.unsubscribe();
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-black">
@@ -95,7 +99,7 @@ const chat = () => {
               <View>
                 {messages.map((message, index) =>
                   (message.author !== "You") ? (
-                    <View>
+                    <View key={message.id}>
                       <ChatMessageLeft message={message.msg} />
                       {/* If next message is a different author OR is undefined, put this author's name below this message */}
                       {(index + 1 === messages.length || messages[index + 1].author !== message.author) ? (
@@ -105,7 +109,7 @@ const chat = () => {
                       ) : null}
                     </View>
                   ) : (
-                    <View>
+                    <View key={message.id}>
                       <ChatMessageRight message={message.msg} />
                       {/* If next message is a different author OR is undefined, blah blah blah */}
                       {(index + 1 === messages.length || messages[index + 1].author !== message.author) ? (
