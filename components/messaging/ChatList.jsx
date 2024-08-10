@@ -72,15 +72,15 @@ const ChatList = ({ filter }) => {
             </View>
           ) : (
             <View>
-              <View className="flex items-center justify-center mt-2 mb-[-20px]">
+              {/* <View className="flex items-center justify-center mt-2 mb-[-20px]">
                 <Text className="text-[#333] text-sm text-center text-[#888888] mb-3 mt-1">
                   Swipe down to refresh
                 </Text>
-              </View>
+              </View> */}
               {/* New message */}
               <NewMessageCard filter={filter} />
               {filter == "DMs" ? <AIChatMessageCard lastMsgData={"Hello! How can I help you today?"}></AIChatMessageCard> : null}
-              {(chats.length > 0) ? chats.map((chat) => (
+              {(chats.filter(chat => chat.type == filter).length > 0) ? chats.map((chat) => (
                 (chat.type == filter) ? (
                   <View key={chat.id}>
                     <MessageCard lastMsgData={chat.lastMsg.msg} lastMsgTimestamp={chat.lastMsg.timestamp} author={chat.lastMsg.author} users={chat.users} chatID={chat.id} />
