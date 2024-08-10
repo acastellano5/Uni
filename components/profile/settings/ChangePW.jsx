@@ -7,16 +7,18 @@ import FormField from "../../FormField";
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
 import CustomButton from "../../CustomButton"
+import { router } from "expo-router";
 const changePW= (oldPword, newPassword)=>{
   const user = auth().currentUser
   const cred = auth.EmailAuthProvider.credential(user.email, oldPword)
   user.reauthenticateWithCredential(cred).then( ()=>{
+    
     user.updatePassword(newPassword)
     router.back('//home')
 
 
   }).catch(function(error) {
-    console.log("error");
+    console.log("error",error);
     Alert.alert("Error","Check Your Parameters")
   })
 }
@@ -25,7 +27,6 @@ const ChangePassword = ({ setScreen }) => {
     email: "",
     emailTwo: "",
   });
-  console.log(auth().currentUser);
   return (
     <View className="pt-8 w-11/12 mx-auto">
       <View className="flex-row justify-start">

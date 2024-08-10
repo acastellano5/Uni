@@ -33,9 +33,6 @@ const Settings = ({
       case "main":
         return <MainSettings onRequestClose={onRequestClose} setScreen={setScreen}/>;
 
-      case "updateEmail": 
-        return <UpdateEmail setScreen={setScreen}/>
-
       case "changePW": 
         return <ChangePW setScreen={setScreen}/>
 

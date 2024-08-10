@@ -14,10 +14,18 @@ import { roles } from "../../../assets/data";
 import FormField from "../../../components/FormField";
 import CustomButton from "../../../components/CustomButton";
 import { classData, collegesData, statesData, jobFieldsData } from "../../../assets/data";
+import { sendAlumniRequest } from "../../../lib/useFirebase";
 
 const SchoolShow = () => {
+  const [form, setForm] = useState({
+    class: "",
+    college: "",
+    state: "",
+    fieldOfEmployment: "",
+  });
   const [role, setRole] = useState("");
 
+  
   // displays different fields depending on what role the user selects when trying to join an organization
   const displayFields = () => {
     switch (role) {
@@ -69,17 +77,43 @@ const SchoolShow = () => {
         );
 
       case "Alumni":
+
         return (
           <>
-            <SingleSelect title="Class" placeholder="Select class" data={classData} containerStyles="mb-2"/>
-            <SingleSelect title="College" placeholder="Select college" data={collegesData} containerStyles="mb-2"/>
-            <SingleSelect title="State" placeholder="Select State" data={statesData} containerStyles="mb-2"/>
-            <SingleSelect title="Field of employment" placeholder="Select field of employment" data={jobFieldsData} />
+            <SingleSelect title="Class" placeholder="Select class" data={classData} containerStyles="mb-2"selectedValue={form.class} // Add this line
+            onItemSelect={(item) => {
+              setForm({
+                ...form,
+                class: item.value,
+              });
+            }}/>
+            <SingleSelect title="College" placeholder="Select college" data={collegesData} containerStyles="mb-2"selectedValue={form.college} // Add this line
+            onItemSelect={(item) => {
+              setForm({
+                ...form,
+                college: item,
+              });
+            }}/>
+            <SingleSelect title="State" placeholder="Select State" data={statesData} containerStyles="mb-2"selectedValue={form.state} // Add this line
+            onItemSelect={(item) => {
+              setForm({
+                ...form,
+                state: item,
+              });
+            }}/>
+            <SingleSelect title="Field of employment" placeholder="Select field of employment" data={jobFieldsData}selectedValue={form.fieldOfEmployment} // Add this line
+            onItemSelect={(item) => {
+              
+              setForm({
+                ...form,
+                fieldOfEmployment: item.value,
+              });
+            }}/>
             <CustomButton
               title="Join"
               containerStyles="bg-primary py-2 mt-8"
               textStyles="text-white text-base"
-              handlePress={() => router.push("./processReq")}
+              handlePress={() => {sendAlumniRequest(null,"Class: "+form.class+" College: "+form.college.label+" Field of Employment: "+form.fieldOfEmployment+" State: "+form.state.label).then(router.push("./processReq"))}}
             />
           </>
         );

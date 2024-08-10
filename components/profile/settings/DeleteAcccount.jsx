@@ -13,8 +13,8 @@ const delAccount= (email, password)=>{
   const user = auth().currentUser
   const cred = auth.EmailAuthProvider.credential(email, password)
   user.reauthenticateWithCredential(cred).then( ()=>{
-    delUser()
-    router.back('//index')
+    delUser().then(router.back('//index'))
+
 
 
   }).catch(function(error) {

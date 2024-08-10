@@ -48,12 +48,11 @@ import { router } from "expo-router";
           className="w-10/12 mx-auto"
         >
           {/* settings options */}
-          <SettingsBtn title="Update Email Address" handlePress={() => setScreen("updateEmail")}/>
           <SettingsBtn title="Change Password" containerStyles="mt-3" handlePress={() => setScreen("changePW")}/>
   
           <ActionBtn title="Sign Out" textColor="text-darkGray" onPress={()=> {
-            signOut()
-            router.back("//index")
+            signOut().then(router.back("//index"))
+            
           }}/>
           <ActionBtn title="Delete Account" onPress={() => setScreen("deleteAccount")} textColor="text-red-500" />
         </ScrollView>

@@ -30,10 +30,11 @@ const GlobalProvider =  ({children}) => {
         setLoading(false)
         setUser(user);
         console.log(user);
-        setOrgId(await getUserOrgs(user.uid))
-        setIsSetUp(await isUserSetup(user.uid))
-        console.log(orgId,"YWYW");
-        console.log(user.uid);
+        if (user) {
+            setOrgId(await getUserOrgs(user.uid))
+            setIsSetUp(await isUserSetup(user.uid))
+        }
+
 
         if (initializing) setInitializing(false);
         if (user) {
@@ -57,7 +58,7 @@ const GlobalProvider =  ({children}) => {
             setIsLogged(false)
             setLoading(false)
             setUser(user)
-
+            setOrgId(null)
         }
     }
     useEffect(() => {

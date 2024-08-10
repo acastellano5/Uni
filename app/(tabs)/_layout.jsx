@@ -40,11 +40,14 @@ const TabLayout = () => {
   console.log(orgId);
   if (!loading && isLogged && isVerified) {
   } else {
-    router.replace("//index");
+    if (!loading && isLogged && isVerified&& !orgId) {
+      router.replace("../(auth)/accountSetUp/schoolsIndex");
+    }
+     else {
+      router.replace("//index");
+    }
   }
-  if (!loading && isLogged && isVerified&& !orgId) {
-    router.replace("../(auth)/accountSetUp/schoolsIndex");
-  }
+
   const Tab = createBottomTabNavigator();
   // if (!loading && !isLogged) router.replace('//index');
 
