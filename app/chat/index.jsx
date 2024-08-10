@@ -79,7 +79,7 @@ const chat = () => {
 
         <View className="bg-darkWhite mt-5 pt-5 h-full rounded-t-3xl">
           {/* If chat.users.length === 2, get userID of OTHER user, and make that profileName */}
-          <ChatName name={isLoading ? "Loading" : chat.users.filter((val) => { return val !== "You" }).join(", ")} profileName={isLoading ? "" : (chat.users.length === 2 ? chat.userIDs.find((user) => user !== auth().currentUser.uid) : "")} />
+          <ChatName name={isLoading ? "Loading" : chat.users.filter((val) => { return val !== "You" }).join(", ")} profileName={isLoading ? "" : (chat.users.length === 2 ? chat.userIDs.find((user) => user !== auth().currentUser.uid) : chat.users.filter(val => val !== "You"))} />
 
           <ScrollView
             className="mt-5 pl-5 pr-5 flex-1"

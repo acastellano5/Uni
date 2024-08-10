@@ -4,8 +4,12 @@ import { sendChatMessage } from "../../lib/useFirebase";
 
 const ChatInput = ({ id }) => {
   const [input, setInput] = useState("");
+  const [sendDisabled, setSendDisabled] = useState(false);
+
   const sendMessage = async () => {
     if (!input.trim()) return;
+    
+    setSendDisabled(true);
     try {
       var sent = await sendChatMessage(id, input)
       if (!sent) return alert("Failed to send message");
@@ -14,6 +18,7 @@ const ChatInput = ({ id }) => {
     } catch (err) {
       alert("Failed to send message");
     }
+    setSendDisabled(false);
   };
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -46,8 +51,8 @@ const ChatInput = ({ id }) => {
         onChangeText={value => setInput(value)}
         onSubmitEditing={sendMessage}
       />
-      <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-        <Text style={styles.sendButtonText} className="text-primary">
+      <TouchableOpacity style={styles.sendButton} onPress={sendMessage} disabled={sendDisabled}>
+        <Text style={styles.sendButtonText} className={(sendDisabled) ? "text-[#666666]" : "text-primary"}>
           Send
         </Text>
       </TouchableOpacity>
