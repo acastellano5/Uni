@@ -151,7 +151,7 @@ const MessageCard = ({ lastMsgData, lastMsgTimestamp, author, users, chatID }) =
       
       <View className="flex-1 flex items-start justify-center ml-4">
         <Text className="text-[#333] text-base font-semibold capitalize mr-4" numberOfLines={1}>
-            { `${author}, ${users.filter((val) => { return val !== author }).join(", ")}` }
+            { `${(author !== "You") ? `${author}, ` : ""}${users.filter((val) => { return (val !== author && val !== "You") }).join(", ")}` }
         </Text>
         
         <View className="w-full flex-row justify-between items-center">
