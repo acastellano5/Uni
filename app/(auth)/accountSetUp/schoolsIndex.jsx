@@ -7,11 +7,21 @@ import {
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchBar from "../../../components/SearchBar";
 import { router } from "expo-router";
+import { getAllOrgs } from "../../../lib/useFirebase";
 
 const SchoolCard = ({ handleJoin }) => {
+  const [orgs, setOrgs] = useState([])
+  
+  useEffect(()=> {
+    const orgs =  [getAllOrgs().then((result)=> {setOrgs(result)})];
+
+
+  },[])
+  console.log(orgs,"Orgs");
+
   return (
     <View className="flex-row items-center bg-white rounded-lg p-3 mb-3">
       <Image
@@ -48,9 +58,6 @@ const SchoolsIndex = () => {
           <SearchBar placeholder="Search high schools" containerStyles="mb-5" />
           <View className="w-10/12 mx-auto">
             <ScrollView showsVerticalScrollIndicator={false} className="h-full">
-              <SchoolCard handleJoin={() => router.push("./schoolShow")} />
-              <SchoolCard handleJoin={() => router.push("./schoolShow")} />
-              <SchoolCard handleJoin={() => router.push("./schoolShow")} />
               <SchoolCard handleJoin={() => router.push("./schoolShow")} />
             </ScrollView>
           </View>
