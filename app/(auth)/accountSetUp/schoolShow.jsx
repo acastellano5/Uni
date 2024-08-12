@@ -84,7 +84,7 @@ const SchoolShow = () => {
             onItemSelect={(item) => {
               setForm({
                 ...form,
-                class: item.value,
+                class: item,
               });
             }}/>
             <SingleSelect title="College" placeholder="Select college" data={collegesData} containerStyles="mb-2"selectedValue={form.college} // Add this line
@@ -106,14 +106,14 @@ const SchoolShow = () => {
               
               setForm({
                 ...form,
-                fieldOfEmployment: item.value,
+                fieldOfEmployment: item,
               });
             }}/>
             <CustomButton
               title="Join"
               containerStyles="bg-primary py-2 mt-8"
               textStyles="text-white text-base"
-              handlePress={() => {sendAlumniRequest(null,"Class: "+form.class+" College: "+form.college.label+" Field of Employment: "+form.fieldOfEmployment+" State: "+form.state.label).then(router.push("./processReq"))}}
+              handlePress={() => {sendAlumniRequest(null,{class: form.class.label, classValue: form.class.label, state: form.state.label, stateValue: form.state.value, employment: form.fieldOfEmployment.label, employmentValue: form.fieldOfEmployment.value,college: form.college.label, collegeValue: form.college.value},20030049).then(router.push("./processReq"))}}
             />
           </>
         );
