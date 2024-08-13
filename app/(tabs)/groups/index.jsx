@@ -5,7 +5,7 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +18,7 @@ import {
   getGroupsByName,
   getGroupsByUser,
   getFollowedGroupsByUser,
+  getUserRole,
 } from "../../../lib/useFirebase";
 import { getCurrentUser } from "../../../lib/firebase";
 import Group from "../../../components/groups/Group";
@@ -36,7 +37,8 @@ const groupTypes = [
 ];
 
 export default function Groups() {
-  const { orgId } = useGlobalContext();
+  const {orgId} = useGlobalContext()
+
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUser, setCurrentUser] = useState("");
   const [groups, setGroups] = useState({});
@@ -47,10 +49,13 @@ export default function Groups() {
   const [searchResults, setSearchResults] = useState([]);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [isFilterApplied, setIsFilterApplied] = useState(false);
+  const [ userRole, setUserRole ] = useState()
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
+      const roleStatus = await getUserRole(orgId)
+      setUserRole(roleStatus)
       setCurrentUser(user.uid);
     };
 
@@ -153,12 +158,12 @@ export default function Groups() {
     setIsSearchResult(false);
     setSearchResults([]);
     setIsFilterApplied(false);
-  }
+  };
 
   const onRefresh = () => {
     setRefreshing(true);
     if (activeTab === "All") {
-      resetGroups(true)
+      resetGroups(true);
     } else if (activeTab === "My Groups") {
       fetchMyGroups(true);
     }
@@ -179,7 +184,12 @@ export default function Groups() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#22c55e"]} tintColor="#22c55e"/>
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={["#22c55e"]}
+              tintColor="#22c55e"
+            />
           }
         >
           {activeTab === "All" && (
@@ -255,13 +265,15 @@ export default function Groups() {
           />
         </ScrollView>
 
-        <TouchableOpacity
-          style={styles.addBtn}
-          activeOpacity={0.8}
-          onPress={() => router.push({ pathname: "/group/create" })}
-        >
-          <Feather name="plus" size={24} color="white" />
-        </TouchableOpacity>
+        { userRole === "Faculty/Staff" ? (
+          <TouchableOpacity
+            style={styles.addBtn}
+            activeOpacity={0.8}
+            onPress={() => router.push({ pathname: "/group/create" })}
+          >
+            <Feather name="plus" size={24} color="white" />
+          </TouchableOpacity>
+        ) : null}
       </View>
     </SafeAreaView>
   );
