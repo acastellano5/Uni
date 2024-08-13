@@ -12,6 +12,7 @@ import MainSettings from "./Main";
 import ChangePW from "./ChangePW";
 import UpdateEmail from "./UpdateEmail"
 import DeleteAccount from "./DeleteAcccount";
+import AddParent from "./AddParent";
 
 const Settings = ({
   visible,
@@ -38,6 +39,9 @@ const Settings = ({
 
       case "deleteAccount": 
         return <DeleteAccount setScreen={setScreen}/>
+
+      case "addParent": 
+        return <AddParent setScreen={setScreen} />
 
       default:
         return null;
