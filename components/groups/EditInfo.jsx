@@ -12,6 +12,8 @@ const EditInfo = ({ group, groupInfo, setGroupInfo, fetchGroup}) => {
     "Faith, Justice, Wellness",
     "Athletic",
     "General",
+    "Alumni",
+    "Parent",
   ];
   const formattedGroupTypes = groupTypes.map((type) => ({
     label: type,
@@ -24,7 +26,10 @@ const EditInfo = ({ group, groupInfo, setGroupInfo, fetchGroup}) => {
 
   const onSavePress = async () => {
     await editGroup(group,groupInfo)
+    console.log("EXACTLY");
+
     fetchGroup()
+    console.log("EXACTLY");
 
   }
   return (

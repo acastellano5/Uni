@@ -150,11 +150,20 @@ const ProfileShow = () => {
           <ScrollView showsVerticalScrollIndicator={false}>
             {/* profile image with edit and settings buttons */}
             <View className="items-center justify-center">
+              
+              {user.profilePicture ? (
+                              <Image
+                              source={{uri: user.profilePicture}}
+                              style={styles.profilePic}
+                              className="mb-2"
+                            />
+              ):
               <Image
-                source={ProfilePic}
-                style={styles.profilePic}
-                className="mb-2"
-              />
+              source={ProfilePic}
+              style={styles.profilePic}
+              className="mb-2"
+            />}
+
               {/* for passing in fullName */}
               {/* <Text className="text-lg font-medium mb-2">{`${user.fullName}`}</Text> */}
 

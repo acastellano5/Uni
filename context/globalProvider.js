@@ -8,6 +8,7 @@ import firestore, {
 import { getUserOrgs, initializeVars, isUserSetup } from "../lib/useFirebase";
 const GlobalContext = createContext()
 const db = firestore();
+const recheck = auth().currentUser.reload()
 
 const usersCollection = firestore().collection("User");
 export const useGlobalContext = () => useContext(GlobalContext);
@@ -26,10 +27,9 @@ const GlobalProvider =  ({children}) => {
 
 
     async function onAuthStateChanged(user) {
-
         setLoading(false)
         setUser(user);
-        console.log(user);
+        console.log(user,"WEE");
         if (user) {
             setOrgId(await getUserOrgs(user.uid))
             setIsSetUp(await isUserSetup(user.uid))
@@ -38,7 +38,7 @@ const GlobalProvider =  ({children}) => {
 
         if (initializing) setInitializing(false);
         if (user) {
-            setIsVerified(true)
+            setIsVerified(auth().currentUser.emailVerified)
             setIsLogged(true)
             setLoading(false)
             setIsSetUp(await isUserSetup(user.uid))
@@ -62,7 +62,7 @@ const GlobalProvider =  ({children}) => {
         }
     }
     useEffect(() => {
-
+        
         const subscriber = auth().onUserChanged(onAuthStateChanged);
 
         return subscriber; // unsubscribe on unmount

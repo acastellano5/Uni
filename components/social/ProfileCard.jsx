@@ -4,7 +4,8 @@ import ProfilePic from "../../assets/images/profilepic.jpeg";
 import { router } from "expo-router";
 
 const ProfileCard = ({ user }) => {
-
+  console.log(user.profilePicture);
+  
   return (
     <View className="w-1/3 p-1">
       <TouchableOpacity
@@ -18,10 +19,16 @@ const ProfileCard = ({ user }) => {
           
         }
       >
-          <Image
-            source={ProfilePic}
-            className="w-full h-[10vh] object-cover rounded-lg mb-3"
-          />
+        {user.profilePicture ? (
+                    <Image
+                    source={{uri: user.profilePicture}}
+                    className="w-full h-[10vh] object-cover rounded-lg mb-3"
+                  />
+        ):(          <Image
+          source={ProfilePic}
+          className="w-full h-[10vh] object-cover rounded-lg mb-3"
+        />)}
+
           <Text className="text-center">{user.fullName}</Text>
       </TouchableOpacity>
     </View>

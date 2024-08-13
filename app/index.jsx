@@ -24,6 +24,7 @@ console.log("Verified: ",isVerified);/*
 console.log(loading);
 console.log(isVerified);
 console.log(isLogged);*/
+console.log(isVerified,"EE");
 
 if (!loading && isLogged && isVerified && orgId){
   return <Redirect href={"/(tabs)/home"}/>

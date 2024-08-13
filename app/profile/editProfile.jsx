@@ -50,12 +50,12 @@ const EditProfile = () => {
   }, [interests]);
 
   const onSavePress = async () => {
-    const { fullName, bio, interests } = form
+    const { fullName, bio, interests, profilePicture } = form
     if (fullName.trim() === "") {  
       Alert.alert("Validation Error", "You must provide your full name.");  
       return;  
     }
-    await editProfile(fullName, bio, interests)
+    await editProfile(fullName, bio, interests, profilePicture)
     router.dismiss()
   };
 
