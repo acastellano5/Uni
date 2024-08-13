@@ -24,7 +24,7 @@ const InfoBox = ({ title, info }) => {
                 <TouchableOpacity
                   activeOpacity={0.8}
                   key={index}
-                  className="flex-1 bg-lightGreen rounded-lg py-3 justify-center"
+                  className="flex-1 bg-lightGreen rounded-lg py-3 justify-center items-center"
                   onPress={() => {
                     router.push({
                       pathname: "/group",

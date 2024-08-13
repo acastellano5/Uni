@@ -8,7 +8,7 @@ import firestore, {
 import { getUserOrgs, initializeVars, isUserSetup } from "../lib/useFirebase";
 const GlobalContext = createContext()
 const db = firestore();
-const recheck = auth().currentUser.reload()
+// const recheck = auth().currentUser.reload()
 
 const usersCollection = firestore().collection("User");
 export const useGlobalContext = () => useContext(GlobalContext);
