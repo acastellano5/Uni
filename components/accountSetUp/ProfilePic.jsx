@@ -1,10 +1,15 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CustomButton from "../CustomButton";
 import ProfilePicture from "../../assets/images/profilepic.jpeg";
 import { router } from "expo-router";
+import ProfileUpload from "../imageUpload/ProfileUpload";
 
-const ProfilePic = ({handleNextPress, handleSkipPress}) => {
+const ProfilePic = ({ handleNextPress, handleSkipPress }) => {
+  const [form, setForm] = useState({
+    profilePicture: null,
+  });
+
   return (
     <>
       {/* Page title */}
@@ -13,7 +18,7 @@ const ProfilePic = ({handleNextPress, handleSkipPress}) => {
       </Text>
 
       {/* Form Inputs */}
-      <View className="items-center">
+      {/* <View className="items-center">
         <TouchableOpacity style={styles.profilePic} activeOpacity={0.7}>
           <Image source={ProfilePicture} style={styles.profilePic} />
         </TouchableOpacity>
@@ -21,6 +26,23 @@ const ProfilePic = ({handleNextPress, handleSkipPress}) => {
         <TouchableOpacity className="mt-5" activeOpacity={0.7}>
           <Text className="text-base font-medium">Upload Photo</Text>
         </TouchableOpacity>
+
+        <ProfileUpload/>
+      </View> */}
+
+      <View className="items-center">
+        <Image
+          source={
+            form.profilePicture ? { uri: form.profilePicture } : ProfilePicture
+          }
+          style={styles.profilePic}
+          className="mb-3"
+        />
+        <ProfileUpload
+          form={form}
+          setForm={setForm}
+          containerStyles="w-10/12 mx-auto"
+        />
       </View>
 
       {/* Next and Skip Buttons */}
