@@ -5,7 +5,8 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
-  Alert
+  Alert,
+  Switch
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -45,8 +46,19 @@ const CreateEvent = () => {
     startTime: null,
     endTime: null,
     description: "",
-    image: ""
+    image: "",
+    isOrgCert: null
   });
+
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  useEffect(() => {
+    setForm({
+      ...form,
+      isOrgCert: isEnabled
+    })
+  }, [ isEnabled ])
 
   useEffect(() => {
     console.log(form)
@@ -297,6 +309,17 @@ const CreateEvent = () => {
 
 
             <ImageUpload title="Event Banner" form={form} setForm={setForm}/>
+
+            <View className="flex-row justify-between mb-5">
+            <Text className="text-base">Make an org post</Text>
+            <Switch
+              trackColor={{ false: "#767577", true: "#22c55e" }}
+              thumbColor={isEnabled ? "#FFF" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
+            />
+          </View>
 
             {/* create event button */}
             <CustomButton
