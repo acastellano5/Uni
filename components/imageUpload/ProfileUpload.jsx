@@ -52,11 +52,11 @@ const ProfileUpload = ({ form, setForm, containerStyles }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={pickImage}
-        className="border border-primary p-1 px-2"
+        className="border border-greenTheme p-1 px-2"
         activeOpacity={0.8}
       >
         <Ionicons name="image-outline" size={24} color="#22c55e"/>
-        <Text className="text-primary ml-1">
+        <Text className="text-greenTheme ml-1">
           Pick an Image
         </Text>
       </TouchableOpacity>
@@ -64,11 +64,11 @@ const ProfileUpload = ({ form, setForm, containerStyles }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={takePhoto}
-        className="border border-primary p-1 px-2 ml-3"
+        className="border border-greenTheme p-1 px-2 ml-3"
         activeOpacity={0.8}
       >
         <Ionicons name="camera-outline" size={24} color="#22c55e"/>
-        <Text className="text-primary ml-1">
+        <Text className="text-greenTheme ml-1">
           Take a Photo
         </Text>
       </TouchableOpacity>

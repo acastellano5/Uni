@@ -35,7 +35,7 @@ const SchoolCard = ({ handleJoin }) => {
         <Text className="text-base font-semibold">Salesianum School</Text>
         <Text className="font-medium text-darkGray mb-2">Wilmington, DE</Text>
         <TouchableOpacity
-          className="bg-primary py-1 px-3 rounded-sm"
+          className="bg-greenTheme py-1 px-3 rounded-sm"
           activeOpacity={0.8}
           onPress={handleJoin}
         >
@@ -51,7 +51,7 @@ const SchoolsIndex = () => {
     <>
       <SafeAreaView className="bg-black h-full">
         <View className="pl-9">
-          <Text className="text-primary text-4xl font-bold">Uni</Text>
+          <Text className="text-greenTheme text-4xl font-bold">Centro</Text>
         </View>
 
         <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-10">

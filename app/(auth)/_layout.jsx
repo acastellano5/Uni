@@ -7,7 +7,7 @@ import Loader from "../../components/Loader";
 const AuthLayout = () => {
   return (
     <>
-      <Stack screenOptions={{gestureEnabled: false}}>
+      <Stack screenOptions={{ gestureEnabled: false }}>
         <Stack.Screen
           name="log-in"
           options={{
@@ -29,6 +29,13 @@ const AuthLayout = () => {
 
         <Stack.Screen
           name="accountSetUp"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="verifyEmail"
           options={{
             headerShown: false,
           }}

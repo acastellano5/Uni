@@ -30,7 +30,7 @@ const forgotPassword = () => {
             resizeMode="contain"
             className="h-[100px] w-[100]"
           />
-          <Text className="text-greenTheme text-5xl font-bold mt-5">Uni</Text>
+          <Text className="text-greenTheme text-5xl font-bold mt-5">Centro</Text>
           <Text className="text-tertiary text-lg">Enter Email to continue</Text>
         </View>
 

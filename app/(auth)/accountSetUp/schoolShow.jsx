@@ -40,7 +40,7 @@ const SchoolShow = () => {
             />
             <CustomButton
               title="Verify"
-              containerStyles="bg-primary py-2 mt-8"
+              containerStyles="bg-greenTheme py-2 mt-8"
               textStyles="text-white text-base"
               handlePress={() => router.push({
                 pathname: './verifyEmail',
@@ -60,7 +60,7 @@ const SchoolShow = () => {
             />
             <CustomButton
               title="Verify"
-              containerStyles="bg-primary py-2 mt-8"
+              containerStyles="bg-greenTheme py-2 mt-8"
               textStyles="text-white text-base"
               handlePress={() => router.push('./verifyEmail')}
             />
@@ -71,7 +71,7 @@ const SchoolShow = () => {
         return (
           <CustomButton
             title="Join"
-            containerStyles="bg-primary py-2"
+            containerStyles="bg-greenTheme py-2"
             textStyles="text-white text-base"
           />
         );
@@ -111,7 +111,7 @@ const SchoolShow = () => {
             }}/>
             <CustomButton
               title="Join"
-              containerStyles="bg-primary py-2 mt-8"
+              containerStyles="bg-greenTheme py-2 mt-8"
               textStyles="text-white text-base"
               handlePress={() => {sendAlumniRequest(null,{class: form.class.label, classValue: form.class.label, state: form.state.label, stateValue: form.state.value, employment: form.fieldOfEmployment.label, employmentValue: form.fieldOfEmployment.value,college: form.college.label, collegeValue: form.college.value},20030049).then(router.push("./processReq"))}}
             />
@@ -126,7 +126,7 @@ const SchoolShow = () => {
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
-        <Text className="text-primary text-4xl font-bold">Uni</Text>
+        <Text className="text-greenTheme text-4xl font-bold">Centro</Text>
       </View>
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-10">

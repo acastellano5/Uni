@@ -32,7 +32,7 @@ const Register = () => {
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
-        <Text className="text-greenTheme text-2xl font-bold">Register</Text>
+        <Text className="text-greenTheme text-2xl font-bold">Sign Up</Text>
       </View>
 
 
@@ -45,8 +45,8 @@ const Register = () => {
             resizeMode="contain"
             className="h-[100px] w-[100]"
           />
-          <Text className="text-greenTheme text-5xl font-bold mt-5">Uni</Text>
-          <Text className="text-tertiary text-lg">Sign up for Uni</Text>
+          <Text className="text-greenTheme text-5xl font-bold mt-5">Centro</Text>
+          <Text className="text-tertiary text-lg">Sign up for Centro</Text>
         </View>
 
 

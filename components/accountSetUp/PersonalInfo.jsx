@@ -53,7 +53,7 @@ const PersonalInfo = ({ handleNextPress }) => {
           />
 
           {/* Next Button */}
-          <CustomButton title="Next" containerStyles="bg-primary py-3 mt-10" textStyles="text-base" handlePress={()=>{setAccountName(form.first, form.last, form.gender).then(handleNextPress)}}/>
+          <CustomButton title="Next" containerStyles="bg-greenTheme py-3 mt-10" textStyles="text-base" handlePress={()=>{setAccountName(form.first, form.last, form.gender).then(handleNextPress)}}/>
     </>
   );
 };

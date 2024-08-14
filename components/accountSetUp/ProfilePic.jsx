@@ -56,7 +56,7 @@ const ProfilePic = ({ handleNextPress, handleSkipPress }) => {
 
         <CustomButton
           title="Next"
-          containerStyles="bg-primary py-2 px-8 ml-3"
+          containerStyles="bg-greenTheme py-2 px-8 ml-3"
           textStyles="text-base"
           handlePress={handleNextPress}
         />
