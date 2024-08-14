@@ -42,7 +42,9 @@ const CreatePost = () => {
       return;
     }
     if (authorType === "group") {
-      createGroupPost(groupId, form.image, form.text, orgId);
+      const tasko = await uploadToFirebase(form.image);
+
+      createGroupPost(groupId, tasko, form.text, orgId);
     } else if (authorType === "user") {
       if (form.image) {
         const task = await uploadToFirebase(form.image);
