@@ -497,7 +497,6 @@ export const roles = [
   { label: "Student", value: "Student" },
   { label: "Faculty/Staff", value: "Faculty/Staff" },
   { label: "Alumni", value: "Alumni" },
-  { label: "Parent", value: "Parent" }, 
-  { label: "Guest", value: "Guest" }
+  { label: "Parent", value: "Parent" }
 
 ]
