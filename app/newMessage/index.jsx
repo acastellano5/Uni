@@ -62,14 +62,14 @@ export default function newMessage() {
     var result = await createChat(members, message);
     if (typeof(result) == "string") return alert(result);
 
-    router.push({
+    router.replace({
       pathname: "/chat",
       params: { chatID: result.id }
     });
   }
 
   return (
-    <SafeAreaView className="h-full bg-secondary">
+    <SafeAreaView className="h-full bg-primary">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
@@ -100,7 +100,7 @@ export default function newMessage() {
               return (
                 <View key={user.id} className="flex-row items-center justify-between w-11/12 mx-auto bg-white rounded-xl px-3 py-2 mt-2">
                   <Text className="font-semibold text-dark">{user.fullName}</Text>
-                  <TouchableOpacity className="bg-green-400 rounded-md w-[25px] h-[25px] flex items-center justify-center" onPress={() => { addMember(user) }}>
+                  <TouchableOpacity className="bg-primary rounded-md w-[25px] h-[25px] flex items-center justify-center" onPress={() => { addMember(user) }}>
                     <Text className="font-semibold text-white text-center">+</Text>
                   </TouchableOpacity>
                 </View>

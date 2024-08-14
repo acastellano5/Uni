@@ -68,7 +68,7 @@ const ChatList = ({ filter }) => {
         {isLoading ? (
             <View>
               <View style={{ height: 120 }} />
-              <ActivityIndicator size="large" color="#22c55e" />
+              <ActivityIndicator size="large" color="#063970" />
             </View>
           ) : (
             <View>

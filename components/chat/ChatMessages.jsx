@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from 'react-native'
 const ChatMessageLeft = ({ message }) => {
   return (
     <View className="flex-row items-center justify-start mt-3" style={styles.messageLeft}>
-      <View className="bg-lightGreen py-2 px-3 rounded-lg">
+      <View className="bg-lightYellow py-2 px-3 rounded-lg">
         <Text className="text-[#5e5e5e]">{message}</Text>
       </View>
     </View>

@@ -9,7 +9,7 @@ const ChatTabs = ({ tabs, activeTab, setActiveTab }) => {
         <TouchableOpacity 
         key={index} 
         activeOpacity={0.8}
-        className={`${activeTab === tab ? "bg-secondary" : ""} py-2 px-3 rounded-lg`}
+        className={`${activeTab === tab ? "bg-primary" : ""} py-2 px-3 rounded-lg`}
         onPress={() => setActiveTab(tab)}
         >
             <Text
