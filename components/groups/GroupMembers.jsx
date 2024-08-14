@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, ActivityIndicator, ScrollView, RefreshControl } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import ProfilePic from "../../assets/images/profilepic.jpeg";
 import Member from "./Member";
@@ -38,21 +45,26 @@ const GroupMembers = ({ members, moderators, onRefresh, refreshing }) => {
   }, [moderators]);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} className="h-full" refreshControl={
-      <RefreshControl
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        colors={["#063970"]}
-        tintColor="#063970"
-      />
-    }>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      className="h-full"
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={["#063970"]}
+          tintColor="#063970"
+        />
+      }
+    >
       <View className="bg-white w-11/12 mx-auto rounded-lg px-3 py-2">
         {loading ? (
           <ActivityIndicator size="large" color="#063970" />
         ) : (
           <View className="flex-row flex-wrap">
-            {fetchedModerators.map(
-              (moderator, index) => (
+            {fetchedModerators.length > 0 || fetchedMembers.length > 0 ? (
+              <>
+                {fetchedModerators.map((moderator, index) => (
                   <Member
                     key={index}
                     role="Moderator"
@@ -60,18 +72,21 @@ const GroupMembers = ({ members, moderators, onRefresh, refreshing }) => {
                     profileImg={ProfilePic}
                     uid={moderator.id}
                   />
-              )
-            )}
+                ))}
 
-            {fetchedMembers.map((member, index) => (
-              <Member
-                key={index}
-                role="Member"
-                name={`${member.fullName}`}
-                profileImg={ProfilePic}
-                uid={member.id}
-              />
-            ))}
+                {fetchedMembers.map((member, index) => (
+                  <Member
+                    key={index}
+                    role="Member"
+                    name={`${member.fullName}`}
+                    profileImg={ProfilePic}
+                    uid={member.id}
+                  />
+                ))}
+              </>
+            ) : (
+              <Text className="mx-auto text-base text-darkGray my-5">No members</Text>
+            )}
           </View>
         )}
       </View>
