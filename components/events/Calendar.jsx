@@ -70,16 +70,16 @@ const Calendar = ({ events, currentUserId, onRefresh, refreshing }) => {
         rowHasChanged={(r1, r2) => r1.name !== r2.name}
         showClosingKnob={true}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#22c55e"]} tintColor="#22c55e"/>
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#063970"]} tintColor="#063970"/>
         }
         theme={{
-          selectedDayBackgroundColor: "#22c55e",
+          selectedDayBackgroundColor: "#063970",
           calendarBackground: "#F5F5F5",
-          dotColor: "#22c55e",
-          agendaDayTextColor: "#22c55e",
-          todayTextColor: "#22c55e",
-          agendaDayNumColor: "#22c55e",
-          agendaTodayColor: "#22c55e",
+          dotColor: "#063970",
+          agendaDayTextColor: "#063970",
+          todayTextColor: "#063970",
+          agendaDayNumColor: "#063970",
+          agendaTodayColor: "#063970",
           agendaKnobColor: "#C9C9C9",
         }}
       />

@@ -175,9 +175,9 @@ const GroupHome = ({ group, fetchGroup, setGroupContent }) => {
                   onPress={handleFollowOrUnfollowGroup}
                 >
                   {isFollowingGroup ? (
-                    <AntDesign name="star" size={24} color="#22c55e" />
+                    <AntDesign name="star" size={24} color="#063970" />
                   ) : (
-                    <AntDesign name="staro" size={24} color="#22c55e" />
+                    <AntDesign name="staro" size={24} color="#063970" />
                   )}
                 </TouchableOpacity>
               ) : null}
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 70,
     right: 20,
-    backgroundColor: "#22c55e",
+    backgroundColor: "#063970",
     borderRadius: 30,
     width: 60,
     height: 60,

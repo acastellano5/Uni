@@ -124,7 +124,7 @@ const EventsPage = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container} className="bg-secondary">
+    <SafeAreaView style={styles.container} className="bg-primary">
       <Header />
 
       <View style={styles.contentContainer} className="mt-5">
@@ -139,7 +139,7 @@ const EventsPage = () => {
 
         <View style={styles.flexContainer}>
           {eventsLoading ? (
-            <ActivityIndicator size="large" color="#22c55e" />
+            <ActivityIndicator size="large" color="#063970" />
           ) : (
             <Calendar
               events={events}
@@ -159,7 +159,7 @@ const EventsPage = () => {
           router.push("/event/create");
         }}
       >
-        <Feather name="plus" size={24} color="#22c55e" />
+        <Feather name="plus" size={24} color="#063970" />
       </TouchableOpacity>
     </SafeAreaView>
   );

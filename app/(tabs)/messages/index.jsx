@@ -22,7 +22,7 @@ export default function Messages() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   return (
-    <SafeAreaView className="h-full bg-secondary">
+    <SafeAreaView className="h-full bg-primary">
       <Header title="Home" />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-3">
         <ChatTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab}/>

@@ -68,7 +68,7 @@ const ImageUpload = ({ title, form, setForm }) => {
           className="border border-primary"
           activeOpacity={0.8}
         >
-          <Ionicons name="image-outline" size={24} color="#22c55e" />
+          <Ionicons name="image-outline" size={24} color="#063970" />
           <Text style={styles.buttonText} className="text-primary">
             Pick an Image
           </Text>
@@ -80,7 +80,7 @@ const ImageUpload = ({ title, form, setForm }) => {
           className="border border-primary"
           activeOpacity={0.8}
         >
-          <Ionicons name="camera-outline" size={24} color="#22c55e" />
+          <Ionicons name="camera-outline" size={24} color="#063970" />
           <Text style={styles.buttonText} className="text-primary">
             Take a Photo
           </Text>

@@ -38,7 +38,7 @@ const GroupInfo = ({ group, onRefresh, refreshing }) => {
 
   if (loading) {
     return (
-        <ActivityIndicator size="large" color="#22c55e" />
+        <ActivityIndicator size="large" color="#063970" />
     );
   }
 
@@ -47,13 +47,13 @@ const GroupInfo = ({ group, onRefresh, refreshing }) => {
       <RefreshControl
         refreshing={refreshing}
         onRefresh={onRefresh}
-        colors={["#22c55e"]}
-        tintColor="#22c55e"
+        colors={["#063970"]}
+        tintColor="#063970"
       />
     }>
       <View className="bg-white w-11/12 mx-auto rounded-lg px-3 py-2">
         <Text className="text-base font-semibold mb-2">Description</Text>
-        <View className="bg-lightGreen mb-3">
+        <View className="bg-lightYellow mb-3">
           <Text className="text-[#5e5e5e] p-2 rounded-lg">
             {group.description}
           </Text>

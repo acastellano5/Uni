@@ -37,7 +37,7 @@ const groupTypes = [
 ];
 
 export default function Groups() {
-  const {orgId} = useGlobalContext()
+  const { orgId } = useGlobalContext();
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentUser, setCurrentUser] = useState("");
@@ -49,13 +49,13 @@ export default function Groups() {
   const [searchResults, setSearchResults] = useState([]);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [isFilterApplied, setIsFilterApplied] = useState(false);
-  const [ userRole, setUserRole ] = useState()
+  const [userRole, setUserRole] = useState();
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
-      const roleStatus = await getUserRole(orgId)
-      setUserRole(roleStatus)
+      const roleStatus = await getUserRole(orgId);
+      setUserRole(roleStatus);
       setCurrentUser(user.uid);
     };
 
@@ -106,8 +106,16 @@ export default function Groups() {
   useEffect(() => {
     if (currentUser) {
       if (activeTab === "All") {
+        setSearchValue("");
+        setIsSearchResult(false);
+        setSearchResults([]);
+        setIsFilterApplied(false);
         fetchAllGroups();
       } else if (activeTab === "My Groups") {
+        setSearchValue("");
+        setIsSearchResult(false);
+        setSearchResults([]);
+        setIsFilterApplied(false);
         fetchMyGroups();
       }
     }
@@ -170,7 +178,7 @@ export default function Groups() {
   };
 
   return (
-    <SafeAreaView className="h-full bg-black">
+    <SafeAreaView className="h-full bg-primary">
       <Header />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl">
         <TabsDisplay
@@ -187,8 +195,8 @@ export default function Groups() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              colors={["#22c55e"]}
-              tintColor="#22c55e"
+              colors={["#063970"]}
+              tintColor="#063970"
             />
           }
         >
@@ -208,7 +216,7 @@ export default function Groups() {
 
           {loading ? (
             <View className="h-full items-center justify-center mt-10">
-              <ActivityIndicator size="large" color="#22c55e" />
+              <ActivityIndicator size="large" color="#063970" />
             </View>
           ) : (
             <View className="w-10/12 mx-auto mt-5 mb-20">
@@ -265,7 +273,7 @@ export default function Groups() {
           />
         </ScrollView>
 
-        { userRole === "Faculty/Staff" ? (
+        {userRole === "Faculty/Staff" ? (
           <TouchableOpacity
             style={styles.addBtn}
             activeOpacity={0.8}

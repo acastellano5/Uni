@@ -47,7 +47,7 @@ if (!loading && isLogged && isVerified && orgId){
     
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
-        <Text className="text-primary text-4xl font-bold">Uni</Text>
+        <Text className="text-greenTheme text-4xl font-bold">Uni</Text>
       </View>
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5">

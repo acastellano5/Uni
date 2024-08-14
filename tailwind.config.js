@@ -4,18 +4,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#22c55e",
+        primary: "#063970",
         secondary: "#000",
         tertiary: "#C9C9C9", 
         darkGray: "#545454",
         darkWhite: "#F5F5F5",
         lightGreen: "#ddf5e2b2",
-        boxShadow: {
-          '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
-        }
-      }
+        lightYellow: "#F7ED9D",
+        yellowTheme: "#FEEF6E",
+        greenTheme: "#22c55e"
+      },
     },
   },
   plugins: [],
 }
-

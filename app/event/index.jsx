@@ -74,7 +74,7 @@ const EventsShow = () => {
   if (loading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#22c55e" />
+        <ActivityIndicator size="large" color="#063970" />
       </View>
     );
   }

@@ -19,7 +19,7 @@ const TabsDisplay = ({ tabs, activeTab, setActiveTab, containerStyles, textStyle
           containerStyles={`rounded-lg ${containerStyles}`}
           textStyles={`${textStyles} font-bold text-center`}
           onHandleSearchType={() => setActiveTab(item)}
-          activeBackground="#000"
+          activeBackground="#063970"
           background="#FFF"
           activeText="#FFF"
           text="#AAA9B8"

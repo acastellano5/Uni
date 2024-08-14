@@ -17,7 +17,7 @@ const forgotPassword = () => {
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
-        <Text className="text-primary text-2xl font-bold">Reset Password</Text>
+        <Text className="text-greenTheme text-2xl font-bold">Reset Password</Text>
       </View>
 
 
@@ -30,7 +30,7 @@ const forgotPassword = () => {
             resizeMode="contain"
             className="h-[100px] w-[100]"
           />
-          <Text className="text-primary text-5xl font-bold mt-5">Uni</Text>
+          <Text className="text-greenTheme text-5xl font-bold mt-5">Uni</Text>
           <Text className="text-tertiary text-lg">Enter Email to continue</Text>
         </View>
 
@@ -70,7 +70,7 @@ const forgotPassword = () => {
 
           <Text className="mt-9 text-base">Wrong Place?{' '}
 
-            <Text className="text-yellow-500 font-bold" onPress={() => router.push("../../../log-in")}>Back To Login</Text>
+            <Text className="text-yellow-500 font-bold" onPress={() => router.dismiss()}>Back To Login</Text>
           </Text>
         </View>
         

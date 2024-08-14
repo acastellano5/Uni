@@ -36,15 +36,15 @@ const GroupEvents = ({ group, onRefresh, refreshing }) => {
       <RefreshControl
         refreshing={refreshing}
         onRefresh={onRefresh}
-        colors={["#22c55e"]}
-        tintColor="#22c55e"
+        colors={["#063970"]}
+        tintColor="#063970"
       />
     }>
       <View className="w-11/12 mx-auto">
       <GroupToggle activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {loading ? (
-        <ActivityIndicator size="large" color="#22c55e" />
+        <ActivityIndicator size="large" color="#063970" />
       ) : (
         <View className="flex-row flex-wrap mt-3">
           {groupEvents.length > 0 ? (

@@ -22,7 +22,7 @@ const LogIn = () => {
   return (
     <SafeAreaView className="bg-black h-full">
       <View className="pl-9">
-        <Text className="text-primary text-2xl font-bold">Log In</Text>
+        <Text className="text-greenTheme text-2xl font-bold">Log In</Text>
       </View>
 
 
@@ -35,7 +35,7 @@ const LogIn = () => {
             resizeMode="contain"
             className="h-[100px] w-[100]"
           />
-          <Text className="text-primary text-5xl font-bold mt-5">Uni</Text>
+          <Text className="text-greenTheme text-5xl font-bold mt-5">Uni</Text>
           <Text className="text-tertiary text-lg">Log in to continue</Text>
         </View>
 
@@ -65,7 +65,7 @@ const LogIn = () => {
 
 
         <View className="w-5/6 mx-auto mt-3 items-end">
-          <Text className="font-bold text-yellow-500"onPress={() => router.replace("./forgotPassword")}>Forgot Password?</Text>
+          <Text className="font-bold text-yellow-500"onPress={() => router.push("./forgotPassword")}>Forgot Password?</Text>
         </View>
 
 
@@ -125,7 +125,7 @@ const LogIn = () => {
 
           <Text className="mt-9 text-base">Don't have an account?{' '}
 
-            <Text className="text-yellow-500 font-bold" onPress={() => router.replace("./register")}>Sign up</Text>
+            <Text className="text-yellow-500 font-bold" onPress={() => router.push("./register")}>Sign up</Text>
           </Text>
         </View>
         

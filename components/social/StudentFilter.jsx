@@ -61,7 +61,6 @@ const StudentFilter = ({ setUsers, dismissFilter }) => {
               onItemSelect={(e) => {
                 setForm({ ...form, class: e.value });
               }}
-              focusedColor="#22c55e"
               title="Class"
               placeholder="Filter by Class"
             />
@@ -76,7 +75,6 @@ const StudentFilter = ({ setUsers, dismissFilter }) => {
             />
             <SingleSelectDropdown
               data={groupsData}
-              focusedColor="#22c55e"
               title="Group"
               placeholder="Filter By Group"
               onItemSelect={(e) => {

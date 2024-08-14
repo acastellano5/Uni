@@ -5,7 +5,7 @@ import { router } from "expo-router";
 const Item = ({ name, title }) => {
   return (
     <View style={title !== "Groups" ? styles.itemStyles : null}>
-      <View className="bg-lightGreen rounded-lg py-3 flex-1 justify-center">
+      <View className="bg-lightYellow rounded-lg py-3 flex-1 justify-center">
         <Text className="text-center">{name}</Text>
       </View>
     </View>
@@ -24,7 +24,7 @@ const InfoBox = ({ title, info }) => {
                 <TouchableOpacity
                   activeOpacity={0.8}
                   key={index}
-                  className="flex-1 bg-lightGreen rounded-lg py-3 justify-center items-center"
+                  className="flex-1 bg-lightYellow rounded-lg py-3 justify-center items-center"
                   onPress={() => {
                     router.push({
                       pathname: "/group",

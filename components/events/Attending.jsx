@@ -26,7 +26,7 @@ const Attending = ({ attendees }) => {
       <Text className="text-lg font-semibold text-primary mb-1">Attendees</Text>
       <View>
         {loading ? (
-          <ActivityIndicator size="large" color="#22c55e" /> // Show loader while loading
+          <ActivityIndicator size="large" color="#063970" /> // Show loader while loading
         ) : (
           attendees.length > 0 ? (
             attending.map((attendee, index) => (

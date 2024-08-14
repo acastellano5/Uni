@@ -66,7 +66,6 @@ const AlumniFilter = ({ setUsers, dismissFilter }) => {
                 setForm({ ...form, class: e.value });
               }}
               containerStyles="mb-2"
-              focusedColor="#22c55e"
               title="Class"
               placeholder="Filter by Class"
             />
@@ -81,7 +80,6 @@ const AlumniFilter = ({ setUsers, dismissFilter }) => {
             />
             <SingleSelectDropdown
               data={groupsData}
-              focusedColor="#22c55e"
               title="Groups"
               containerStyles="mb-2"
               placeholder="Filter by Groups"
@@ -93,7 +91,6 @@ const AlumniFilter = ({ setUsers, dismissFilter }) => {
               data={statesData}
               containerStyles="mb-2"
               onItemSelect={(e) => setForm({ ...form, state: e.value })}
-              focusedColor="#22c55e"
               title="State"
               placeholder="Filter by State"
             />
@@ -101,14 +98,12 @@ const AlumniFilter = ({ setUsers, dismissFilter }) => {
               data={jobFieldsData}
               containerStyles="mb-2"
               onItemSelect={(e) => setForm({ ...form, field: e.value })}
-              focusedColor="#22c55e"
               title="Field"
               placeholder="Filter by Field"
             />
             <SingleSelectDropdown
               data={collegesData}
               onItemSelect={(e) => setForm({ ...form, college: e.value })}
-              focusedColor="#22c55e"
               title="College"
               placeholder="Filter by College"
             />

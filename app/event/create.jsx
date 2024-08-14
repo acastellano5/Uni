@@ -159,13 +159,13 @@ const CreateEvent = () => {
   };
 
   return (
-    <SafeAreaView className="h-full bg-black">
+    <SafeAreaView className="h-full bg-primary">
       <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" />
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl">
         {loading ? (
           <View className="flex-1 justify-center items-center">
-            <ActivityIndicator size="large" color="#22c55e" />
+            <ActivityIndicator size="large" color="#063970" />
           </View>
         ) : (
           <ScrollView
@@ -241,7 +241,7 @@ const CreateEvent = () => {
                     mode="datetime"
                     is24Hour={true}
                     display="default"
-                    accentColor="#22c55e"
+                    accentColor="#063970"
                     onChange={onChangeStartTime}
                   />
                   <CustomButton
@@ -282,7 +282,7 @@ const CreateEvent = () => {
                     mode="datetime"
                     is24Hour={true}
                     display="default"
-                    accentColor="#22c55e"
+                    accentColor="#063970"
                     onChange={onChangeEndTime}
                   />
                   <CustomButton
@@ -313,7 +313,7 @@ const CreateEvent = () => {
             <View className="flex-row justify-between mb-5">
             <Text className="text-base">Make an org post</Text>
             <Switch
-              trackColor={{ false: "#767577", true: "#22c55e" }}
+              trackColor={{ false: "#767577", true: "#063970" }}
               thumbColor={isEnabled ? "#FFF" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}

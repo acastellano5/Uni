@@ -136,14 +136,14 @@ const ProfileShow = () => {
   }, [uid]);
 
   return (
-    <SafeAreaView className="h-full bg-black">
+    <SafeAreaView className="h-full bg-primary">
       <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" />
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         {loading ? (
           // Render loader while loading
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#22c55e" />
+            <ActivityIndicator size="large" color="#063970" />
             <Text style={styles.loadingText}>Loading profile...</Text>
           </View>
         ) : (
@@ -235,7 +235,7 @@ const ProfileShow = () => {
               }`}
             >
               <Text className="text-lg font-medium mb-1">Bio</Text>
-              <View className="bg-lightGreen mb-3 rounded-lg">
+              <View className="bg-lightYellow mb-3 rounded-lg">
                 {/* for passing in bio */}
                 <Text className="text-[#5e5e5e] p-2">
                   {user.bio ? user.bio : "No bio."}

@@ -36,7 +36,8 @@ export default function Home() {
       setIsLoading(true);
       const users = await filterUserByRole(orgId, activeTab);
       setOrgUsers(users);
-      setIsFilterApplied(true);
+      setIsSearchResult(false)
+      setIsFilterApplied(false);
       setSearchValue(""); // Clear the search bar when a filter is applied
       setIsLoading(false);
     };
@@ -104,7 +105,7 @@ export default function Home() {
   };
 
   return (
-    <SafeAreaView className="h-full bg-secondary">
+    <SafeAreaView className="h-full bg-primary">
       {/* Header */}
       <Header />
 
@@ -112,7 +113,7 @@ export default function Home() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#22c55e"]} tintColor="#22c55e"/>
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#063970"]} tintColor="#063970"/>
           }
         >
           {/* Search bar */}
@@ -135,40 +136,40 @@ export default function Home() {
               activeTab={activeTab}
               containerStyles="p-2 rounded-lg border border-primary"
               onHandleSearchType={() => setActiveTab("Student")}
-              activeBackground="#22c55e"
+              activeBackground="#063970"
               background="#FFF"
               activeText="#FFF"
-              text="#22c55e"
+              text="#063970"
             />
             <TabButton
               name="Alumni"
               activeTab={activeTab}
               containerStyles="p-2 rounded-lg border border-primary ml-2"
               onHandleSearchType={() => setActiveTab("Alumni")}
-              activeBackground="#22c55e"
+              activeBackground="#063970"
               background="#FFF"
               activeText="#FFF"
-              text="#22c55e"
+              text="#063970"
             />
             <TabButton
               name="Faculty/Staff"
               activeTab={activeTab}
               containerStyles="p-2 rounded-lg border border-primary ml-2"
               onHandleSearchType={() => setActiveTab("Faculty/Staff")}
-              activeBackground="#22c55e"
+              activeBackground="#063970"
               background="#FFF"
               activeText="#FFF"
-              text="#22c55e"
+              text="#063970"
             />
             <TabButton
               name="Parent"
               activeTab={activeTab}
               containerStyles="p-2 rounded-lg border border-primary ml-2"
               onHandleSearchType={() => setActiveTab("Parent")}
-              activeBackground="#22c55e"
+              activeBackground="#063970"
               background="#FFF"
               activeText="#FFF"
-              text="#22c55e"
+              text="#063970"
             />
           </View>
 
@@ -207,7 +208,7 @@ export default function Home() {
           >
             {isLoading && !refreshing ? (
               <View style={styles.loaderContainer}>
-                <ActivityIndicator size="large" color="#22c55e" />
+                <ActivityIndicator size="large" color="#063970" />
               </View>
             ) : (
               orgUsers.length === 0 ? (

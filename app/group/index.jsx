@@ -67,7 +67,7 @@ const index = () => {
         group.canSee ? (
           displayGroupContent()
         ) : (
-          <SafeAreaView className="h-full bg-black">
+          <SafeAreaView className="h-full bg-primary">
             <BackHeader containerStyles="w-11/12 mx-auto" />
 
             <View className="bg-darkWhite mt-5 h-full rounded-t-3xl">

@@ -77,7 +77,7 @@ const CreatePost = () => {
           <View className="flex-row justify-between mb-5">
             <Text className="text-base">Make an org post</Text>
             <Switch
-              trackColor={{ false: "#767577", true: "#22c55e" }}
+              trackColor={{ false: "#767577", true: "#063970" }}
               thumbColor={isEnabled ? "#FFF" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}

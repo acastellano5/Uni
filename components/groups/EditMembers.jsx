@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { getUserAttributes } from "../../lib/useFirebase";
 import ManageMemberCard from "./ManageMemberCard";
@@ -6,40 +13,46 @@ import AddUsers from "./AddUsers";
 import { useGlobalContext } from "../../context/globalProvider";
 
 const editMembers = ({ group, fetchGroup }) => {
-  const isEffected = false;
   const [loading, setLoading] = useState(true);
-  const { orgId } = useGlobalContext()
-  const [ isModalVisible, setIsModalVisible ] = useState(false)
+  const [loadingMembers, setLoadingMembers] = useState(true);
+  const [loadingModerators, setLoadingModerators] = useState(true);
+  const { orgId } = useGlobalContext();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // make requests to fetch members from database
+  // Fetch members from the database
   const [fetchedMembers, setFetchedMembers] = useState([]);
   useEffect(() => {
     const fetchMembers = async () => {
-      setLoading(true);
       const fetchedUsers = await Promise.all(
         group.members.map((uid) => getUserAttributes(uid))
       );
       setFetchedMembers(fetchedUsers.filter((user) => user !== null));
-      setLoading(false);
+      setLoadingMembers(false);
     };
 
     fetchMembers();
   }, [group]);
 
-  // make requests to fetch moderators from database
+  // Fetch moderators from the database
   const [fetchedModerators, setFetchedModerators] = useState([]);
   useEffect(() => {
     const fetchModerators = async () => {
-      setLoading(true);
       const fetchedUsers = await Promise.all(
         group.moderators.map((uid) => getUserAttributes(uid))
       );
       setFetchedModerators(fetchedUsers.filter((user) => user !== null));
-      setLoading(false);
+      setLoadingModerators(false);
     };
 
     fetchModerators();
-  }, [group, isEffected]);
+  }, [group]);
+
+  // Update the main loading state when both operations are done
+  useEffect(() => {
+    if (!loadingMembers && !loadingModerators) {
+      setLoading(false);
+    }
+  }, [loadingMembers, loadingModerators]);
 
   return (
     <>
@@ -47,37 +60,42 @@ const editMembers = ({ group, fetchGroup }) => {
         className="bg-primary self-start rounded"
         activeOpacity={0.8}
         onPress={() => {
-          setIsModalVisible(true)
+          setIsModalVisible(true);
         }}
       >
         <Text className="text-white py-1 px-2">Add People</Text>
       </TouchableOpacity>
-        <View className="flex-row flex-wrap bg-white pt-3 px-2 rounded mt-3">
+      <View className="flex-row flex-wrap bg-white pt-3 px-2 rounded mt-3">
         <ScrollView showsVerticalScrollIndicator={false}>
-        {fetchedModerators.map((moderator, index) => (
-          <ManageMemberCard
-            person={moderator}
-            groupId={group.id}
-            orgId={orgId}
-            reactor={isEffected}
-            addUser={false}
-            fetchGroup={fetchGroup}
-            role="Moderator"
-            key={index}
-          />
-        ))}
+          {loading ? (
+            <ActivityIndicator size="small" color="#063970" />
+          ) : (
+            <>
+              {fetchedModerators.map((moderator, index) => (
+                <ManageMemberCard
+                  person={moderator}
+                  groupId={group.id}
+                  orgId={orgId}
+                  addUser={false}
+                  fetchGroup={fetchGroup}
+                  role="Moderator"
+                  key={index}
+                />
+              ))}
 
-        {fetchedMembers.map((member, index) => (
-          <ManageMemberCard
-            person={member}
-            groupId={group.id}
-            orgId={orgId}
-            role="Member"
-            addUser={false}
-            fetchGroup={fetchGroup}
-            key={index}
-          />
-        ))}
+              {fetchedMembers.map((member, index) => (
+                <ManageMemberCard
+                  person={member}
+                  groupId={group.id}
+                  orgId={orgId}
+                  role="Member"
+                  addUser={false}
+                  fetchGroup={fetchGroup}
+                  key={index}
+                />
+              ))}
+            </>
+          )}
         </ScrollView>
       </View>
 

@@ -28,7 +28,7 @@ const EventInfo = ({ event }) => {
       {/* event info */}
       <>
         <Text className="text-darkGray text-base mb-2">Description:</Text>
-        <View className="bg-lightGreen mb-3">
+        <View className="bg-lightYellow mb-3 rounded">
           <Text className="text-[#5e5e5e] p-2 rounded-lg">
             {event.description}
           </Text>

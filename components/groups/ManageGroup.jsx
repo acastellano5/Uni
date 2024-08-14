@@ -34,7 +34,7 @@ const ManageGroup = ({group, setGroupContent, fetchGroup}) => {
     }
 
   return (
-    <SafeAreaView className="h-full bg-secondary">
+    <SafeAreaView className="h-full bg-primary">
       <BackHeader containerStyles="w-11/12 mx-auto" displayAI={false} onBackPress={() => setGroupContent("show group")}/>
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
           <View className="w-10/12 mx-auto">

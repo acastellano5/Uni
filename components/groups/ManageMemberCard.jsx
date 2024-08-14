@@ -125,10 +125,10 @@ const ManageMemberCard = ({
   
         {addUser ? (
           isMember || isModerator ? (
-            <AntDesign name="checkcircle" size={24} color="#22c55e" />
+            <AntDesign name="checkcircle" size={24} color="#063970" />
           ) : (
             <TouchableOpacity activeOpacity={0.8} onPress={onAddUser}>
-              <AntDesign name="pluscircleo" size={24} color="#22c55e" />
+              <AntDesign name="pluscircleo" size={24} color="#063970" />
             </TouchableOpacity>
           )
         ) : (

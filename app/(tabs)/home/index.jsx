@@ -117,7 +117,7 @@ export default function Home() {
   const keyExtractor = useCallback((item) => item.postId.toString(), []);
 
   return (
-    <SafeAreaView className="h-full bg-secondary">
+    <SafeAreaView className="h-full bg-primary">
       <Header title="Home" />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-3">
         <TabsDisplay
@@ -129,7 +129,7 @@ export default function Home() {
           tabBarStyles="w-10/12"
         />
         {postsLoading && !refreshing ? (
-          <ActivityIndicator size="large" color="#22c55e" />
+          <ActivityIndicator size="large" color="#063970" />
         ) : (
           posts.length > 0 ? (
             <FlatList
@@ -140,8 +140,8 @@ export default function Home() {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                colors={["#22c55e"]}
-                tintColor="#22c55e"
+                colors={["#063970"]}
+                tintColor="#063970"
               />
             }
             showsVerticalScrollIndicator={false}
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 38,
     right: 20,
-    backgroundColor: "#22c55e",
+    backgroundColor: "#063970",
     borderRadius: 50,
     width: 60,
     height: 60,
