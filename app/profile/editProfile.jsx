@@ -17,7 +17,7 @@ import { useLocalSearchParams, router } from "expo-router";
 import { useGlobalContext } from "../../context/globalProvider";
 import { interestsData } from "../../assets/data";
 import { editProfile } from "../../lib/useFirebase";
-import ProfileUpload from "../../components/imageUpload/ProfileUpload";
+import EditProfileUpload from "../../components/imageUpload/EditProfile";
 
 const EditProfile = () => {
   // getting orgId from global context
@@ -80,7 +80,7 @@ const EditProfile = () => {
               style={styles.profilePic}
               className="mb-3"
             />
-            <ProfileUpload form={form} setForm={setForm} containerStyles="w-10/12 mx-auto"/>
+            <EditProfileUpload form={form} setForm={setForm} containerStyles="w-10/12 mx-auto"/>
           </View>
 
           {/* edit name */}
