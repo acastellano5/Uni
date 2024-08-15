@@ -29,6 +29,8 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [page, setPage] = useState(1); // For pagination
+  const [loadingMore, setLoadingMore] = useState(false); // For indicating more data is loading
 
   useEffect(() => {
     if (!loading && isLogged && isVerified) {
@@ -74,24 +76,28 @@ export default function Home() {
     return posts;
   }, [orgId]);
 
-  const getPosts = useCallback(async (fetchPosts) => {
+  const getPosts = useCallback(async (fetchPosts, page) => {
     try {
-      setPostsLoading(true);
-      const posts = await fetchPosts(orgId, userRole);
+      if (page === 1) setPostsLoading(true);
+      else setLoadingMore(true);
+
+      const posts = await fetchPosts(orgId, userRole, page); // Pass page parameter to fetch function
       const combinedPosts = await combinePosts(posts);
-      setPosts(combinedPosts);
+      setPosts((prevPosts) => page === 1 ? combinedPosts : [...prevPosts, ...combinedPosts]);
     } catch (error) {
       console.log(error);
     } finally {
       setPostsLoading(false);
+      setLoadingMore(false);
     }
   }, [combinePosts, orgId, userRole]);
 
-  const getCommunityPosts = useCallback(() => getPosts(getPostsByTime), [getPosts]);
-  const getFollowingTabPosts = useCallback(() => getPosts(getFollowingPosts), [getPosts]);
+  const getCommunityPosts = useCallback(() => getPosts(getPostsByTime, page), [getPosts, page]);
+  const getFollowingTabPosts = useCallback(() => getPosts(getFollowingPosts, page), [getPosts, page]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
+    setPage(1); // Reset page number on refresh
     activeTab === "Following" ? await getFollowingTabPosts() : await getCommunityPosts();
     setRefreshing(false);
   }, [activeTab, getFollowingTabPosts, getCommunityPosts]);
@@ -102,9 +108,16 @@ export default function Home() {
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
+      setPage(1); // Reset page number when user or tab changes
       activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
     }
   }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts]);
+
+  const loadMorePosts = useCallback(() => {
+    if (!loadingMore && !refreshing) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  }, [loadingMore, refreshing]);
 
   const renderItem = useMemo(() => ({ item }) => (
     <Post
@@ -133,20 +146,23 @@ export default function Home() {
         ) : (
           posts.length > 0 ? (
             <FlatList
-            data={posts}
-            renderItem={renderItem}
-            keyExtractor={keyExtractor}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                colors={["#063970"]}
-                tintColor="#063970"
-              />
-            }
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingTop: 12 }}
-          />
+              data={posts}
+              renderItem={renderItem}
+              keyExtractor={keyExtractor}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={["#063970"]}
+                  tintColor="#063970"
+                />
+              }
+              onEndReached={loadMorePosts} // Lazy loading trigger
+              onEndReachedThreshold={0.5} // Trigger when 50% of the list is left
+              ListFooterComponent={loadingMore && <ActivityIndicator size="large" color="#063970" />} // Loading indicator at the end
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingTop: 12 }}
+            />
           ) : (
             <Text className="text-center text-darkGray text-base mt-10">No posts yet.</Text>
           )
