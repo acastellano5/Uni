@@ -114,6 +114,7 @@ const EditProfile = () => {
               title="College"
               selectedValue={user.orgs[20030049].college}
               placeholder="Select College"
+              isSearchable={true}
             />
             <SingleSelectDropdown
               data={classData}
