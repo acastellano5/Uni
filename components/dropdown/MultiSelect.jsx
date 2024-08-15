@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 14,
-    color: "#22c55e"
+    color: "black"
   },
   iconStyle: {
     width: 20,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   selectedStyle: {
     borderRadius: 12,
-    borderColor: "#22c55e"
+    borderColor: "black"
   },
   label: {
     zIndex: 999,
