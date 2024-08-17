@@ -23,9 +23,11 @@ import ChatInput from "../../components/chat/ChatInput";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { getUserNameMatches, createChat } from "../../lib/useFirebase";
 import { router } from "expo-router"
+import { useGlobalContext } from "../../context/globalProvider";
 
 
 export default function newMessage() {
+  const { orgId } = useGlobalContext();
   const [members, setMembers] = useState([
     { fullName: "You", id: auth().currentUser.uid }
   ]);
@@ -41,7 +43,11 @@ export default function newMessage() {
       }
       
       const matches = await getUserNameMatches(searchValue.trim());
-      setUserNameMatches(matches);
+      // remove all current members from the matches by id
+      const memberIDs = members.map((member) => { return member.id });
+      const filteredMatches = matches.filter((match) => { return !memberIDs.includes(match.id) });
+
+      setUserNameMatches(filteredMatches);
     }
     load();
   }, [searchValue]);
@@ -59,7 +65,7 @@ export default function newMessage() {
   }
 
   const attemptCreateChat = async () => {
-    var result = await createChat(members, message);
+    var result = await createChat(members, message, orgId);
     if (typeof(result) == "string") return alert(result);
 
     router.replace({
