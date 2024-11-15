@@ -161,7 +161,6 @@ const SchoolShow = () => {
                   college: item,
                 });
               }}
-              isSearchable={true}
             />
             <SingleSelect
               title="State"

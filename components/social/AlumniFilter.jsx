@@ -106,7 +106,6 @@ const AlumniFilter = ({ setUsers, dismissFilter }) => {
               onItemSelect={(e) => setForm({ ...form, college: e.value })}
               title="College"
               placeholder="Filter by College"
-              isSearchable={true}
             />
           </View>
 
