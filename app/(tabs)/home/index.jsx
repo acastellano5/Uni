@@ -20,16 +20,17 @@ import { useGlobalContext } from "../../../context/globalProvider";
 import { getUserAttributes, getPostsByTime, getGroupById, getFollowingPosts } from "../../../lib/useFirebase";
 import { getCurrentUser } from "../../../lib/firebase";
 
-const tabs = ["Following", "Community"];
+const tabs = ["Following", "Community"]; // Tab options for the screen
 
 export default function Home() {
-  const { loading, isLogged, isVerified, orgId, userRole } = useGlobalContext();
-  const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [currentUser, setCurrentUser] = useState({});
-  const [posts, setPosts] = useState([]);
-  const [postsLoading, setPostsLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const { loading, isLogged, isVerified, orgId, userRole } = useGlobalContext(); // Global context values
+  const [activeTab, setActiveTab] = useState(tabs[0]); // Active tab state
+  const [currentUser, setCurrentUser] = useState({}); // Current user data
+  const [posts, setPosts] = useState([]); // Posts data
+  const [postsLoading, setPostsLoading] = useState(true); // Loading state for posts
+  const [refreshing, setRefreshing] = useState(false); // Refresh control state
 
+  // Redirect if user is not logged in or verified
   useEffect(() => {
     if (!loading && isLogged && isVerified) {
       fetchUserData();
@@ -38,75 +39,73 @@ export default function Home() {
     }
   }, [loading, isLogged, isVerified]);
 
+  // Fetch user data
   const fetchUserData = async () => {
     try {
-      const currentUserInfo = await getCurrentUser();
-      const user = await getUserAttributes(currentUserInfo.uid);
+      const userInfo = await getCurrentUser();
+      const user = await getUserAttributes(userInfo.uid);
       setCurrentUser(user);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   };
 
+  // Combine post data with additional author details
   const combinePosts = useCallback(async (postsArr) => {
-    const posts = await Promise.all(postsArr.map(async (post) => {
-      if (post.authorType === "user") {
-        const user = await getUserAttributes(post.author);
-        return {
-          ...post,
-          type: "user",
-          authorName: user.fullName,
-          authorId: user.id,
-          authorType: user.orgs[orgId]?.role,
-        };
-      } else if (post.authorType === "group") {
-        const group = await getGroupById(post.author, orgId);
-        return {
-          ...post,
-          type: "group",
-          authorName: group.name,
-          authorId: group.id,
-          authorType: group.category,
-        };
-      }
-      return post;
-    }));
-    return posts;
+    return Promise.all(
+      postsArr.map(async (post) => {
+        if (post.authorType === "user") {
+          const user = await getUserAttributes(post.author);
+          return { ...post, type: "user", authorName: user.fullName, authorType: user.orgs[orgId]?.role };
+        }
+        if (post.authorType === "group") {
+          const group = await getGroupById(post.author, orgId);
+          return { ...post, type: "group", authorName: group.name, authorType: group.category };
+        }
+        return post;
+      })
+    );
   }, [orgId]);
 
-  const getPosts = useCallback(async (fetchPosts) => {
+  // Fetch and set posts
+  const fetchPosts = useCallback(async (fetchFunction) => {
     try {
       setPostsLoading(true);
-      const posts = await fetchPosts(orgId, userRole);
-      const combinedPosts = await combinePosts(posts);
+      const fetchedPosts = await fetchFunction(orgId, userRole);
+      const combinedPosts = await combinePosts(fetchedPosts);
       setPosts(combinedPosts);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching posts:", error);
     } finally {
       setPostsLoading(false);
     }
   }, [combinePosts, orgId, userRole]);
 
-  const getCommunityPosts = useCallback(() => getPosts(getPostsByTime), [getPosts]);
-  const getFollowingTabPosts = useCallback(() => getPosts(getFollowingPosts), [getPosts]);
+  // Fetch posts for each tab
+  const fetchCommunityPosts = useCallback(() => fetchPosts(getPostsByTime), [fetchPosts]);
+  const fetchFollowingPosts = useCallback(() => fetchPosts(getFollowingPosts), [fetchPosts]);
 
+  // Refresh control handler
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    activeTab === "Following" ? await getFollowingTabPosts() : await getCommunityPosts();
+    activeTab === "Following" ? await fetchFollowingPosts() : await fetchCommunityPosts();
     setRefreshing(false);
-  }, [activeTab, getFollowingTabPosts, getCommunityPosts]);
+  }, [activeTab, fetchFollowingPosts, fetchCommunityPosts]);
 
+  // Handle post deletion
   const handlePostDelete = useCallback((postId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
   }, []);
 
+  // Fetch posts when activeTab or user changes
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
-      activeTab === "Following" ? getFollowingTabPosts() : getCommunityPosts();
+      activeTab === "Following" ? fetchFollowingPosts() : fetchCommunityPosts();
     }
-  }, [activeTab, currentUser, getFollowingTabPosts, getCommunityPosts]);
+  }, [activeTab, currentUser, fetchFollowingPosts, fetchCommunityPosts]);
 
-  const renderItem = useMemo(() => ({ item }) => (
+  // Render a single post
+  const renderPost = useMemo(() => ({ item }) => (
     <Post
       containerStyles="w-10/12 mx-auto mb-10"
       post={item}
@@ -114,12 +113,14 @@ export default function Home() {
     />
   ), [handlePostDelete]);
 
+  // Extract unique key for each post
   const keyExtractor = useCallback((item) => item.postId.toString(), []);
 
   return (
     <SafeAreaView className="h-full bg-primary">
       <Header title="Home" />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-3">
+        {/* Tabs for switching views */}
         <TabsDisplay
           tabs={tabs}
           activeTab={activeTab}
@@ -128,13 +129,14 @@ export default function Home() {
           textStyles="text-base"
           tabBarStyles="w-10/12"
         />
+
+        {/* Posts or Loading Indicator */}
         {postsLoading && !refreshing ? (
           <ActivityIndicator size="large" color="#063970" />
-        ) : (
-          posts.length > 0 ? (
-            <FlatList
+        ) : posts.length > 0 ? (
+          <FlatList
             data={posts}
-            renderItem={renderItem}
+            renderItem={renderPost}
             keyExtractor={keyExtractor}
             refreshControl={
               <RefreshControl
@@ -147,10 +149,11 @@ export default function Home() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingTop: 12 }}
           />
-          ) : (
-            <Text className="text-center text-darkGray text-base mt-10">No posts yet.</Text>
-          )
+        ) : (
+          <Text className="text-center text-darkGray text-base mt-10">No posts yet.</Text>
         )}
+
+        {/* Add Post Button */}
         <TouchableOpacity
           style={styles.addBtn}
           activeOpacity={0.8}
