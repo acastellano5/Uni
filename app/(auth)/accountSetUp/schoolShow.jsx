@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -5,138 +6,192 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
 import SingleSelect from "../../../components/dropdown/SingleSelect";
 import { router } from "expo-router";
 import CustomButton from "../../../components/CustomButton";
-import { classData, collegesData, statesData, jobFieldsData } from "../../../assets/data";
+import { classData, statesData, jobFieldsData } from "../../../assets/data";
 import { sendAlumniRequest } from "../../../lib/useFirebase";
+import SearchBar from "../../../components/SearchBar";
 
 const AlumniForm = () => {
-  // State to manage form inputs for alumni-specific fields
+  const [collegeSearch, setCollegeSearch] = useState("");
+  const [collegeResults, setCollegeResults] = useState([]);
+  const [selectedCollege, setSelectedCollege] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+
   const [form, setForm] = useState({
-    class: "", // Alumni graduation class
-    college: "", // College attended
-    state: "", // State of residence
-    fieldOfEmployment: "", // Employment field
+    class: "",
+    college: "",
+    state: "",
+    fieldOfEmployment: "",
   });
 
-  // Function to validate that all required fields are filled
+  useEffect(() => {
+    console.log(form);
+  }, [form]);
+
   const validateFields = () => {
     return (
-      form.class &&
-      form.college &&
-      form.state &&
-      form.fieldOfEmployment
+      form.class && form.college && form.state && form.fieldOfEmployment
     );
   };
 
-  // Function to handle form submission
+  const handleCollegeSearch = async () => {
+    setIsLoading(true); // Start loading
+    try {
+      const response = await fetch(
+        `https://api.data.gov/ed/collegescorecard/v1/schools.json?api_key=3S7pvEefde3OCErdbn6n0SSeq6dhpENh82L0AOR5&school.name=${collegeSearch}`
+      );
+      if (!response.ok) {
+        console.error(`API Error: ${response.status} ${response.statusText}`);
+        setIsLoading(false); // Stop loading on error
+        return [];
+      }
+
+      const result = await response.json();
+      const colleges = result.results.map((school) => ({
+        id: school.id,
+        name: school.school.name,
+      }));
+      setCollegeResults(colleges);
+    } catch (error) {
+      console.error("Error fetching college data:", error);
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
+  };
+
+  const handleCollegeSelect = (college) => {
+    setSelectedCollege(college);
+    setForm({
+      ...form,
+      college: college.name,
+    });
+    setCollegeResults([]);
+    setCollegeSearch("");
+  };
+
   const handleFormSubmit = () => {
-    // Check if all fields are valid
     if (!validateFields()) {
       Alert.alert("Error", "Please fill out all required fields.");
       return;
     }
 
-    // Submit alumni data and navigate to the next screen
-    sendAlumniRequest(null, {
-      class: form.class.label, // Alumni class
-      classValue: form.class.label, // Alumni class value
-      state: form.state.label, // State of residence
-      stateValue: form.state.value, // State value
-      employment: form.fieldOfEmployment.label, // Employment field
-      employmentValue: form.fieldOfEmployment.value, // Employment field value
-      college: form.college.label, // College name
-      collegeValue: form.college.value, // College value
-    }, 20030049)
-      .then(() => router.push("./processReq")); // Navigate to request processing page
+    sendAlumniRequest(
+      null,
+      {
+        class: form.class.label,
+        state: form.state.label,
+        fieldOfEmployment: form.fieldOfEmployment.label,
+        college: form.college,
+      },
+      20030049
+    ).then(() => router.push("./processReq"));
   };
 
   return (
     <SafeAreaView className="bg-black h-full">
-      {/* App Header */}
       <View className="pl-9">
         <Text className="text-greenTheme text-4xl font-bold">Centro</Text>
       </View>
 
-      {/* Main Container */}
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-10">
         <View className="w-10/12 mx-auto">
           <ScrollView showsVerticalScrollIndicator={false} className="h-full">
-            {/* Back Button */}
             <TouchableOpacity
               className="self-start"
-              onPress={() => router.back()} // Navigate back to the previous screen
+              onPress={() => router.back()}
             >
               <Ionicons name="arrow-back" size={30} color="black" />
             </TouchableOpacity>
 
-            {/* Form Title */}
             <Text className="text-2xl font-semibold text-center mb-2">
               Salesianum School
             </Text>
 
-            {/* Alumni Form Fields */}
             <SingleSelect
-              title="Class" // Dropdown for selecting class
+              title="Class"
               placeholder="Select class"
               data={classData}
               containerStyles="mb-2"
               selectedValue={form.class}
               onItemSelect={(item) => {
-                setForm({
-                  ...form,
-                  class: item, // Update class field
-                });
+                setForm({ ...form, class: item.value });
               }}
             />
-            <SingleSelect
-              title="College" // Dropdown for selecting college
-              placeholder="Select college"
-              data={collegesData}
-              containerStyles="mb-2"
-              selectedValue={form.college}
-              onItemSelect={(item) => {
-                setForm({
-                  ...form,
-                  college: item, // Update college field
-                });
+
+            <Text className="mb-1 text-base">College</Text>
+            <SearchBar
+              containerStyles="w-full bg-transparent mb-2"
+              fieldStyles="bg-transparent border-black"
+              iconColor="#000"
+              placeholder="Search College"
+              placeholderColor="#7B7B8B"
+              placeholderStyles="text-base"
+              handleSubmitEditing={handleCollegeSearch}
+              textValue={collegeSearch}
+              onClearSearch={() => {
+                setCollegeSearch("")
+                setCollegeResults([])
               }}
+              handleChangeText={setCollegeSearch}
             />
+
+            {isLoading ? ( // Show loading spinner when loading
+              <ActivityIndicator size="large" color="#00ff00" className="mb-2" />
+            ) : (
+              collegeResults.length > 0 && (
+                <FlatList
+                  data={collegeResults}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() => handleCollegeSelect(item)}
+                      className="p-2 border-b border-gray-200"
+                    >
+                      <Text className="text-black">{item.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                  className="bg-white mb-2"
+                />
+              )
+            )}
+
+            {selectedCollege && (
+              <Text className="text-black mb-2">
+                Selected College: {selectedCollege.name}
+              </Text>
+            )}
+
             <SingleSelect
-              title="State" // Dropdown for selecting state
+              title="State"
               placeholder="Select State"
               data={statesData}
               containerStyles="mb-2"
               selectedValue={form.state}
               onItemSelect={(item) => {
-                setForm({
-                  ...form,
-                  state: item, // Update state field
-                });
+                setForm({ ...form, state: item.value });
               }}
             />
             <SingleSelect
-              title="Field of employment" // Dropdown for selecting employment field
+              title="Field of employment"
               placeholder="Select field of employment"
               data={jobFieldsData}
               selectedValue={form.fieldOfEmployment}
               onItemSelect={(item) => {
-                setForm({
-                  ...form,
-                  fieldOfEmployment: item, // Update employment field
-                });
+                setForm({ ...form, fieldOfEmployment: item.value });
               }}
             />
             <CustomButton
-              title="Join" // Button to submit the form
+              title="Join"
               containerStyles="bg-greenTheme py-2 mt-8"
               textStyles="text-white text-base"
-              handlePress={handleFormSubmit} // Trigger form submission
+              handlePress={handleFormSubmit}
             />
           </ScrollView>
         </View>
