@@ -11,133 +11,78 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import SingleSelect from "../../../components/dropdown/SingleSelect";
 import { router } from "expo-router";
-import { roles } from "../../../assets/data";
-import FormField from "../../../components/FormField";
 import CustomButton from "../../../components/CustomButton";
 import { classData, collegesData, statesData, jobFieldsData } from "../../../assets/data";
 import { sendAlumniRequest } from "../../../lib/useFirebase";
 
-const SchoolShow = () => {
+const AlumniForm = () => {
+  // State to manage form inputs for alumni-specific fields
   const [form, setForm] = useState({
-    class: "",
-    college: "",
-    state: "",
-    fieldOfEmployment: "",
-    schoolEmail: "",
-    studentEmail: "",
+    class: "", // Alumni graduation class
+    college: "", // College attended
+    state: "", // State of residence
+    fieldOfEmployment: "", // Employment field
   });
-  const [role, setRole] = useState("");
 
+  // Function to validate that all required fields are filled
   const validateFields = () => {
-    if (role === "Student" || role === "Faculty/Staff") {
-      return form.schoolEmail.trim() !== "";
-    } else if (role === "Parent") {
-      return form.studentEmail.trim() !== "";
-    } else if (role === "Alumni") {
-      return (
-        form.class &&
-        form.college &&
-        form.state &&
-        form.fieldOfEmployment
-      );
-    }
-    return true;
+    return (
+      form.class &&
+      form.college &&
+      form.state &&
+      form.fieldOfEmployment
+    );
   };
 
+  // Function to handle form submission
   const handleFormSubmit = () => {
+    // Check if all fields are valid
     if (!validateFields()) {
       Alert.alert("Error", "Please fill out all required fields.");
       return;
     }
 
-    switch (role) {
-      case "Student":
-      case "Faculty/Staff":
-        router.push({
-          pathname: './verifyEmail',
-          params: { role: "school member" }
-        });
-        break;
-      case "Parent":
-        router.push('./verifyEmail');
-        break;
-      case "Guest":
-        // Perform any action needed for Guest
-        break;
-      case "Alumni":
-        sendAlumniRequest(null, {
-          class: form.class.label,
-          classValue: form.class.label,
-          state: form.state.label,
-          stateValue: form.state.value,
-          employment: form.fieldOfEmployment.label,
-          employmentValue: form.fieldOfEmployment.value,
-          college: form.college.label,
-          collegeValue: form.college.value
-        }, 20030049)
-          .then(() => router.push("./processReq"));
-        break;
-      default:
-        break;
-    }
+    // Submit alumni data and navigate to the next screen
+    sendAlumniRequest(null, {
+      class: form.class.label, // Alumni class
+      classValue: form.class.label, // Alumni class value
+      state: form.state.label, // State of residence
+      stateValue: form.state.value, // State value
+      employment: form.fieldOfEmployment.label, // Employment field
+      employmentValue: form.fieldOfEmployment.value, // Employment field value
+      college: form.college.label, // College name
+      collegeValue: form.college.value, // College value
+    }, 20030049)
+      .then(() => router.push("./processReq")); // Navigate to request processing page
   };
 
-  const displayFields = () => {
-    switch (role) {
-      case "Student":
-      case "Faculty/Staff":
-        return (
-          <>
-            <FormField
-              title="School email address"
-              placeholder="name@schoolemail.com"
-              isEditable={true}
-              value={form.schoolEmail}
-              handleChangeText={(e) => setForm({ ...form, schoolEmail: e })}
-            />
-            <CustomButton
-              title="Verify"
-              containerStyles="bg-greenTheme py-2 mt-8"
-              textStyles="text-white text-base"
-              handlePress={handleFormSubmit}
-            />
-          </>
-        );
+  return (
+    <SafeAreaView className="bg-black h-full">
+      {/* App Header */}
+      <View className="pl-9">
+        <Text className="text-greenTheme text-4xl font-bold">Centro</Text>
+      </View>
 
-      case "Parent":
-        return (
-          <>
-            <FormField
-              title="Student's email address"
-              placeholder="name@schoolemail.com"
-              isEditable={true}
-              value={form.studentEmail}
-              handleChangeText={(e) => setForm({ ...form, studentEmail: e })}
-            />
-            <CustomButton
-              title="Verify"
-              containerStyles="bg-greenTheme py-2 mt-8"
-              textStyles="text-white text-base"
-              handlePress={handleFormSubmit}
-            />
-          </>
-        );
+      {/* Main Container */}
+      <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-10">
+        <View className="w-10/12 mx-auto">
+          <ScrollView showsVerticalScrollIndicator={false} className="h-full">
+            {/* Back Button */}
+            <TouchableOpacity
+              className="self-start"
+              onPress={() => router.back()} // Navigate back to the previous screen
+            >
+              <Ionicons name="arrow-back" size={30} color="black" />
+            </TouchableOpacity>
 
-      case "Guest":
-        return (
-          <CustomButton
-            title="Join"
-            containerStyles="bg-greenTheme py-2"
-            textStyles="text-white text-base"
-            handlePress={handleFormSubmit}
-          />
-        );
+            {/* Form Title */}
+            <Text className="text-2xl font-semibold text-center mb-2">
+              Salesianum School
+            </Text>
 
-      case "Alumni":
-        return (
-          <>
+            {/* Alumni Form Fields */}
             <SingleSelect
-              title="Class"
+              title="Class" // Dropdown for selecting class
               placeholder="Select class"
               data={classData}
               containerStyles="mb-2"
@@ -145,12 +90,12 @@ const SchoolShow = () => {
               onItemSelect={(item) => {
                 setForm({
                   ...form,
-                  class: item,
+                  class: item, // Update class field
                 });
               }}
             />
             <SingleSelect
-              title="College"
+              title="College" // Dropdown for selecting college
               placeholder="Select college"
               data={collegesData}
               containerStyles="mb-2"
@@ -158,12 +103,12 @@ const SchoolShow = () => {
               onItemSelect={(item) => {
                 setForm({
                   ...form,
-                  college: item,
+                  college: item, // Update college field
                 });
               }}
             />
             <SingleSelect
-              title="State"
+              title="State" // Dropdown for selecting state
               placeholder="Select State"
               data={statesData}
               containerStyles="mb-2"
@@ -171,69 +116,28 @@ const SchoolShow = () => {
               onItemSelect={(item) => {
                 setForm({
                   ...form,
-                  state: item,
+                  state: item, // Update state field
                 });
               }}
             />
             <SingleSelect
-              title="Field of employment"
+              title="Field of employment" // Dropdown for selecting employment field
               placeholder="Select field of employment"
               data={jobFieldsData}
               selectedValue={form.fieldOfEmployment}
               onItemSelect={(item) => {
                 setForm({
                   ...form,
-                  fieldOfEmployment: item,
+                  fieldOfEmployment: item, // Update employment field
                 });
               }}
             />
             <CustomButton
-              title="Join"
+              title="Join" // Button to submit the form
               containerStyles="bg-greenTheme py-2 mt-8"
               textStyles="text-white text-base"
-              handlePress={handleFormSubmit}
+              handlePress={handleFormSubmit} // Trigger form submission
             />
-          </>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <SafeAreaView className="bg-black h-full">
-      <View className="pl-9">
-        <Text className="text-greenTheme text-4xl font-bold">Centro</Text>
-      </View>
-
-      <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-10">
-        <View className="w-10/12 mx-auto">
-          <ScrollView showsVerticalScrollIndicator={false} className="h-full">
-            {/* back button */}
-            <TouchableOpacity
-              className="self-start"
-              onPress={() => router.back()}
-            >
-              <Ionicons name="arrow-back" size={30} color="black" />
-            </TouchableOpacity>
-
-            <Text className="text-2xl font-semibold text-center mb-2">
-              Salesianum School
-            </Text>
-
-            {/* form fields */}
-            <>
-              <SingleSelect
-                title="Role"
-                placeholder="Select role"
-                data={roles}
-                onItemSelect={(item) => setRole(item.value)}
-                containerStyles="mb-2"
-              />
-
-              {displayFields()}
-            </>
           </ScrollView>
         </View>
       </View>
@@ -241,6 +145,6 @@ const SchoolShow = () => {
   );
 };
 
-export default SchoolShow;
+export default AlumniForm;
 
 const styles = StyleSheet.create({});
