@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -7,194 +8,123 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from "react-native";
-import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 import Header from "../../../components/Header";
 import SearchBar from "../../../components/SearchBar";
-import TabButton from "../../../components/TabButton";
 import Filter from "../../../components/social/Filter";
 import ProfileCard from "../../../components/social/ProfileCard";
-import { getUsers, filterUserByRole } from "../../../lib/useFirebase";
+import { filterUserByRole, getUsers } from "../../../lib/useFirebase";
 import { useGlobalContext } from "../../../context/globalProvider";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function Home() {
   const { orgId } = useGlobalContext();
 
-  const [activeTab, setActiveTab] = useState("");
-  const [isFilterVisible, setIsFilterVisible] = useState(false);
-  const [orgUsers, setOrgUsers] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
-  const [isSearchResult, setIsSearchResult] = useState(false);
-  const [isFilterApplied, setIsFilterApplied] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false); // State for managing the refresh status
+  // State variables
+  const [orgUsers, setOrgUsers] = useState([]); // List of users to display
+  const [searchValue, setSearchValue] = useState(""); // Search input value
+  const [isSearchResult, setIsSearchResult] = useState(false); // Tracks if search results are displayed
+  const [isFilterVisible, setIsFilterVisible] = useState(false); // Controls filter modal visibility
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isFilterApplied, setIsFilterApplied] = useState(false); // Tracks if a filter is applied
+  const [refreshing, setRefreshing] = useState(false); // Refresh state
 
-  // Fetch filtered users when tab switches
-  useEffect(() => {
-    const fetchFilteredUsers = async () => {
-      setIsLoading(true);
-      const users = await filterUserByRole(orgId, activeTab);
-      setOrgUsers(users);
-      setIsSearchResult(false)
-      setIsFilterApplied(false);
-      setSearchValue(""); // Clear the search bar when a filter is applied
-      setIsLoading(false);
-    };
-
-    if (activeTab) {
-      fetchFilteredUsers();
-    }
-  }, [activeTab, orgId]);
-
-  // Fetch initial set of users
-  const fetchInitialUsers = async () => {
-    const users = await getUsers(orgId);
+  // Fetch users filtered to "Alumni" by default or with applied filters
+  const fetchUsers = async (filters = null) => {
+    setIsLoading(true);
+    const users = await filterUserByRole(orgId, "Alumni", searchValue, filters);
     setOrgUsers(users);
-    setIsFilterApplied(false);
-    setIsSearchResult(false)
-    setActiveTab("")
-    setSearchValue("")
+    setIsSearchResult(false);
+    setIsFilterApplied(!!filters);
+    setSearchValue(""); // Clear search input after fetching
     setIsLoading(false);
   };
 
+  // Fetch users on component mount or when `orgId` changes
   useEffect(() => {
-    setIsLoading(true);
-    fetchInitialUsers();
+    fetchUsers();
   }, [orgId]);
 
-  const onSubmitSearch = async () => {
-    setActiveTab("");
+  // Handles user search
+  const performSearch = async () => {
     setIsLoading(true);
-    const users = await getUsers(orgId, searchValue);
+    const users = await getUsers(orgId, searchValue)
+    setOrgUsers(users);
     setIsSearchResult(true);
-    setOrgUsers(users);
     setIsFilterApplied(false);
     setIsLoading(false);
   };
 
-  const handleClearSearch = async () => {
+  // Clears the search input and refreshes user list
+  const clearSearch = async () => {
     setSearchValue("");
     setIsSearchResult(false);
-    setActiveTab("");
-    setIsLoading(true);
-    const users = await getUsers(orgId);
-    setOrgUsers(users);
-    setIsLoading(false);
+    await fetchUsers();
   };
 
-  const onValidateSearch = () => {
-    setSearchValue("");
-    setIsSearchResult(false);
-    setActiveTab("");
-  }
-
-  const handleClearFilter = async () => {
-    setActiveTab("");
+  // Clears the applied filter and refreshes user list
+  const clearFilter = async () => {
     setIsFilterApplied(false);
-    setIsLoading(true);
-    const users = await getUsers(orgId);
-    setOrgUsers(users);
-    setIsLoading(false);
+    await fetchUsers();
   };
 
-  const onRefresh = async () => {
+  // Pull-to-refresh action
+  const refreshUsers = async () => {
     setRefreshing(true);
-    await fetchInitialUsers();
+    await fetchUsers();
     setRefreshing(false);
   };
 
   return (
     <SafeAreaView className="h-full bg-primary">
-      {/* Header */}
+      {/* App Header */}
       <Header />
 
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5">
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#063970"]} tintColor="#063970"/>
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={refreshUsers}
+              colors={["#063970"]}
+              tintColor="#063970"
+            />
           }
         >
-          {/* Search bar */}
+          {/* Search Bar */}
           <SearchBar
             placeholder="Search people"
             filterOnPress={() => setIsFilterVisible(true)}
-            isFilterDisabled={!activeTab}
             textValue={searchValue}
-            onClearSearch={handleClearSearch}
-            handleChangeText={(e) => setSearchValue(e)}
-            handleSubmitEditing={onSubmitSearch}
-            onValidateSearch={onValidateSearch}
+            onClearSearch={clearSearch}
+            handleChangeText={setSearchValue}
+            handleSubmitEditing={performSearch}
+            onValidateSearch={() => setSearchValue("")}
             needFilter={true}
           />
 
-          <View className="w-10/12 mx-auto flex-row justify-center items-center mt-5">
-            {/* Search categories */}
-            <TabButton
-              name="Student"
-              activeTab={activeTab}
-              containerStyles="p-2 rounded-lg border border-primary"
-              onHandleSearchType={() => setActiveTab("Student")}
-              activeBackground="#063970"
-              background="#FFF"
-              activeText="#FFF"
-              text="#063970"
-            />
-            <TabButton
-              name="Alumni"
-              activeTab={activeTab}
-              containerStyles="p-2 rounded-lg border border-primary ml-2"
-              onHandleSearchType={() => setActiveTab("Alumni")}
-              activeBackground="#063970"
-              background="#FFF"
-              activeText="#FFF"
-              text="#063970"
-            />
-            <TabButton
-              name="Faculty/Staff"
-              activeTab={activeTab}
-              containerStyles="p-2 rounded-lg border border-primary ml-2"
-              onHandleSearchType={() => setActiveTab("Faculty/Staff")}
-              activeBackground="#063970"
-              background="#FFF"
-              activeText="#FFF"
-              text="#063970"
-            />
-            <TabButton
-              name="Parent"
-              activeTab={activeTab}
-              containerStyles="p-2 rounded-lg border border-primary ml-2"
-              onHandleSearchType={() => setActiveTab("Parent")}
-              activeBackground="#063970"
-              background="#FFF"
-              activeText="#FFF"
-              text="#063970"
-            />
-          </View>
-
+          {/* Filter Modal */}
           <Filter
             visible={isFilterVisible}
             onRequestClose={() => setIsFilterVisible(false)}
             animationType="slide"
             presentationStyle="formSheet"
-            category={activeTab}
-            setUsers={setOrgUsers}
+            category="Alumni"
+            setUsers={(users) => {
+              setOrgUsers(users);
+              setIsFilterVisible(false);
+              setIsFilterApplied(true);
+            }}
           />
 
+          {/* Back Button for Search or Filter */}
           {(isSearchResult || isFilterApplied) && (
             <View className="w-11/12 mx-auto mt-3">
               <TouchableOpacity
                 activeOpacity={0.8}
-                className="self-start"
                 onPress={() => {
-                  if (isSearchResult) {
-                    handleClearSearch();
-                    handleClearFilter()
-                  } else if (isFilterApplied) {
-                    handleClearFilter();
-                    handleClearSearch()
-                  }
+                  isSearchResult ? clearSearch() : clearFilter();
                 }}
               >
                 <Ionicons name="arrow-back" size={24} color="black" />
@@ -202,22 +132,23 @@ export default function Home() {
             </View>
           )}
 
+          {/* User List or Loading State */}
           <View
-            className={`${!isSearchResult && !isFilterApplied ? "mt-5" : "mt-3"} w-11/12 mx-auto flex-row flex-wrap mb-20`}
-            style={{alignItems: "stretch"}}
+            className={`${
+              !isSearchResult && !isFilterApplied ? "mt-5" : "mt-3"
+            } w-11/12 mx-auto flex-row flex-wrap mb-20`}
+            style={{ alignItems: "stretch" }}
           >
             {isLoading && !refreshing ? (
               <View style={styles.loaderContainer}>
                 <ActivityIndicator size="large" color="#063970" />
               </View>
+            ) : orgUsers.length === 0 ? (
+              <View style={styles.noUsersContainer}>
+                <Text style={styles.noUsersText}>No users found</Text>
+              </View>
             ) : (
-              orgUsers.length === 0 ? (
-                <View style={styles.noUsersFoundContainer}>
-                  <Text style={styles.noUsersFoundText}>No users found</Text>
-                </View>
-              ) : (
-                orgUsers.map((user, index) => <ProfileCard key={index} user={user} />)
-              )
+              orgUsers.map((user, index) => <ProfileCard key={index} user={user} />)
             )}
           </View>
         </ScrollView>
@@ -226,22 +157,23 @@ export default function Home() {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   loaderContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    height: 200, // You can adjust this height as needed
-    width: "100%",
-  },
-  noUsersFoundContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     height: 200,
     width: "100%",
   },
-  noUsersFoundText: {
+  noUsersContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 200,
+    width: "100%",
+  },
+  noUsersText: {
     fontSize: 18,
     color: "#666",
   },
