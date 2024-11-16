@@ -85,9 +85,9 @@ const AlumniForm = () => {
     sendAlumniRequest(
       null,
       {
-        class: form.class.label,
-        state: form.state.label,
-        fieldOfEmployment: form.fieldOfEmployment.label,
+        class: form.class,
+        state: form.state,
+        fieldOfEmployment: form.fieldOfEmployment,
         college: form.college,
       },
       20030049
