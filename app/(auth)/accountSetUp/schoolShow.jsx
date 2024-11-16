@@ -82,16 +82,17 @@ const AlumniForm = () => {
       return;
     }
 
-    sendAlumniRequest(
-      null,
-      {
-        class: form.class,
-        state: form.state,
-        fieldOfEmployment: form.fieldOfEmployment,
-        college: form.college,
-      },
-      20030049
-    ).then(() => router.push("./processReq"));
+     // Submit alumni data and navigate to the next screen
+     sendAlumniRequest(null, {
+      class: form.class.label, // Alumni class
+      classValue: form.class.label, // Alumni class value
+      state: form.state.label, // State of residence
+      stateValue: form.state.value, // State value
+      employment: form.fieldOfEmployment.label, // Employment field
+      employmentValue: form.fieldOfEmployment.value, // Employment field value
+      college: form.college // College name
+    }, 20030049)
+      .then(() => router.push("./processReq")); // Navigate to request processing page
   };
 
   return (
@@ -119,9 +120,9 @@ const AlumniForm = () => {
               placeholder="Select class"
               data={classData}
               containerStyles="mb-2"
-              selectedValue={form.class}
+              selectedValue={form.class.label}
               onItemSelect={(item) => {
-                setForm({ ...form, class: item.value });
+                setForm({ ...form, class: item });
               }}
             />
 
@@ -173,18 +174,18 @@ const AlumniForm = () => {
               placeholder="Select State"
               data={statesData}
               containerStyles="mb-2"
-              selectedValue={form.state}
+              selectedValue={form.state.value}
               onItemSelect={(item) => {
-                setForm({ ...form, state: item.value });
+                setForm({ ...form, state: item });
               }}
             />
             <SingleSelect
               title="Field of employment"
               placeholder="Select field of employment"
               data={jobFieldsData}
-              selectedValue={form.fieldOfEmployment}
+              selectedValue={form.fieldOfEmployment.label}
               onItemSelect={(item) => {
-                setForm({ ...form, fieldOfEmployment: item.value });
+                setForm({ ...form, fieldOfEmployment: item });
               }}
             />
             <CustomButton
