@@ -3,6 +3,7 @@ import React from "react";
 import logo from "../assets/images/logo.png";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
+import Entypo from '@expo/vector-icons/Entypo';
 
 const Header = ({ textStyles }) => {
   return (
@@ -26,7 +27,7 @@ const Header = ({ textStyles }) => {
         activeOpacity={0.8}
         onPress={() => router.push("/aiChat")}
       >
-        <Image source={logo} className="h-[30px] w-[30px] ml-3" />
+        <Entypo name="briefcase" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );
