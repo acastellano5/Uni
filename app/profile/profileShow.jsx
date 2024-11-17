@@ -249,9 +249,6 @@ const ProfileShow = () => {
               {/* groups section */}
               <InfoBox title="Groups" info={groups} />
 
-              {/* classes section */}
-              <InfoBox title="Classes" />
-
               <PostSection posts={posts} />
 
               <Settings
