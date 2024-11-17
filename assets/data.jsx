@@ -488,6 +488,7 @@ export const groupCategories = [
   { label: "Academic", value: "Academic" },
   { label: "Faith, Justice, Wellness", value: "Faith, Justice, Wellness" },
   { label: "General", value: "General" },
+  { label: "Alumni", value: "Alumni"}
 
 ]
 

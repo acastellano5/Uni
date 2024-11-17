@@ -34,6 +34,7 @@ const groupTypes = [
   "Faith, Justice, Wellness",
   "Athletic",
   "General",
+  "Alumni",
 ];
 
 export default function Groups() {
