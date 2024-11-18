@@ -1,10 +1,16 @@
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { router } from "expo-router";
+import SearchBar from "../SearchBar";
+import Filter from "../../components/postings/CompanyFilter"
 
 const CompanyCard = () => {
   return (
-    <TouchableOpacity className="bg-white rounded-lg p-3 mb-3 w-11/12 mx-auto d-flex flex-row items-center" activeOpacity={0.8} onPress={() => router.push('/postings/companyInfo')}>
+    <TouchableOpacity
+      className="bg-white rounded-lg p-3 mb-3 w-11/12 mx-auto d-flex flex-row items-center"
+      activeOpacity={0.8}
+      onPress={() => router.push("/postings/companyInfo")}
+    >
       <Image
         source={{
           uri: "https://thumbs.dreamstime.com/b/meta-logo-facebook-rebrand-concept-icon-blue-color-social-media-new-name-text-kyiv-ukraine-october-233509975.jpg",
@@ -22,7 +28,7 @@ const CompanyCard = () => {
           activeOpacity={0.8}
           onPress={(e) => {
             e.stopPropagation();
-            router.push('/postings/companyInfo')
+            router.push("/postings/companyInfo");
           }}
         >
           <Text className="text-white">See More</Text>
@@ -33,8 +39,40 @@ const CompanyCard = () => {
 };
 
 const CompaniesFeed = () => {
+  const [searchValue, setSearchValue] = useState("");
+  const [isFilterVisible, setIsFilterVisible] = useState(false); // Controls filter modal visibility
+
+  const clearSearch = () => {
+    setSearchValue("");
+  };
+
+  const performSearch = () => {
+    alert("search performed");
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <SearchBar
+        placeholder="Search by location"
+        filterOnPress={() => setIsFilterVisible(true)}
+        textValue={searchValue}
+        onClearSearch={clearSearch}
+        handleChangeText={setSearchValue}
+        handleSubmitEditing={performSearch}
+        onValidateSearch={() => setSearchValue("")}
+        needFilter={true}
+        containerStyles="mb-3"
+      />
+
+      <Filter
+        visible={isFilterVisible}
+        onRequestClose={() => setIsFilterVisible(false)}
+        animationType="slide"
+        presentationStyle="formSheet"
+        setUsers={() => {
+          console.log("yurr");
+        }}
+      />
       <CompanyCard />
       <CompanyCard />
     </ScrollView>
