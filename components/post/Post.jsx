@@ -47,13 +47,30 @@ const PostContent = ({ post, cuid, onDelete }) => {
     ]);
   };
 
-  useEffect(async () => {
-    const contentLink = await getDownloadURL(post.postId)
-    Image.getSize(contentLink, (width, height) => {
-      setImageAspectRatio(width / height);
-      setImage(contentLink)
-    });
+  useEffect(() => {
+    let isMounted = true; // flag to track component mount status
+  
+    const fetchImageSize = async () => {
+      try {
+        const contentLink = await getDownloadURL(post.postId);
+        if (isMounted) {
+          Image.getSize(contentLink, (width, height) => {
+            setImageAspectRatio(width / height);
+            setImage(contentLink);
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching image size:", error);
+      }
+    };
+  
+    fetchImageSize();
+  
+    return () => {
+      isMounted = false; // cleanup on component unmount
+    };
   }, [post]);
+  
 
   return (
     <>
