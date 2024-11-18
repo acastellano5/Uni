@@ -25,7 +25,7 @@ const Header = ({ textStyles }) => {
 
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => router.push("/aiChat")}
+        onPress={() => router.push("/postings")}
       >
         <Entypo name="briefcase" size={24} color="white" />
       </TouchableOpacity>

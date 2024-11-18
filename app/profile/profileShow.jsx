@@ -23,7 +23,7 @@ import {
   ifUserFollowed,
   unfollowUser,
   getPostByAuthor,
-  getFollowing
+  getFollowing,
 } from "../../lib/useFirebase";
 import { getCurrentUser } from "../../lib/firebase";
 import { useGlobalContext } from "../../context/globalProvider";
@@ -51,7 +51,7 @@ const ProfileShow = () => {
   const [posts, setPosts] = useState([]);
 
   // set following state
-  const [ following, setFollowing ] = useState([])
+  const [following, setFollowing] = useState([]);
 
   // set current user state
   const [currentUserId, setCurrentUserId] = useState("");
@@ -75,9 +75,9 @@ const ProfileShow = () => {
   };
 
   const fetchUserFollowing = async () => {
-    const followingUsers = await getFollowing(uid, orgId, true)
-    setFollowing(followingUsers)
-  }
+    const followingUsers = await getFollowing(uid, orgId, true);
+    setFollowing(followingUsers);
+  };
 
   // fetch user info and groups
   useFocusEffect(
@@ -107,9 +107,8 @@ const ProfileShow = () => {
         // fetch posts the user has
         fetchUserPosts();
 
-
         // fetch following users
-        fetchUserFollowing()
+        fetchUserFollowing();
 
         // fetch current user info
         const user = await getCurrentUser();
@@ -150,19 +149,19 @@ const ProfileShow = () => {
           <ScrollView showsVerticalScrollIndicator={false}>
             {/* profile image with edit and settings buttons */}
             <View className="items-center justify-center">
-              
               {user.profilePicture ? (
-                              <Image
-                              source={{uri: user.profilePicture}}
-                              style={styles.profilePic}
-                              className="mb-2"
-                            />
-              ):
-              <Image
-              source={ProfilePic}
-              style={styles.profilePic}
-              className="mb-2"
-            />}
+                <Image
+                  source={{ uri: user.profilePicture }}
+                  style={styles.profilePic}
+                  className="mb-2"
+                />
+              ) : (
+                <Image
+                  source={ProfilePic}
+                  style={styles.profilePic}
+                  className="mb-2"
+                />
+              )}
 
               {/* for passing in fullName */}
               {/* <Text className="text-lg font-medium mb-2">{`${user.fullName}`}</Text> */}
@@ -179,17 +178,24 @@ const ProfileShow = () => {
                         followUser(user.id, orgId);
                         setIsFollowing(true);
                       } else {
-                        Alert.alert(`Unfollow ${user.fullName}`, `Are you sure you want to unfollow ${user.fullName}?`, [
-                          {
-                            text: "Cancel",
-                            onPress: () => console.log("Cancel Pressed"),
-                            style: "cancel",
-                          },
-                          { text: "Yes", onPress: async () => {
-                              await unfollowUser(user.id, orgId) 
-                              setIsFollowing(false);
-                          }},
-                        ]);
+                        Alert.alert(
+                          `Unfollow ${user.fullName}`,
+                          `Are you sure you want to unfollow ${user.fullName}?`,
+                          [
+                            {
+                              text: "Cancel",
+                              onPress: () => console.log("Cancel Pressed"),
+                              style: "cancel",
+                            },
+                            {
+                              text: "Yes",
+                              onPress: async () => {
+                                await unfollowUser(user.id, orgId);
+                                setIsFollowing(false);
+                              },
+                            },
+                          ]
+                        );
                       }
                     }}
                   />
@@ -260,7 +266,7 @@ const ProfileShow = () => {
                 presentationStyle="formSheet"
               />
 
-              <FollowingModal 
+              <FollowingModal
                 visible={isFollowingVisible}
                 setIsVisible={setIsFollowingVisible}
                 animationType="slide"
