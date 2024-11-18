@@ -41,7 +41,7 @@ const Index = () => {
           setActiveTab={setActiveTab}
           containerStyles="py-3 w-3/6"
           textStyles="text-base"
-          tabBarStyles="w-10/12 mb-5"
+          tabBarStyles="w-10/12 mb-3"
         />
 
         {displayContent()}
