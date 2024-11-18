@@ -4,7 +4,7 @@ import Comments from "./CommentsSection";
 import { router } from "expo-router";
 import { formatDistance } from "date-fns";
 import { getCurrentUser } from "../../lib/firebase";
-import { delPost } from "../../lib/useFirebase";
+import { delPost, getDownloadURL } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton";
@@ -15,6 +15,8 @@ const PostContent = ({ post, cuid, onDelete }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes.length);
   const [imageAspectRatio, setImageAspectRatio] = useState(1);
+  const [image, setImage] = useState(post.content);
+
 
   const postedAtDate =
     post.source === "PostSection"
@@ -45,11 +47,13 @@ const PostContent = ({ post, cuid, onDelete }) => {
     ]);
   };
 
-  useEffect(() => {
-    Image.getSize(post.content, (width, height) => {
+  useEffect(async () => {
+    const contentLink = await getDownloadURL(post.postId)
+    Image.getSize(contentLink, (width, height) => {
       setImageAspectRatio(width / height);
+      setImage(contentLink)
     });
-  }, [post.content]);
+  }, [post]);
 
   return (
     <>
@@ -76,7 +80,7 @@ const PostContent = ({ post, cuid, onDelete }) => {
       </View>
       {/* post content */}
       <Image
-        source={{ uri: post.content }}
+        source={{ uri: image }}
         className="rounded-md"
         style={{
           width: "100%",
