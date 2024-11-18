@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import TabsDisplay from "../../components/TabsDisplay";
 import JobsFeed from "../../components/postings/JobsFeed";
 import CompaniesFeed from "../../components/postings/CompaniesFeed";
+import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 const Index = () => {
   const tabs = ["Jobs", "Companies"];
@@ -19,6 +21,14 @@ const Index = () => {
         return <CompaniesFeed />;
     }
   };
+
+  const handleAddPress = () => {
+    if (activeTab === "Jobs") {
+      router.push('/postings/createJob')
+    } else {
+      router.push('/postings/createCompany')
+    }
+  }
 
   return (
     <SafeAreaView className="h-full bg-primary">
@@ -35,6 +45,15 @@ const Index = () => {
         />
 
         {displayContent()}
+
+        {/* Add Button */}
+        <TouchableOpacity
+          style={styles.addBtn}
+          activeOpacity={0.8}
+          onPress={handleAddPress}
+        >
+          <Feather name="plus" size={24} color="white" />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -42,4 +61,16 @@ const Index = () => {
 
 export default Index;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  addBtn: {
+    position: "absolute",
+    bottom: 100,
+    right: 20,
+    backgroundColor: "#063970",
+    borderRadius: 50,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

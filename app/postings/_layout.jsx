@@ -27,6 +27,20 @@ const PostingLayout = () => {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen
+          name="createJob"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="createCompany"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
       <StatusBar style="dark" />
     </>
