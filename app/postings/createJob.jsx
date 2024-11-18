@@ -6,6 +6,7 @@ import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { jobFieldsData } from "../../assets/data";
 import SingleSelect from "../../components/dropdown/SingleSelect"
+import { addJobDetails } from "../../lib/useFirebase";
 
 const CreateJob = () => {
   const [form, setForm] = useState({

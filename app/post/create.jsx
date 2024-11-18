@@ -8,6 +8,9 @@ import {
   createUserPost,
   createGroupPost,
   uploadToFirebase,
+  addJobDetails,
+  getAllGroups,
+  getAllJobs,
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router, useLocalSearchParams } from "expo-router";
@@ -55,6 +58,7 @@ const CreatePost = () => {
     }
     router.push("/home");
   };
+  getAllJobs(2020102)
 
   return (
     <SafeAreaView className="h-full bg-secondary">
