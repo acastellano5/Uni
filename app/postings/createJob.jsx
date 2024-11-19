@@ -7,24 +7,23 @@ import CustomButton from "../../components/CustomButton";
 import { jobFieldsData } from "../../assets/data";
 import SingleSelect from "../../components/dropdown/SingleSelect"
 import { addJobDetails } from "../../lib/useFirebase";
+import { useGlobalContext } from "../../context/globalProvider";
+import { router } from "expo-router";
 
 const CreateJob = () => {
+  const { orgId } = useGlobalContext()
   const [form, setForm] = useState({
     role: "",
     company: "",
-    fieldOfEmployment: "",
     location: "",
-    category: "",
+    industry: "",
     description: "",
   });
 
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
-
-  const onCreatePress = () => {
-    alert("yayyyyyy");
-  };
+  const onCreatePress = async () => {
+    const newJob = await addJobDetails(form, orgId)
+    router.replace({pathname: '/postings/jobInfo', params: {...newJob}})
+  }; 
 
   return (
     <SafeAreaView className="h-full bg-secondary">
@@ -54,12 +53,12 @@ const CreateJob = () => {
           />
 
           <SingleSelect
-            title="Field of employment"
-            placeholder="Select field of employment"
+            title="Industry"
+            placeholder="Select Industry"
             data={jobFieldsData}
-            selectedValue={form.fieldOfEmployment}
+            selectedValue={form.industry}
             onItemSelect={(item) => {
-              setForm({ ...form, fieldOfEmployment: item.label });
+              setForm({ ...form, industry: item.label });
             }}
             containerStyles="mb-3"
           />
