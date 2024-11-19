@@ -1,25 +1,27 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React, { useState } from "react";
+import { View, Text, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from "react-native";
+import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
 import SearchBar from "../../components/SearchBar";
 import Filter from "../../components/postings/JobFilter"
+import { getAllJobs } from "../../lib/useFirebase"
+import { useGlobalContext } from "../../context/globalProvider";
 
-const JobPosting = () => {
+const JobPosting = ({ job }) => {
   return (
     <TouchableOpacity
       className="bg-white rounded-lg p-3 mb-3 w-11/12 mx-auto"
       activeOpacity={0.8}
-      onPress={() => router.push("/postings/jobInfo")}
+      onPress={() => router.push({pathname: "/postings/jobInfo", params: {...job}})}
     >
-      <Text className="text-lg font-bold">Software Engineer</Text>
-      <Text className="text-base font-semibold">Microsoft</Text>
-      <Text className="mb-3">San Francisco, CA</Text>
+      <Text className="text-lg font-bold">{job.jobRole}</Text>
+      <Text className="text-base font-semibold">{ job.company }</Text>
+      <Text className="mb-3">{ job.location }</Text>
 
       <TouchableOpacity
         className="bg-primary py-1 px-3 rounded-lg"
         style={{ alignSelf: "flex-start" }}
         activeOpacity={0.8}
-        onPress={() => router.push("/postings/jobInfo")}
+        onPress={() => router.push({pathname: "/postings/jobInfo", params: {...job}})}
       >
         <Text className="text-white">See More</Text>
       </TouchableOpacity>
@@ -28,8 +30,21 @@ const JobPosting = () => {
 };
 
 const JobsFeed = () => {
+  const { orgId } = useGlobalContext()
   const [searchValue, setSearchValue] = useState("");
   const [isFilterVisible, setIsFilterVisible] = useState(false); // Controls filter modal visibility
+  const [ jobPostings, setJobPostings ] = useState([])
+  const [ jobsLoading, setJobsLoading ] = useState(true)
+
+  const fetchJobs = async () => {
+    const jobs = await getAllJobs(orgId)
+    setJobPostings(jobs)
+    setJobsLoading(false)
+  }
+
+  useEffect(() => {
+    fetchJobs()
+  }, [])
 
   const clearSearch = () => {
     setSearchValue("");
@@ -38,6 +53,11 @@ const JobsFeed = () => {
   const performSearch = () => {
     alert("search performed");
   };
+
+  const renderJobPosting = useMemo(() => ({ item }) => (
+    <JobPosting job={item}/>
+  ))
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <SearchBar
@@ -59,9 +79,18 @@ const JobsFeed = () => {
         presentationStyle="formSheet"
         setUsers={() => {console.log("yurr")}}
       />
-      <JobPosting />
-      <JobPosting />
-      <JobPosting />
+
+      {/* render job postings here */}
+      { jobsLoading ? (
+        <ActivityIndicator size="large" color="#063970" />
+      ) : jobPostings.length > 0 ? (
+        <FlatList
+          data={jobPostings}
+          renderItem={renderJobPosting}
+        />
+      ) : (
+        <Text className="text-center text-darkGray text-base mt-10">No jobs yet.</Text>
+      )}
     </ScrollView>
   );
 };
