@@ -5,13 +5,13 @@ import BackHeader from "../../components/BackHeader";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { jobFieldsData } from "../../assets/data";
-import SingleSelect from "../../components/dropdown/SingleSelect"
+import SingleSelect from "../../components/dropdown/SingleSelect";
 import { addJobDetails } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router } from "expo-router";
 
 const CreateJob = () => {
-  const { orgId } = useGlobalContext()
+  const { orgId } = useGlobalContext();
   const [form, setForm] = useState({
     role: "",
     company: "",
@@ -20,10 +20,12 @@ const CreateJob = () => {
     description: "",
   });
 
+  const [doesOwnComp, setDoesOwnComp] = useState("");
+
   const onCreatePress = async () => {
-    const newJob = await addJobDetails(form, orgId)
-    router.replace({pathname: '/postings/jobInfo', params: {...newJob}})
-  }; 
+    const newJob = await addJobDetails(form, orgId);
+    router.replace({ pathname: "/postings/jobInfo", params: { ...newJob } });
+  };
 
   return (
     <SafeAreaView className="h-full bg-secondary">
@@ -42,15 +44,48 @@ const CreateJob = () => {
             isEditable={true}
           />
 
-          <FormField
-            title="Company"
-            value={form.company}
-            handleChangeText={(e) => setForm({ ...form, company: e })}
-            otherStyles="mb-3"
-            placeholder="Type here..."
-            labelStyles="text-base"
-            isEditable={true}
+          <SingleSelect
+            title="Do you own this company?"
+            placeholder="Select an answer"
+            data={[
+              {
+                label: "Yes",
+                value: "Yes",
+              },
+              {
+                label: "No",
+                value: "No",
+              },
+            ]}
+            selectedValue={doesOwnComp}
+            onItemSelect={(item) => {
+              setDoesOwnComp(item.value);
+            }}
+            containerStyles="mb-3"
           />
+
+          {doesOwnComp === "Yes" ? (
+            <SingleSelect
+              title="Industry"
+              placeholder="Select Industry"
+              data={jobFieldsData}
+              selectedValue={form.industry}
+              onItemSelect={(item) => {
+                setForm({ ...form, industry: item.label });
+              }}
+              containerStyles="mb-3"
+            />
+          ) : doesOwnComp === "No" ? (
+            <FormField
+              title="Company"
+              value={form.company}
+              handleChangeText={(e) => setForm({ ...form, company: e })}
+              otherStyles="mb-3"
+              placeholder="Type here..."
+              labelStyles="text-base"
+              isEditable={true}
+            />
+          ) : null}
 
           <SingleSelect
             title="Industry"
