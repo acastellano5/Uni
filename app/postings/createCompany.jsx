@@ -1,18 +1,32 @@
-import { StyleSheet, Text, View, Alert, Switch, Image, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  Switch,
+  Image,
+  ScrollView,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { jobFieldsData } from "../../assets/data";
-import SingleSelect from "../../components/dropdown/SingleSelect"
+import SingleSelect from "../../components/dropdown/SingleSelect";
 import LogoUpload from "../../components/imageUpload/LogoUpload";
+import { addCompany } from "../../lib/useFirebase";
+import { useGlobalContext } from "../../context/globalProvider";
+import { router } from "expo-router";
 
 const CreateCompany = () => {
+  const { orgId } = useGlobalContext()
   const [form, setForm] = useState({
-    companyLogo: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+    companyLogo:
+      "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+    location: "",
     companyName: "",
-    companyType: "",
+    industry: "",
     description: "",
   });
 
@@ -20,16 +34,22 @@ const CreateCompany = () => {
     console.log(form);
   }, [form]);
 
-  const onCreatePress = () => {
-    alert("yayyyyyy");
+  const onCreatePress = async () => {
+    await addCompany(form, orgId)
+    router.push("/postings")
   };
 
   return (
     <SafeAreaView className="h-full bg-secondary">
       <BackHeader containerStyles="w-11/12 mx-auto" />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
-        <ScrollView className="w-10/12 mx-auto top-[50]" showsVerticalScrollIndicator={false}>
-          <Text className="text-3xl text-center font-semibold mb-3">Create Company</Text>
+        <ScrollView
+          className="w-10/12 mx-auto top-[50]"
+          showsVerticalScrollIndicator={false}
+        >
+          <Text className="text-3xl text-center font-semibold mb-3">
+            Create Company
+          </Text>
 
           {/* company logo */}
           <View className="items-center">
@@ -38,7 +58,11 @@ const CreateCompany = () => {
               style={styles.profilePic}
               className="mb-3"
             />
-            <LogoUpload form={form} setForm={setForm} containerStyles="w-10/12 mx-auto"/>
+            <LogoUpload
+              form={form}
+              setForm={setForm}
+              containerStyles="w-10/12 mx-auto"
+            />
           </View>
 
           <FormField
@@ -52,14 +76,24 @@ const CreateCompany = () => {
           />
 
           <SingleSelect
-            title="Company Type"
-            placeholder="Select company type"
+            title="Industry"
+            placeholder="Select industry"
             data={jobFieldsData}
-            selectedValue={form.companyType}
+            selectedValue={form.industry}
             onItemSelect={(item) => {
-              setForm({ ...form, companyType: item.label });
+              setForm({ ...form, industry: item.label });
             }}
             containerStyles="mb-3"
+          />
+
+          <FormField
+            title="Company Location"
+            value={form.location}
+            handleChangeText={(e) => setForm({ ...form, location: e })}
+            otherStyles="mb-3"
+            placeholder="Type here..."
+            labelStyles="text-base"
+            isEditable={true}
           />
 
           <FormField
@@ -92,6 +126,6 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     borderRadius: 45,
-    objectFit: 'cover'
+    objectFit: "cover",
   },
 });
