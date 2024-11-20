@@ -1,10 +1,12 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
-import React, { useState } from "react";
+import { View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, FlatList } from "react-native";
+import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
 import SearchBar from "../SearchBar";
 import Filter from "../../components/postings/CompanyFilter"
+import { getAllCompanies } from "../../lib/useFirebase";
+import { useGlobalContext } from "../../context/globalProvider";
 
-const CompanyCard = () => {
+const CompanyCard = ({ company }) => {
   return (
     <TouchableOpacity
       className="bg-white rounded-lg p-3 mb-3 w-11/12 mx-auto d-flex flex-row items-center"
@@ -13,14 +15,15 @@ const CompanyCard = () => {
     >
       <Image
         source={{
-          uri: "https://thumbs.dreamstime.com/b/meta-logo-facebook-rebrand-concept-icon-blue-color-social-media-new-name-text-kyiv-ukraine-october-233509975.jpg",
+          uri: company.logo,
         }}
-        style={{ width: 100, height: 100 }}
+        style={{ width: 100, height: 100, borderRadius: 50, objectFit: 'cover' }}
+        className="mr-3"
       />
 
       <View>
-        <Text className="text-lg font-bold">Meta</Text>
-        <Text className="mb-3">San Francisco, CA</Text>
+        <Text className="text-lg font-bold">{ company.companyName }</Text>
+        <Text className="mb-3">{company.location}</Text>
 
         <TouchableOpacity
           className="bg-primary py-1 px-3 rounded-lg"
@@ -41,6 +44,21 @@ const CompanyCard = () => {
 const CompaniesFeed = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isFilterVisible, setIsFilterVisible] = useState(false); // Controls filter modal visibility
+  const { orgId } = useGlobalContext()
+
+  const [ companies, setCompanies ] = useState([])
+  const [ companiesLoading, setCompaniesLoading ] = useState(true)
+
+  const fetchCompanies = async () => {
+    const fetchedCompanies = await getAllCompanies(orgId)
+    const alumniCompanies = fetchedCompanies.filter(company => company.isAlumniOwned)
+    setCompanies(alumniCompanies)
+  }
+
+  useEffect(() => {
+    fetchCompanies()
+    setCompaniesLoading(false)
+  }, [ ])
 
   const clearSearch = () => {
     setSearchValue("");
@@ -49,6 +67,10 @@ const CompaniesFeed = () => {
   const performSearch = () => {
     alert("search performed");
   };
+
+  const renderCompany = useMemo(() => ({ item }) => (
+    <CompanyCard company={item}/>
+  ))
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -73,8 +95,20 @@ const CompaniesFeed = () => {
           console.log("yurr");
         }}
       />
-      <CompanyCard />
-      <CompanyCard />
+
+
+
+      {/* render company cards */}
+      { companiesLoading ? (
+        <ActivityIndicator size="large" color="#063970"/>
+      ) : companies.length > 0 ? (
+        <FlatList
+          data={companies}
+          renderItem={renderCompany}
+        />
+      ) : (
+        <Text className="text-center text-darkGray text-base mt-10">No Companies yet.</Text>
+      ) }
     </ScrollView>
   );
 };
