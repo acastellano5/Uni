@@ -6,6 +6,7 @@ import {
   Image,
   ActivityIndicator,
   FlatList,
+  Alert
 } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
@@ -18,13 +19,28 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 const CompanyCard = ({ company, onDelete }) => {
   const { user } = useGlobalContext();
 
-  const handleDelete = async () => {
-    try {
-      await deleteCompany(company.companyID);
-      onDelete(company.companyID); // Notify parent component of deletion
-    } catch (error) {
-      console.error("Error deleting company:", error);
-    }
+  const handleDelete = () => {
+    Alert.alert(
+      "Confirm Deletion",
+      `Are you sure you want to delete the company "${company.companyName}"?`,
+      [
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              await deleteCompany(company.companyID);
+              onDelete(company.companyID); // Notify parent component of deletion
+            } catch (error) {
+              console.error("Error deleting company:", error);
+            }
+          },
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ]
+    );
   };
 
   return (
