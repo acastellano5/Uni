@@ -40,7 +40,7 @@ const CreateCompany = () => {
     console.log();
     console.log('====================================');
     await addCompany(form, orgId)
-    router.push("/postings")
+    router.replace("/postings")
   };
 
   return (
