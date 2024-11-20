@@ -28,6 +28,7 @@ const CreateCompany = () => {
     companyName: "",
     industry: "",
     description: "",
+    isAlumniOwned: true,
   });
 
   useEffect(() => {
@@ -35,6 +36,9 @@ const CreateCompany = () => {
   }, [form]);
 
   const onCreatePress = async () => {
+    console.log('====================================');
+    console.log();
+    console.log('====================================');
     await addCompany(form, orgId)
     router.push("/postings")
   };
