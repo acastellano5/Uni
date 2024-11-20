@@ -1,64 +1,103 @@
-import { View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+  FlatList,
+} from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
 import SearchBar from "../SearchBar";
-import Filter from "../../components/postings/CompanyFilter"
-import { getAllCompanies } from "../../lib/useFirebase";
+import Filter from "../../components/postings/CompanyFilter";
+import { getAllCompanies, deleteCompany } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-const CompanyCard = ({ company }) => {
+const CompanyCard = ({ company, onDelete }) => {
+  const { user } = useGlobalContext();
+
+  const handleDelete = async () => {
+    try {
+      await deleteCompany(company.companyID);
+      onDelete(company.companyID); // Notify parent component of deletion
+    } catch (error) {
+      console.error("Error deleting company:", error);
+    }
+  };
+
   return (
     <TouchableOpacity
       className="bg-white rounded-lg p-3 mb-3 w-11/12 mx-auto d-flex flex-row items-center"
       activeOpacity={0.8}
-      onPress={() => router.push({pathname: "/postings/companyInfo", params: { ...company }})}
+      onPress={() =>
+        router.push({
+          pathname: "/postings/companyInfo",
+          params: { ...company },
+        })
+      }
     >
       <Image
         source={{
           uri: company.logo,
         }}
-        style={{ width: 80, height: 80, borderRadius: 40, objectFit: 'cover' }}
+        style={{ width: 80, height: 80, borderRadius: 40, objectFit: "cover" }}
         className="mr-3"
       />
 
-      <View>
-        <Text className="text-lg font-bold">{ company.companyName }</Text>
-        <Text className="mb-3">{company.location}</Text>
+      <View className="d-flex flex-row flex-1 justify-between">
+        <View>
+          <Text className="text-lg font-bold">{company.companyName}</Text>
+          <Text className="mb-3">{company.location}</Text>
 
-        <TouchableOpacity
-          className="bg-primary py-1 px-3 rounded-lg"
-          style={{ alignSelf: "flex-start" }}
-          activeOpacity={0.8}
-          onPress={(e) => {
-            e.stopPropagation();
-            router.push({pathname: "/postings/companyInfo", params: { ...company }});
-          }}
-        >
-          <Text className="text-white">See More</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-primary py-1 px-3 rounded-lg"
+            style={{ alignSelf: "flex-start" }}
+            activeOpacity={0.8}
+            onPress={(e) => {
+              e.stopPropagation();
+              router.push({
+                pathname: "/postings/companyInfo",
+                params: { ...company },
+              });
+            }}
+          >
+            <Text className="text-white">See More</Text>
+          </TouchableOpacity>
+        </View>
+
+        {user.uid === company.owner ? (
+          <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
+            <FontAwesome name="trash-o" size={24} color="red" />
+          </TouchableOpacity>
+        ) : null}
       </View>
     </TouchableOpacity>
   );
 };
 
+
 const CompaniesFeed = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isFilterVisible, setIsFilterVisible] = useState(false); // Controls filter modal visibility
-  const { orgId } = useGlobalContext()
+  const { orgId } = useGlobalContext();
 
-  const [ companies, setCompanies ] = useState([])
-  const [ companiesLoading, setCompaniesLoading ] = useState(true)
+  const [companies, setCompanies] = useState([]);
+  const [companiesLoading, setCompaniesLoading] = useState(true);
 
   const fetchCompanies = async () => {
-    const fetchedCompanies = await getAllCompanies(orgId)
-    const alumniCompanies = fetchedCompanies.filter(company => company.isAlumniOwned)
-    setCompanies(alumniCompanies)
-  }
+    const fetchedCompanies = await getAllCompanies(orgId);
+    const alumniCompanies = fetchedCompanies.filter(
+      (company) => company.isAlumniOwned
+    );
+    setCompanies(alumniCompanies);
+  };
 
   useEffect(() => {
-    fetchCompanies()
-    setCompaniesLoading(false)
-  }, [ ])
+    fetchCompanies();
+    setCompaniesLoading(false);
+  }, []);
 
   const clearSearch = () => {
     setSearchValue("");
@@ -68,9 +107,18 @@ const CompaniesFeed = () => {
     alert("search performed");
   };
 
-  const renderCompany = useMemo(() => ({ item }) => (
-    <CompanyCard company={item}/>
-  ))
+  const handleCompanyDelete = (deletedCompanyId) => {
+    setCompanies((prevCompanies) =>
+      prevCompanies.filter((company) => company.companyID !== deletedCompanyId)
+    );
+  };
+
+  const renderCompany = useMemo(
+    () => ({ item }) => (
+      <CompanyCard company={item} onDelete={handleCompanyDelete} />
+    ),
+    []
+  );
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -96,21 +144,19 @@ const CompaniesFeed = () => {
         }}
       />
 
-
-
       {/* render company cards */}
-      { companiesLoading ? (
-        <ActivityIndicator size="large" color="#063970"/>
+      {companiesLoading ? (
+        <ActivityIndicator size="large" color="#063970" />
       ) : companies.length > 0 ? (
-        <FlatList
-          data={companies}
-          renderItem={renderCompany}
-        />
+        <FlatList data={companies} renderItem={renderCompany} />
       ) : (
-        <Text className="text-center text-darkGray text-base mt-10">No Companies yet.</Text>
-      ) }
+        <Text className="text-center text-darkGray text-base mt-10">
+          No Companies yet.
+        </Text>
+      )}
     </ScrollView>
   );
 };
 
 export default CompaniesFeed;
+
