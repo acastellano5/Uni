@@ -13,6 +13,7 @@ import React, { useState, useEffect } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { getUserAttributes, deleteCompany } from "../../lib/useFirebase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Feather from "@expo/vector-icons/Feather";
 import { useGlobalContext } from "../../context/globalProvider";
 
 const companyInfo = () => {
@@ -55,6 +56,10 @@ const companyInfo = () => {
     );
   };
 
+  const handleEdit = () => {
+    router.push({pathname: '/postings/editCompany', params: { companyId: company.companyID }})
+  } 
+
   return (
     <SafeAreaView className="h-full bg-primary">
       <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" />
@@ -82,9 +87,17 @@ const companyInfo = () => {
                   {company.companyName}
                 </Text>
                 {user.uid === company.owner ? (
-                  <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
-                    <FontAwesome name="trash-o" size={24} color="red" />
-                  </TouchableOpacity>
+                  <View className="d-flex flex-row">
+                    <TouchableOpacity className="mr-1" activeOpacity={0.8} onPress={handleEdit}>
+                      <Feather name="edit" size={24} color="gray" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={handleDelete}
+                    >
+                      <FontAwesome name="trash-o" size={24} color="red" />
+                    </TouchableOpacity>
+                  </View>
                 ) : null}
               </View>
 
