@@ -11,7 +11,7 @@ const CompanyCard = ({ company }) => {
     <TouchableOpacity
       className="bg-white rounded-lg p-3 mb-3 w-11/12 mx-auto d-flex flex-row items-center"
       activeOpacity={0.8}
-      onPress={() => router.push("/postings/companyInfo")}
+      onPress={() => router.push({pathname: "/postings/companyInfo", params: { ...company }})}
     >
       <Image
         source={{
@@ -31,7 +31,7 @@ const CompanyCard = ({ company }) => {
           activeOpacity={0.8}
           onPress={(e) => {
             e.stopPropagation();
-            router.push("/postings/companyInfo");
+            router.push({pathname: "/postings/companyInfo", params: { ...company }});
           }}
         >
           <Text className="text-white">See More</Text>
