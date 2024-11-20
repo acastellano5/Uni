@@ -15,7 +15,7 @@ import CustomButton from "../../components/CustomButton";
 import { jobFieldsData } from "../../assets/data";
 import SingleSelect from "../../components/dropdown/SingleSelect";
 import LogoUpload from "../../components/imageUpload/LogoUpload";
-import { addCompany, getCompanyByID } from "../../lib/useFirebase";
+import { addCompany, getCompanyById } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router, useLocalSearchParams } from "expo-router";
 
@@ -24,7 +24,7 @@ const EditCompany = () => {
   const [form, setForm] = useState({});
 
   const fetchCompany = async () => {
-    const fetchedCompany = await getCompanyByID(companyId);
+    const fetchedCompany = await getCompanyById(companyId);
     setForm({
       companyLogo: fetchedCompany.logo,
       location: fetchedCompany.location,
