@@ -15,7 +15,7 @@ import CustomButton from "../../components/CustomButton";
 import { jobFieldsData } from "../../assets/data";
 import SingleSelect from "../../components/dropdown/SingleSelect";
 import LogoUpload from "../../components/imageUpload/LogoUpload";
-import { addCompany, getCompanyById } from "../../lib/useFirebase";
+import { addCompany, getCompanyById, editCompany } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router, useLocalSearchParams } from "expo-router";
 
@@ -38,10 +38,14 @@ const EditCompany = () => {
   }, []);
   const { orgId } = useGlobalContext();
 
-  const onCreatePress = async () => {
-    await addCompany(form, orgId);
+  const onEditPress = async () => {
+    await editCompany(companyId, form, orgId);
     router.replace("/postings");
   };
+
+  useEffect(() => {
+    console.log(form)
+  }, [form])
 
   return (
     <SafeAreaView className="h-full bg-secondary">
@@ -112,10 +116,10 @@ const EditCompany = () => {
           />
 
           <CustomButton
-            title="Create"
+            title="Update"
             containerStyles="bg-primary py-3 mb-24"
             textStyles="text-white text-base font-semibold"
-            handlePress={onCreatePress}
+            handlePress={onEditPress}
           />
         </ScrollView>
       </View>
