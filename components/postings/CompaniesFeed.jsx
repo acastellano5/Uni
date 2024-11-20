@@ -50,7 +50,7 @@ const CompanyCard = ({ company, onDelete }) => {
       onPress={() =>
         router.push({
           pathname: "/postings/companyInfo",
-          params: { ...company },
+          params: { companyId: company.companyID },
         })
       }
     >
@@ -75,7 +75,7 @@ const CompanyCard = ({ company, onDelete }) => {
               e.stopPropagation();
               router.push({
                 pathname: "/postings/companyInfo",
-                params: { ...company },
+                params: { companyId: company.companyID },
               });
             }}
           >

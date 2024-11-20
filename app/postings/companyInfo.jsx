@@ -11,24 +11,31 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import React, { useState, useEffect } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import { getUserAttributes, deleteCompany } from "../../lib/useFirebase";
+import { getUserAttributes, deleteCompany, getCompanyById } from "../../lib/useFirebase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
 import { useGlobalContext } from "../../context/globalProvider";
 
 const companyInfo = () => {
-  const company = useLocalSearchParams();
+  const { companyId } = useLocalSearchParams();
   const [contact, setContact] = useState({});
+  const [ company, setCompany ] = useState({})
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useGlobalContext();
 
-  const fetchContact = async () => {
-    const fetchedContact = await getUserAttributes(company.owner);
+  const fetchContact = async (ownerId) => {
+    const fetchedContact = await getUserAttributes(ownerId);
     setContact(fetchedContact);
   };
 
+  const fetchCompany = async () => {
+    const fetchedCompany = await getCompanyById(companyId)
+    fetchContact(fetchedCompany.owner)
+    setCompany(fetchedCompany)
+  }
+
   useEffect(() => {
-    fetchContact();
+    fetchCompany();
     setIsLoading(false);
   }, []);
 
