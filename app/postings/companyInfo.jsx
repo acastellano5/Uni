@@ -1,15 +1,24 @@
-import { View, Text, ScrollView, Image, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import React, { useState, useEffect } from "react";
-import { useLocalSearchParams } from "expo-router";
-import { getUserAttributes } from "../../lib/useFirebase";
+import { router, useLocalSearchParams } from "expo-router";
+import { getUserAttributes, deleteCompany } from "../../lib/useFirebase";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useGlobalContext } from "../../context/globalProvider";
 
 const companyInfo = () => {
   const company = useLocalSearchParams();
-
   const [contact, setContact] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useGlobalContext();
 
   const fetchContact = async () => {
     const fetchedContact = await getUserAttributes(company.owner);
@@ -20,9 +29,10 @@ const companyInfo = () => {
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    console.log(contact)
-  }, [ contact ])
+  const handleDelete = async () => {
+    await deleteCompany(company.companyID);
+    router.replace("/postings");
+  };
   return (
     <SafeAreaView className="h-full bg-primary">
       <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" />
@@ -45,9 +55,17 @@ const companyInfo = () => {
                 }}
               />
 
-              <Text className="text-3xl font-semibold text-center">
-                {company.companyName}
-              </Text>
+              <View className="flex-row justify-center items-center">
+                <Text className="text-3xl font-semibold text-center mr-3">
+                  {company.companyName}
+                </Text>
+                {user.uid === company.owner ? (
+                  <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
+                    <FontAwesome name="trash-o" size={24} color="red" />
+                  </TouchableOpacity>
+                ) : null}
+              </View>
+
               <Text className="text-lg font-semibold text-gray-400 text-center">
                 Contact: {contact.fullName}
               </Text>
