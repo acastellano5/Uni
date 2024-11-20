@@ -5,6 +5,7 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
@@ -24,15 +25,36 @@ const companyInfo = () => {
     const fetchedContact = await getUserAttributes(company.owner);
     setContact(fetchedContact);
   };
+
   useEffect(() => {
     fetchContact();
     setIsLoading(false);
   }, []);
 
-  const handleDelete = async () => {
-    await deleteCompany(company.companyID);
-    router.replace("/postings");
+  const handleDelete = () => {
+    Alert.alert(
+      "Confirm Deletion",
+      `Are you sure you want to delete the company "${company.companyName}"?`,
+      [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              await deleteCompany(company.companyID);
+              router.replace("/postings");
+            } catch (error) {
+              console.error("Error deleting company:", error);
+            }
+          },
+        },
+      ]
+    );
   };
+
   return (
     <SafeAreaView className="h-full bg-primary">
       <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" />
