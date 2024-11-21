@@ -6,7 +6,7 @@ import {
   Image,
   ActivityIndicator,
   FlatList,
-  Alert
+  Alert,
 } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
@@ -15,6 +15,7 @@ import Filter from "../../components/postings/CompanyFilter";
 import { getAllCompanies, deleteCompany } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Feather from "@expo/vector-icons/Feather";
 
 const CompanyCard = ({ company, onDelete }) => {
   const { user } = useGlobalContext();
@@ -42,6 +43,10 @@ const CompanyCard = ({ company, onDelete }) => {
       ]
     );
   };
+
+  const handleEdit = () => {
+    router.push({ pathname: "/postings/editCompany", params: { companyId: company.companyID } })
+  }
 
   return (
     <TouchableOpacity
@@ -84,15 +89,19 @@ const CompanyCard = ({ company, onDelete }) => {
         </View>
 
         {user.uid === company.owner ? (
-          <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
-            <FontAwesome name="trash-o" size={24} color="red" />
-          </TouchableOpacity>
+          <View className="flex-row items-start">
+            <TouchableOpacity activeOpacity={0.8} onPress={handleEdit} className="mr-3">
+              <Feather name="edit" size={24} color="gray" />
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
+              <FontAwesome name="trash-o" size={24} color="red" />
+            </TouchableOpacity>
+          </View>
         ) : null}
       </View>
     </TouchableOpacity>
   );
 };
-
 
 const CompaniesFeed = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -130,9 +139,9 @@ const CompaniesFeed = () => {
   };
 
   const renderCompany = useMemo(
-    () => ({ item }) => (
-      <CompanyCard company={item} onDelete={handleCompanyDelete} />
-    ),
+    () =>
+      ({ item }) =>
+        <CompanyCard company={item} onDelete={handleCompanyDelete} />,
     []
   );
 
@@ -175,4 +184,3 @@ const CompaniesFeed = () => {
 };
 
 export default CompaniesFeed;
-

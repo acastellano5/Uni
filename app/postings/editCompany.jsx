@@ -43,10 +43,6 @@ const EditCompany = () => {
     router.replace("/postings");
   };
 
-  useEffect(() => {
-    console.log(form)
-  }, [form])
-
   return (
     <SafeAreaView className="h-full bg-secondary">
       <BackHeader containerStyles="w-11/12 mx-auto" />
