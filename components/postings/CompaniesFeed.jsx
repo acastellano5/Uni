@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   FlatList,
   Alert,
+  RefreshControl,
 } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
@@ -45,8 +46,11 @@ const CompanyCard = ({ company, onDelete }) => {
   };
 
   const handleEdit = () => {
-    router.push({ pathname: "/postings/editCompany", params: { companyId: company.companyID } })
-  }
+    router.push({
+      pathname: "/postings/editCompany",
+      params: { companyId: company.companyID },
+    });
+  };
 
   return (
     <TouchableOpacity
@@ -90,7 +94,11 @@ const CompanyCard = ({ company, onDelete }) => {
 
         {user.uid === company.owner ? (
           <View className="flex-row items-start">
-            <TouchableOpacity activeOpacity={0.8} onPress={handleEdit} className="mr-3">
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handleEdit}
+              className="mr-3"
+            >
               <Feather name="edit" size={24} color="gray" />
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
@@ -110,6 +118,7 @@ const CompaniesFeed = () => {
 
   const [companies, setCompanies] = useState([]);
   const [companiesLoading, setCompaniesLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchCompanies = async () => {
     const fetchedCompanies = await getAllCompanies(orgId);
@@ -117,6 +126,12 @@ const CompaniesFeed = () => {
       (company) => company.isAlumniOwned
     );
     setCompanies(alumniCompanies);
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchCompanies();
+    setRefreshing(false);
   };
 
   useEffect(() => {
@@ -146,7 +161,12 @@ const CompaniesFeed = () => {
   );
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#063970"]} tintColor={"#063970"}/>
+      }
+    >
       <SearchBar
         placeholder="Search by location"
         filterOnPress={() => setIsFilterVisible(true)}
@@ -173,7 +193,11 @@ const CompaniesFeed = () => {
       {companiesLoading ? (
         <ActivityIndicator size="large" color="#063970" />
       ) : companies.length > 0 ? (
-        <FlatList data={companies} renderItem={renderCompany} />
+        <FlatList
+          data={companies}
+          renderItem={renderCompany}
+          keyExtractor={(item) => item.companyID}
+        />
       ) : (
         <Text className="text-center text-darkGray text-base mt-10">
           No Companies yet.
