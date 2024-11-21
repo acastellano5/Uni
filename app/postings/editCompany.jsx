@@ -39,9 +39,38 @@ const EditCompany = () => {
   const { orgId } = useGlobalContext();
 
   const onEditPress = async () => {
-    await editCompany(companyId, form, orgId);
-    router.replace({pathname: "/postings/companyInfo", params: { companyId }});
+    const { companyLogo, location, companyName, industry, description } = form;
+  
+    if (!companyLogo || companyLogo === "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png") {
+      Alert.alert("Validation Error", "Company Logo is required.");
+      return;
+    }
+    if (!companyName.trim()) {
+      Alert.alert("Validation Error", "Company Name is required.");
+      return;
+    }
+    if (!industry.trim()) {
+      Alert.alert("Validation Error", "Industry is required.");
+      return;
+    }
+    if (!location.trim()) {
+      Alert.alert("Validation Error", "Company Location is required.");
+      return;
+    }
+    if (!description.trim()) {
+      Alert.alert("Validation Error", "Description is required.");
+      return;
+    }
+  
+    try {
+      await editCompany(companyId, form, orgId);
+      router.replace({ pathname: "/postings/companyInfo", params: { companyId } });
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while updating the company.");
+      console.error(error);
+    }
   };
+  
   const handleBackPress = async () => {
     router.replace({ pathname: "/postings/companyInfo", params: { companyId } })
   }
