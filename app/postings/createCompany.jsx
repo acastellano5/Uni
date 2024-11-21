@@ -36,11 +36,8 @@ const CreateCompany = () => {
   }, [form]);
 
   const onCreatePress = async () => {
-    console.log('====================================');
-    console.log();
-    console.log('====================================');
-    await addCompany(form, orgId)
-    router.replace("/postings")
+    const newCompanyId = await addCompany(form, orgId)
+    router.replace({pathname: "/postings/companyInfo", params: { companyId: newCompanyId }})
   };
 
   return (
