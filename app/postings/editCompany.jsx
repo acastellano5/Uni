@@ -40,12 +40,15 @@ const EditCompany = () => {
 
   const onEditPress = async () => {
     await editCompany(companyId, form, orgId);
-    router.replace("/postings");
+    router.replace({pathname: "/postings/companyInfo", params: { companyId }});
   };
+  const handleBackPress = async () => {
+    router.replace({ pathname: "/postings/companyInfo", params: { companyId } })
+  }
 
   return (
     <SafeAreaView className="h-full bg-secondary">
-      <BackHeader containerStyles="w-11/12 mx-auto" />
+      <BackHeader containerStyles="w-11/12 mx-auto" onBackPress={handleBackPress}/>
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView
           className="w-10/12 mx-auto top-[50]"

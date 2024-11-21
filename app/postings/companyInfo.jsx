@@ -17,7 +17,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { useGlobalContext } from "../../context/globalProvider";
 
 const companyInfo = () => {
-  const { companyId } = useLocalSearchParams();
+  const { companyId, isEdited } = useLocalSearchParams();
   const [contact, setContact] = useState({});
   const [ company, setCompany ] = useState({})
   const [isLoading, setIsLoading] = useState(true);
@@ -64,7 +64,7 @@ const companyInfo = () => {
   };
 
   const handleEdit = () => {
-    router.push({pathname: '/postings/editCompany', params: { companyId: company.companyID }})
+    router.replace({pathname: '/postings/editCompany', params: { companyId: company.companyID }})
   } 
 
   return (
