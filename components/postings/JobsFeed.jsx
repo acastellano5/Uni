@@ -19,17 +19,17 @@ const JobPosting = ({ job }) => {
     <TouchableOpacity
       className="bg-white rounded-lg p-3 mb-3 w-11/12 mx-auto"
       activeOpacity={0.8}
-      onPress={() => router.push({ pathname: "/postings/jobInfo", params: { ...job } })}
+      onPress={() => router.push({ pathname: "/postings/jobInfo", params: { jobId: job.jobID } })}
     >
       <Text className="text-lg font-bold">{job.jobRole}</Text>
-      <Text className="text-base font-semibold">{job.company}</Text>
+      <Text className="text-base font-semibold">{job.companyName}</Text>
       <Text className="mb-3">{job.location}</Text>
 
       <TouchableOpacity
         className="bg-primary py-1 px-3 rounded-lg"
         style={{ alignSelf: "flex-start" }}
         activeOpacity={0.8}
-        onPress={() => router.push({ pathname: "/postings/jobInfo", params: { ...job } })}
+        onPress={() => router.push({ pathname: "/postings/jobInfo", params: { jobId: job.jobID } })}
       >
         <Text className="text-white">See More</Text>
       </TouchableOpacity>
