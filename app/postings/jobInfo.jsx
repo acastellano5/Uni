@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import React, { useState, useEffect } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, Link } from "expo-router";
 import { getJobById, getUserAttributes } from "../../lib/useFirebase"
 
 const jobInfo = () => {
@@ -28,7 +28,7 @@ const jobInfo = () => {
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView className="w-11/12 mx-auto">
           <Text className="text-3xl font-semibold">{job.jobRole}</Text>
-          <Text className="text-2xl font-semibold">{ job.company }</Text>
+          <Link href={`/postings/companyInfo?companyId=${job.companyID}`} className="text-2xl font-semibold">{ job.companyName }</Link>
           <Text className="text-xl font-semibold">{ job.location }</Text>
           <Text className="text-lg font-semibold text-gray-400">Posted by {contact.fullName}</Text>
 

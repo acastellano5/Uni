@@ -8,7 +8,7 @@ import {
   RefreshControl,
 } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
-import { router } from "expo-router";
+import { router, Link } from "expo-router";
 import SearchBar from "../../components/SearchBar";
 import Filter from "../../components/postings/JobFilter";
 import { getAllJobs } from "../../lib/useFirebase";
@@ -22,7 +22,7 @@ const JobPosting = ({ job }) => {
       onPress={() => router.push({ pathname: "/postings/jobInfo", params: { jobId: job.jobID } })}
     >
       <Text className="text-lg font-bold">{job.jobRole}</Text>
-      <Text className="text-base font-semibold">{job.companyName}</Text>
+      <Link href={`/postings/companyInfo?companyId=${job.companyID}`} className="text-base font-semibold">{job.companyName}</Link>
       <Text className="mb-3">{job.location}</Text>
 
       <TouchableOpacity
