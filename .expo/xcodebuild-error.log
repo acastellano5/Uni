@@ -1,3 +1,6 @@
---- xcodebuild: WARNING: Using the first of multiple matching destinations:
-{ platform:iOS Simulator, id:B2C5B51B-8B6D-4231-A325-FE1CAFF66C0B, OS:18.0, name:iPhone 16 Pro }
-{ platform:iOS Simulator, id:B2C5B51B-8B6D-4231-A325-FE1CAFF66C0B, OS:18.0, name:iPhone 16 Pro }
+2024-11-21 15:40:35.044 xcodebuild[31239:5276487] Writing error result bundle to /var/folders/ht/j4bct9657r9dnggmm83rk6m40000gn/T/ResultBundle_2024-21-11_15-40-0035.xcresult
+xcodebuild: error: Unable to find a destination matching the provided destination specifier:
+		{ id:B2C5B51B-8B6D-4231-A325-FE1CAFF66C0B }
+
+	Ineligible destinations for the "Centro" scheme:
+		{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device, error:iOS 18.1 is not installed. To use with Xcode, first download and install the platform }
