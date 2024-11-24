@@ -6,7 +6,7 @@ import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { jobFieldsData } from "../../assets/data";
 import SingleSelect from "../../components/dropdown/SingleSelect";
-import { addJobDetails } from "../../lib/useFirebase";
+import { createJob } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router } from "expo-router";
 
@@ -14,17 +14,21 @@ const CreateJob = () => {
   const { orgId } = useGlobalContext();
   const [form, setForm] = useState({
     role: "",
-    company: "",
+    companyName: "",
     location: "",
-    industry: "",
     description: "",
+    industry: ""
   });
+
+  useEffect(() => {
+    console.log(form)
+  }, [ form ])
 
   const [doesOwnComp, setDoesOwnComp] = useState("");
 
   const onCreatePress = async () => {
-    const newJob = await addJobDetails(form, orgId);
-    router.replace({ pathname: "/postings/jobInfo", params: { ...newJob } });
+    const newJob = await createJob(orgId, form);
+    router.replace({ pathname: "/postings/jobInfo", params: { jobId: newJob } });
   };
 
   return (
@@ -78,8 +82,8 @@ const CreateJob = () => {
           ) : doesOwnComp === "No" ? (
             <FormField
               title="Company"
-              value={form.company}
-              handleChangeText={(e) => setForm({ ...form, company: e })}
+              value={form.companyName}
+              handleChangeText={(e) => setForm({ ...form, companyName: e })}
               otherStyles="mb-3"
               placeholder="Type here..."
               labelStyles="text-base"
