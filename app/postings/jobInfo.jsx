@@ -3,19 +3,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { getUserAttributes } from "../../lib/useFirebase"
+import { getJobById, getUserAttributes } from "../../lib/useFirebase"
 
 const jobInfo = () => {
-  const job = useLocalSearchParams()
-  const [ contact, setContact ] = useState("")
+  const { jobId }  = useLocalSearchParams()
+  
+  const [ job, setJob ] = useState({})
+  const [ contact, setContact ] = useState({})
 
-  const fetchContact = async () => {
-    const user = await getUserAttributes(job.postedBy)
+  const fetchJob = async () => {
+    const fetchedJob = await getJobById(jobId)
+    const user = await getUserAttributes(fetchedJob.postedBy)
+    setJob(fetchedJob)
     setContact(user)
   }
 
   useEffect(() => {
-    fetchContact()
+    fetchJob()
   }, [])
 
   return (
