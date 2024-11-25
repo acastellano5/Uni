@@ -31,7 +31,7 @@ const PostImage = ({ post }) => {
       }
     >
       <Image
-        source={{ uri: post.content }}
+        source={post.content ? { uri: post.content } : { uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUs55nkjiEFR-2RL9nfedkXcYZCAcWNlfLpg&s" }}
         className="w-full h-full rounded-sm"
       />
     </TouchableOpacity>
