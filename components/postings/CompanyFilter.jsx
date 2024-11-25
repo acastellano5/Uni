@@ -18,13 +18,15 @@ import {
     onRequestClose,
     animationType,
     presentationStyle,
+    setSelectedIndustry
   }) => {
     const [form, setForm] = useState({
       field: "",
     });
   
     const handleApply = () => {
-      alert("fajsshdjfkd")
+      setSelectedIndustry(form.field)
+      onRequestClose()
     }
   
     return (

@@ -14,7 +14,7 @@ import {
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
 import Filter from "../../components/postings/CompanyFilter";
-import { getAllCompanies, deleteCompany } from "../../lib/useFirebase";
+import { getAllCompanies, deleteCompany, getCompanyByIndustry } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
@@ -155,26 +155,22 @@ const CompaniesFeed = () => {
     setFilteredCompanies(companies);
   };
 
-  const performSearchAndFilter = () => {
-    const filtered = companies.filter((company) => {
-      const matchesName = companyName
-        ? company.companyName.toLowerCase().includes(companyName.toLowerCase())
-        : true;
-      const matchesLocation = location
-        ? company.location.toLowerCase().includes(location.toLowerCase())
-        : true;
-      const matchesIndustry = selectedIndustry
-        ? company.industry === selectedIndustry
-        : true;
-      return matchesName && matchesLocation && matchesIndustry;
-    });
-    setFilteredCompanies(filtered);
-  };
-
   const handleInputClick = (field) => {
     setActiveSearchField(field);
     setModalVisible(true);
   };
+
+  const fetchFilteredCompanies = async () => {
+    const companies = await getCompanyByIndustry(orgId, selectedIndustry)
+    console.log(companies)
+    setCompanies(companies)
+  }
+
+  useEffect(() => {
+    if (selectedIndustry) {
+      fetchFilteredCompanies()
+    }
+  }, [ selectedIndustry ])
 
   const renderCompany = useMemo(
     () =>
@@ -243,7 +239,7 @@ const CompaniesFeed = () => {
               marginRight: 3,
             }}
             activeOpacity={0.8}
-            onPress={performSearchAndFilter}
+            onPress={() => alert("booyah")}
           >
             <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
@@ -284,15 +280,15 @@ const CompaniesFeed = () => {
 
         {companiesLoading ? (
           <ActivityIndicator size="large" color="#063970" />
-        ) : filteredCompanies.length > 0 ? (
+        ) : companies.length > 0 ? (
           <FlatList
-            data={filteredCompanies}
+            data={companies}
             renderItem={renderCompany}
             keyExtractor={(item) => item.companyID}
           />
         ) : (
           <Text className="text-center text-darkGray text-base mt-10">
-            No Companies match your search or filter criteria.
+            No Companies found.
           </Text>
         )}
       </ScrollView>
