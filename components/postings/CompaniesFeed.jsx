@@ -115,12 +115,12 @@ const CompanyCard = ({ company, onDelete }) => {
 };
 
 const CompaniesFeed = () => {
-  const [companyName, setCompanyName] = useState(""); // Search by company name
-  const [location, setLocation] = useState(""); // Search by location
+  const [companyName, setCompanyName] = useState("");
+  const [location, setLocation] = useState("");
+  const [selectedIndustry, setSelectedIndustry] = useState(null);
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [activeSearchField, setActiveSearchField] = useState(""); // Tracks which field is active
-  const [selectedIndustry, setSelectedIndustry] = useState(null); // Filter by industry
-  const [isFilterVisible, setIsFilterVisible] = useState(false); // Controls filter modal visibility
+  const [activeSearchField, setActiveSearchField] = useState(""); // Tracks the active input field
   const { orgId } = useGlobalContext();
 
   const [companies, setCompanies] = useState([]);
@@ -134,7 +134,7 @@ const CompaniesFeed = () => {
       (company) => company.isAlumniOwned
     );
     setCompanies(alumniCompanies);
-    setFilteredCompanies(alumniCompanies); // Initially show all companies
+    setFilteredCompanies(alumniCompanies);
   };
 
   const onRefresh = async () => {
@@ -152,7 +152,7 @@ const CompaniesFeed = () => {
     setCompanyName("");
     setLocation("");
     setSelectedIndustry(null);
-    setFilteredCompanies(companies); // Reset to show all companies
+    setFilteredCompanies(companies);
   };
 
   const performSearchAndFilter = () => {
@@ -171,15 +171,6 @@ const CompaniesFeed = () => {
     setFilteredCompanies(filtered);
   };
 
-  const handleCompanyDelete = (deletedCompanyId) => {
-    setCompanies((prevCompanies) =>
-      prevCompanies.filter((company) => company.companyID !== deletedCompanyId)
-    );
-    setFilteredCompanies((prevCompanies) =>
-      prevCompanies.filter((company) => company.companyID !== deletedCompanyId)
-    );
-  };
-
   const handleInputClick = (field) => {
     setActiveSearchField(field);
     setModalVisible(true);
@@ -188,7 +179,7 @@ const CompaniesFeed = () => {
   const renderCompany = useMemo(
     () =>
       ({ item }) =>
-        <CompanyCard company={item} onDelete={handleCompanyDelete} />,
+        <CompanyCard company={item} onDelete={(id) => handleCompanyDelete(id)} />,
     []
   );
 
@@ -197,12 +188,7 @@ const CompaniesFeed = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={["#063970"]}
-            tintColor={"#063970"}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#063970"]} tintColor={"#063970"} />
         }
       >
         <View
@@ -213,7 +199,6 @@ const CompaniesFeed = () => {
           }}
           className="w-11/12 mx-auto"
         >
-          {/* Company Name Input */}
           <TouchableOpacity
             style={{
               flex: 1,
@@ -227,15 +212,11 @@ const CompaniesFeed = () => {
             }}
             onPress={() => handleInputClick("companyName")}
           >
-            <Text
-              style={{ color: companyName ? "black" : "#ccc" }}
-              numberOfLines={2}
-              ellipsizeMode="tail"
-            >
+            <Text style={{ color: companyName ? "black" : "#ccc" }}>
               {companyName || "Search by company name"}
             </Text>
           </TouchableOpacity>
-          {/* Location Input */}
+
           <TouchableOpacity
             style={{
               flex: 1,
@@ -253,7 +234,7 @@ const CompaniesFeed = () => {
               {location || "Search by location"}
             </Text>
           </TouchableOpacity>
-          {/* Search Button */}
+
           <TouchableOpacity
             style={{
               backgroundColor: "#063970",
@@ -266,7 +247,7 @@ const CompaniesFeed = () => {
           >
             <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
-          {/* Clear Button */}
+
           <TouchableOpacity
             style={{
               backgroundColor: "#e6e6e6",
@@ -279,7 +260,7 @@ const CompaniesFeed = () => {
           >
             <AntDesign name="close" size={24} color="black" />
           </TouchableOpacity>
-          {/* Filter Button */}
+
           <TouchableOpacity
             style={{
               backgroundColor: "#e6e6e6",
@@ -289,15 +270,18 @@ const CompaniesFeed = () => {
             activeOpacity={0.8}
             onPress={() => setIsFilterVisible(true)}
           >
-            <MaterialCommunityIcons
-              name="filter-variant"
-              size={24}
-              color="#063970"
-            />
+            <MaterialCommunityIcons name="filter-variant" size={24} color="#063970" />
           </TouchableOpacity>
         </View>
 
-        {/* Render company cards */}
+        <Filter
+          visible={isFilterVisible}
+          onRequestClose={() => setIsFilterVisible(false)}
+          animationType="slide"
+          presentationStyle="formSheet"
+          setSelectedIndustry={setSelectedIndustry}
+        />
+
         {companiesLoading ? (
           <ActivityIndicator size="large" color="#063970" />
         ) : filteredCompanies.length > 0 ? (
@@ -313,8 +297,8 @@ const CompaniesFeed = () => {
         )}
       </ScrollView>
 
-      {/* Modal for Full-Screen Input */}
-      <Modal visible={modalVisible} animationType="slide" transparent={false} presentationStyle="formSheet">
+      {/* Modal for Fullscreen Input */}
+      <Modal visible={modalVisible} animationType="slide" transparent={false}>
         <View
           style={{
             flex: 1,
@@ -343,7 +327,7 @@ const CompaniesFeed = () => {
               if (activeSearchField === "companyName") setCompanyName(text);
               else setLocation(text);
             }}
-            autoFocus={true}
+            autoFocus
           />
           <View
             style={{
