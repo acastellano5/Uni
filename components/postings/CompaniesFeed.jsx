@@ -14,7 +14,7 @@ import {
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
 import Filter from "../../components/postings/CompanyFilter";
-import { getAllCompanies, deleteCompany, getCompanyByIndustry } from "../../lib/useFirebase";
+import { getAllCompanies, deleteCompany, getCompanyByIndustry, getCompanyByName } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
@@ -152,7 +152,7 @@ const CompaniesFeed = () => {
     setCompanyName("");
     setLocation("");
     setSelectedIndustry(null);
-    setFilteredCompanies(companies);
+    fetchCompanies()
   };
 
   const handleInputClick = (field) => {
@@ -162,12 +162,21 @@ const CompaniesFeed = () => {
 
   const fetchFilteredCompanies = async () => {
     const companies = await getCompanyByIndustry(orgId, selectedIndustry)
+    console.log("***************")
     console.log(companies)
+    console.log("***************")
+    setCompanies(companies)
+  }
+
+  const performSearch = async () => {
+    setSelectedIndustry(null)
+    const companies = await getCompanyByName(orgId, companyName)
     setCompanies(companies)
   }
 
   useEffect(() => {
     if (selectedIndustry) {
+      setCompanyName("")
       fetchFilteredCompanies()
     }
   }, [ selectedIndustry ])
@@ -246,7 +255,7 @@ const CompaniesFeed = () => {
               marginRight: 3,
             }}
             activeOpacity={0.8}
-            onPress={() => alert("booyah")}
+            onPress={performSearch}
           >
             <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
