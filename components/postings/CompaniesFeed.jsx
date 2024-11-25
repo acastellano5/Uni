@@ -17,7 +17,8 @@ import { getAllCompanies, deleteCompany } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 const CompanyCard = ({ company, onDelete }) => {
   const { user } = useGlobalContext();
@@ -113,8 +114,8 @@ const CompanyCard = ({ company, onDelete }) => {
 };
 
 const CompaniesFeed = () => {
-  const [jobTitle, setJobTitle] = useState(""); // For searching by job title
   const [location, setLocation] = useState(""); // For searching by location
+  const [selectedIndustry, setSelectedIndustry] = useState(null); // For filtering by industry
   const [isFilterVisible, setIsFilterVisible] = useState(false); // Controls filter modal visibility
   const { orgId } = useGlobalContext();
 
@@ -144,20 +145,20 @@ const CompaniesFeed = () => {
   }, []);
 
   const clearSearch = () => {
-    setJobTitle("");
     setLocation("");
+    setSelectedIndustry(null);
     setFilteredCompanies(companies); // Reset to show all companies
   };
 
-  const performSearch = () => {
+  const performSearchAndFilter = () => {
     const filtered = companies.filter((company) => {
-      const matchesTitle = jobTitle
-        ? company.companyName.toLowerCase().includes(jobTitle.toLowerCase())
-        : true;
       const matchesLocation = location
         ? company.location.toLowerCase().includes(location.toLowerCase())
         : true;
-      return matchesTitle && matchesLocation;
+      const matchesIndustry = selectedIndustry
+        ? company.industry === selectedIndustry
+        : true;
+      return matchesLocation && matchesIndustry;
     });
     setFilteredCompanies(filtered);
   };
@@ -193,21 +194,6 @@ const CompaniesFeed = () => {
         }}
         className="w-11/12 mx-auto"
       >
-        {/* Job Title Input */}
-        <TextInput
-          style={{
-            flex: 1,
-            height: 40,
-            borderColor: "#ccc",
-            fontSize: 12.5,
-            borderWidth: 1,
-            borderRadius: 5,
-            paddingHorizontal: 10,
-          }}
-          placeholder="Search by company name"
-          value={jobTitle}
-          onChangeText={setJobTitle}
-        />
         {/* Location Input */}
         <TextInput
           style={{
@@ -233,7 +219,7 @@ const CompaniesFeed = () => {
             marginRight: 3,
           }}
           activeOpacity={0.8}
-          onPress={performSearch}
+          onPress={performSearchAndFilter}
         >
           <AntDesign name="search1" size={24} color="white" />
         </TouchableOpacity>
@@ -243,21 +229,36 @@ const CompaniesFeed = () => {
             backgroundColor: "#e6e6e6",
             padding: 8,
             borderRadius: 5,
+            marginRight: 3,
           }}
           activeOpacity={0.8}
           onPress={clearSearch}
         >
           <AntDesign name="close" size={24} color="black" />
         </TouchableOpacity>
+        {/* Filter Button */}
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#e6e6e6",
+            padding: 8,
+            borderRadius: 5,
+          }}
+          activeOpacity={0.8}
+          onPress={() => setIsFilterVisible(true)}
+        >
+          <MaterialCommunityIcons name="filter-variant" size={24} color="#063970" />
+        </TouchableOpacity>
       </View>
 
+      {/* Filter Modal */}
       <Filter
         visible={isFilterVisible}
         onRequestClose={() => setIsFilterVisible(false)}
         animationType="slide"
         presentationStyle="formSheet"
-        setUsers={() => {
-          console.log("Filter applied");
+        setIndustry={(industry) => {
+          setSelectedIndustry(industry);
+          setIsFilterVisible(false);
         }}
       />
 
@@ -272,7 +273,7 @@ const CompaniesFeed = () => {
         />
       ) : (
         <Text className="text-center text-darkGray text-base mt-10">
-          No Companies match your search.
+          No Companies match your search or filter criteria.
         </Text>
       )}
     </ScrollView>
