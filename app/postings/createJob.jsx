@@ -55,12 +55,30 @@ const CreateJob = () => {
   };
 
   const handleCreatePress = async () => {
-    const newJobId = await createJob(orgId, form);
-    router.replace({
-      pathname: "/postings/jobInfo",
-      params: { jobId: newJobId },
-    });
+    // Check if any form field is empty
+    if (
+      !form.role ||
+      (!form.companyName && !form.company) || // Either companyName or company must be filled
+      !form.industry ||
+      !form.location ||
+      !form.description
+    ) {
+      alert("Please fill out all fields before proceeding.");
+      return;
+    }
+  
+    try {
+      const newJobId = await createJob(orgId, form);
+      router.replace({
+        pathname: "/postings/jobInfo",
+        params: { jobId: newJobId },
+      });
+    } catch (error) {
+      alert("There was an error creating the job. Please try again.");
+      console.error("Error creating job:", error);
+    }
   };
+  
 
   return (
     <SafeAreaView className="h-full bg-secondary">
