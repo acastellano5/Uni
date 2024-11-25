@@ -13,7 +13,12 @@ import {
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
 import Filter from "../../components/postings/JobFilter";
-import { getAllJobs, deleteJobs, getJobsByIndustry, getJobsByTitle } from "../../lib/useFirebase";
+import {
+  getAllJobs,
+  deleteJobs,
+  getJobsByIndustry,
+  getJobsByTitle,
+} from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -122,14 +127,14 @@ const JobsFeed = () => {
     setJobTitle("");
     setLocation("");
     setSelectedIndustry(null);
-    fetchJobs() // Reset to show all jobs
+    fetchJobs(); // Reset to show all jobs
   };
 
- const performSearch = async () => {
-    setSelectedIndustry(null)
-    const jobs = await getJobsByTitle(orgId, jobTitle)
-    setJobPostings(jobs)
- }
+  const performSearch = async () => {
+    setSelectedIndustry(null);
+    const jobs = await getJobsByTitle(orgId, jobTitle);
+    setJobPostings(jobs);
+  };
 
   const removeJob = (jobId) => {
     setJobPostings((prevJobs) => prevJobs.filter((job) => job.jobID !== jobId));
@@ -151,16 +156,16 @@ const JobsFeed = () => {
   );
 
   const fetchFilteredJobs = async () => {
-    const jobs = await getJobsByIndustry(orgId, selectedIndustry)
-    setJobPostings(jobs)
-  }
+    const jobs = await getJobsByIndustry(orgId, selectedIndustry);
+    setJobPostings(jobs);
+  };
 
   useEffect(() => {
     if (selectedIndustry) {
-      setJobTitle("")
-      fetchFilteredJobs()
+      setJobTitle("");
+      fetchFilteredJobs();
     }
-  }, [ selectedIndustry ])
+  }, [selectedIndustry]);
 
   return (
     <>
@@ -262,6 +267,41 @@ const JobsFeed = () => {
           </TouchableOpacity>
         </View>
 
+        {/* Render Selected Industry Filter */}
+        {selectedIndustry && (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 10,
+              marginLeft: 15,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 20,
+            }}
+          >
+            <Text style={{ marginRight: 10, color: "#063970", fontSize: 16 }}>
+              {selectedIndustry}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setSelectedIndustry(null);
+                fetchJobs();
+              }}
+              style={{
+                width: 20,
+                height: 20,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#e6e6e6",
+                borderRadius: 10,
+              }}
+            >
+              <AntDesign name="close" size={14} color="black" />
+            </TouchableOpacity>
+          </View>
+        )}
+
         <Filter
           visible={isFilterVisible}
           onRequestClose={() => setIsFilterVisible(false)}
@@ -286,7 +326,12 @@ const JobsFeed = () => {
       </ScrollView>
 
       {/* Full-Screen Search Modal */}
-      <Modal visible={modalVisible} animationType="slide" transparent={false} presentationStyle="formSheet">
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={false}
+        presentationStyle="formSheet"
+      >
         <View
           style={{
             flex: 1,
@@ -310,9 +355,7 @@ const JobsFeed = () => {
                 ? "Enter job title"
                 : "Enter location"
             }
-            value={
-              activeSearchField === "jobTitle" ? jobTitle : location
-            }
+            value={activeSearchField === "jobTitle" ? jobTitle : location}
             onChangeText={(text) => {
               if (activeSearchField === "jobTitle") setJobTitle(text);
               else setLocation(text);
