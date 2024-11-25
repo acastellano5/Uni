@@ -6,36 +6,90 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  Alert
 } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
 import { router, Link } from "expo-router";
 import SearchBar from "../../components/SearchBar";
 import Filter from "../../components/postings/JobFilter";
-import { getAllJobs } from "../../lib/useFirebase";
+import { getAllJobs, deleteJobs } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-const JobPosting = ({ job }) => {
+const JobPosting = ({ job, removeJob }) => {
+  const { user } = useGlobalContext();
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Confirm Deletion",
+      `Are you sure you want to delete this job posting?`,
+      [
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              await deleteJobs(job.jobID); // Delete from database
+              removeJob(job.jobID); // Remove from UI
+            } catch (error) {
+              console.error("Error deleting job:", error);
+            }
+          },
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ]
+    );
+  };
+
   return (
     <TouchableOpacity
-      className="bg-white rounded-lg p-3 mb-3 w-11/12 mx-auto"
+      className="bg-white rounded-lg p-3 mb-3 w-11/12 mx-auto d-flex flex-row items-start justify-between"
       activeOpacity={0.8}
-      onPress={() => router.push({ pathname: "/postings/jobInfo", params: { jobId: job.jobID } })}
+      onPress={() =>
+        router.push({
+          pathname: "/postings/jobInfo",
+          params: { jobId: job.jobID },
+        })
+      }
     >
-      <Text className="text-lg font-bold">{job.jobRole}</Text>
-      <Link href={`/postings/companyInfo?companyId=${job.companyID}`} className="text-base font-semibold">{job.companyName}</Link>
-      <Text className="mb-3">{job.location}</Text>
+      <View>
+        <Text className="text-lg font-bold">{job.jobRole}</Text>
+        <Link
+          href={`/postings/companyInfo?companyId=${job.companyID}`}
+          className="text-base font-semibold"
+        >
+          {job.companyName}
+        </Link>
+        <Text className="mb-3">{job.location}</Text>
 
-      <TouchableOpacity
-        className="bg-primary py-1 px-3 rounded-lg"
-        style={{ alignSelf: "flex-start" }}
-        activeOpacity={0.8}
-        onPress={() => router.push({ pathname: "/postings/jobInfo", params: { jobId: job.jobID } })}
-      >
-        <Text className="text-white">See More</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-primary py-1 px-3 rounded-lg"
+          style={{ alignSelf: "flex-start" }}
+          activeOpacity={0.8}
+          onPress={() =>
+            router.push({
+              pathname: "/postings/jobInfo",
+              params: { jobId: job.jobID },
+            })
+          }
+        >
+          <Text className="text-white">See More</Text>
+        </TouchableOpacity>
+      </View>
+
+      {user.uid === job.postedBy ? (
+        <View className="flex-row items-start">
+          <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
+            <FontAwesome name="trash-o" size={24} color="red" />
+          </TouchableOpacity>
+        </View>
+      ) : null}
     </TouchableOpacity>
   );
 };
+
 
 const JobsFeed = () => {
   const { orgId } = useGlobalContext();
@@ -61,6 +115,10 @@ const JobsFeed = () => {
     fetchJobs();
   }, []);
 
+  const removeJob = (jobId) => {
+    setJobPostings((prevJobs) => prevJobs.filter((job) => job.jobID !== jobId));
+  };
+
   const clearSearch = () => {
     setSearchValue("");
   };
@@ -70,7 +128,9 @@ const JobsFeed = () => {
   };
 
   const renderJobPosting = useMemo(
-    () => ({ item }) => <JobPosting job={item} />,
+    () =>
+      ({ item }) =>
+        <JobPosting job={item} removeJob={removeJob} />,
     []
   );
 
@@ -115,13 +175,16 @@ const JobsFeed = () => {
         <FlatList
           data={jobPostings}
           renderItem={renderJobPosting}
-          keyExtractor={(item) => item.id || item.jobId} // Ensure key is unique
+          keyExtractor={(item) => item.id || item.jobID} // Ensure key is unique
         />
       ) : (
-        <Text className="text-center text-darkGray text-base mt-10">No jobs yet.</Text>
+        <Text className="text-center text-darkGray text-base mt-10">
+          No jobs yet.
+        </Text>
       )}
     </ScrollView>
   );
 };
 
 export default JobsFeed;
+
