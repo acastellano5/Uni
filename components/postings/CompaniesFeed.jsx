@@ -9,6 +9,7 @@ import {
   Alert,
   RefreshControl,
   TextInput,
+  Modal,
 } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
@@ -114,8 +115,11 @@ const CompanyCard = ({ company, onDelete }) => {
 };
 
 const CompaniesFeed = () => {
-  const [location, setLocation] = useState(""); // For searching by location
-  const [selectedIndustry, setSelectedIndustry] = useState(null); // For filtering by industry
+  const [companyName, setCompanyName] = useState(""); // Search by company name
+  const [location, setLocation] = useState(""); // Search by location
+  const [modalVisible, setModalVisible] = useState(false);
+  const [activeSearchField, setActiveSearchField] = useState(""); // Tracks which field is active
+  const [selectedIndustry, setSelectedIndustry] = useState(null); // Filter by industry
   const [isFilterVisible, setIsFilterVisible] = useState(false); // Controls filter modal visibility
   const { orgId } = useGlobalContext();
 
@@ -145,6 +149,7 @@ const CompaniesFeed = () => {
   }, []);
 
   const clearSearch = () => {
+    setCompanyName("");
     setLocation("");
     setSelectedIndustry(null);
     setFilteredCompanies(companies); // Reset to show all companies
@@ -152,13 +157,16 @@ const CompaniesFeed = () => {
 
   const performSearchAndFilter = () => {
     const filtered = companies.filter((company) => {
+      const matchesName = companyName
+        ? company.companyName.toLowerCase().includes(companyName.toLowerCase())
+        : true;
       const matchesLocation = location
         ? company.location.toLowerCase().includes(location.toLowerCase())
         : true;
       const matchesIndustry = selectedIndustry
         ? company.industry === selectedIndustry
         : true;
-      return matchesLocation && matchesIndustry;
+      return matchesName && matchesLocation && matchesIndustry;
     });
     setFilteredCompanies(filtered);
   };
@@ -172,6 +180,11 @@ const CompaniesFeed = () => {
     );
   };
 
+  const handleInputClick = (field) => {
+    setActiveSearchField(field);
+    setModalVisible(true);
+  };
+
   const renderCompany = useMemo(
     () =>
       ({ item }) =>
@@ -180,103 +193,190 @@ const CompaniesFeed = () => {
   );
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#063970"]} tintColor={"#063970"} />
-      }
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginBottom: 10,
-        }}
-        className="w-11/12 mx-auto"
+    <>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#063970"]}
+            tintColor={"#063970"}
+          />
+        }
       >
-        {/* Location Input */}
-        <TextInput
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginBottom: 10,
+          }}
+          className="w-11/12 mx-auto"
+        >
+          {/* Company Name Input */}
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              height: 40,
+              borderColor: "#ccc",
+              borderWidth: 1,
+              borderRadius: 5,
+              marginRight: 5,
+              justifyContent: "center",
+              paddingHorizontal: 10,
+            }}
+            onPress={() => handleInputClick("companyName")}
+          >
+            <Text
+              style={{ color: companyName ? "black" : "#ccc" }}
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {companyName || "Search by company name"}
+            </Text>
+          </TouchableOpacity>
+          {/* Location Input */}
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              height: 40,
+              borderColor: "#ccc",
+              borderWidth: 1,
+              borderRadius: 5,
+              marginRight: 5,
+              justifyContent: "center",
+              paddingHorizontal: 10,
+            }}
+            onPress={() => handleInputClick("location")}
+          >
+            <Text style={{ color: location ? "black" : "#ccc" }}>
+              {location || "Search by location"}
+            </Text>
+          </TouchableOpacity>
+          {/* Search Button */}
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#063970",
+              padding: 8,
+              borderRadius: 5,
+              marginRight: 3,
+            }}
+            activeOpacity={0.8}
+            onPress={performSearchAndFilter}
+          >
+            <AntDesign name="search1" size={24} color="white" />
+          </TouchableOpacity>
+          {/* Clear Button */}
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#e6e6e6",
+              padding: 8,
+              borderRadius: 5,
+              marginRight: 3,
+            }}
+            activeOpacity={0.8}
+            onPress={clearSearch}
+          >
+            <AntDesign name="close" size={24} color="black" />
+          </TouchableOpacity>
+          {/* Filter Button */}
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#e6e6e6",
+              padding: 8,
+              borderRadius: 5,
+            }}
+            activeOpacity={0.8}
+            onPress={() => setIsFilterVisible(true)}
+          >
+            <MaterialCommunityIcons
+              name="filter-variant"
+              size={24}
+              color="#063970"
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* Render company cards */}
+        {companiesLoading ? (
+          <ActivityIndicator size="large" color="#063970" />
+        ) : filteredCompanies.length > 0 ? (
+          <FlatList
+            data={filteredCompanies}
+            renderItem={renderCompany}
+            keyExtractor={(item) => item.companyID}
+          />
+        ) : (
+          <Text className="text-center text-darkGray text-base mt-10">
+            No Companies match your search or filter criteria.
+          </Text>
+        )}
+      </ScrollView>
+
+      {/* Modal for Full-Screen Input */}
+      <Modal visible={modalVisible} animationType="slide" transparent={false} presentationStyle="formSheet">
+        <View
           style={{
             flex: 1,
-            height: 40,
-            borderColor: "#ccc",
-            fontSize: 12.5,
-            borderWidth: 1,
-            borderRadius: 5,
-            marginRight: 5,
-            paddingHorizontal: 10,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
           }}
-          placeholder="Search by location"
-          value={location}
-          onChangeText={setLocation}
-        />
-        {/* Search Button */}
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#063970",
-            padding: 8,
-            borderRadius: 5,
-            marginRight: 3,
-          }}
-          activeOpacity={0.8}
-          onPress={performSearchAndFilter}
         >
-          <AntDesign name="search1" size={24} color="white" />
-        </TouchableOpacity>
-        {/* Clear Button */}
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#e6e6e6",
-            padding: 8,
-            borderRadius: 5,
-            marginRight: 3,
-          }}
-          activeOpacity={0.8}
-          onPress={clearSearch}
-        >
-          <AntDesign name="close" size={24} color="black" />
-        </TouchableOpacity>
-        {/* Filter Button */}
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#e6e6e6",
-            padding: 8,
-            borderRadius: 5,
-          }}
-          activeOpacity={0.8}
-          onPress={() => setIsFilterVisible(true)}
-        >
-          <MaterialCommunityIcons name="filter-variant" size={24} color="#063970" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Filter Modal */}
-      <Filter
-        visible={isFilterVisible}
-        onRequestClose={() => setIsFilterVisible(false)}
-        animationType="slide"
-        presentationStyle="formSheet"
-        setIndustry={(industry) => {
-          setSelectedIndustry(industry);
-          setIsFilterVisible(false);
-        }}
-      />
-
-      {/* Render company cards */}
-      {companiesLoading ? (
-        <ActivityIndicator size="large" color="#063970" />
-      ) : filteredCompanies.length > 0 ? (
-        <FlatList
-          data={filteredCompanies}
-          renderItem={renderCompany}
-          keyExtractor={(item) => item.companyID}
-        />
-      ) : (
-        <Text className="text-center text-darkGray text-base mt-10">
-          No Companies match your search or filter criteria.
-        </Text>
-      )}
-    </ScrollView>
+          <TextInput
+            style={{
+              height: 50,
+              borderColor: "#ccc",
+              borderWidth: 1,
+              borderRadius: 5,
+              paddingHorizontal: 10,
+              fontSize: 18,
+              width: "100%",
+            }}
+            placeholder={
+              activeSearchField === "companyName"
+                ? "Enter company name"
+                : "Enter location"
+            }
+            value={activeSearchField === "companyName" ? companyName : location}
+            onChangeText={(text) => {
+              if (activeSearchField === "companyName") setCompanyName(text);
+              else setLocation(text);
+            }}
+            autoFocus={true}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+              marginTop: 20,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#063970",
+                padding: 15,
+                borderRadius: 5,
+              }}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={{ color: "white", textAlign: "center" }}>Done</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#e6e6e6",
+                padding: 15,
+                borderRadius: 5,
+              }}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={{ textAlign: "center" }}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 

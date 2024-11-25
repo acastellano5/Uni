@@ -6,16 +6,18 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  Alert,
   TextInput,
+  Modal,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
-import { router, Link } from "expo-router";
+import { router } from "expo-router";
 import Filter from "../../components/postings/JobFilter";
 import { getAllJobs, deleteJobs } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 const JobPosting = ({ job, removeJob }) => {
   const { user } = useGlobalContext();
@@ -57,12 +59,7 @@ const JobPosting = ({ job, removeJob }) => {
     >
       <View>
         <Text className="text-lg font-bold">{job.jobRole}</Text>
-        <Link
-          href={`/postings/companyInfo?companyId=${job.companyID}`}
-          className="text-base font-semibold"
-        >
-          {job.companyName}
-        </Link>
+        <Text className="text-base font-semibold">{job.companyName}</Text>
         <Text className="mb-3">{job.location}</Text>
 
         <TouchableOpacity
@@ -95,14 +92,19 @@ const JobsFeed = () => {
   const { orgId } = useGlobalContext();
   const [jobTitle, setJobTitle] = useState("");
   const [location, setLocation] = useState("");
+  const [activeSearchField, setActiveSearchField] = useState(""); // Tracks which field is active
   const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [selectedIndustry, setSelectedIndustry] = useState(null); // For filters
+  const [modalVisible, setModalVisible] = useState(false);
   const [jobPostings, setJobPostings] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
   const [jobsLoading, setJobsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchJobs = async () => {
     const jobs = await getAllJobs(orgId);
     setJobPostings(jobs);
+    setFilteredJobs(jobs); // Initially show all jobs
     setJobsLoading(false);
   };
 
@@ -116,18 +118,39 @@ const JobsFeed = () => {
     fetchJobs();
   }, []);
 
-  const removeJob = (jobId) => {
-    setJobPostings((prevJobs) => prevJobs.filter((job) => job.jobID !== jobId));
-  };
-
   const clearSearch = () => {
     setJobTitle("");
     setLocation("");
+    setSelectedIndustry(null);
+    setFilteredJobs(jobPostings); // Reset to show all jobs
   };
 
-  const performSearch = () => {
-    alert(`Searching for:\nJob Title: ${jobTitle}\nLocation: ${location}`);
-    // Perform search logic here
+  const performSearchAndFilter = () => {
+    const filtered = jobPostings.filter((job) => {
+      const matchesTitle = jobTitle
+        ? job.jobRole.toLowerCase().includes(jobTitle.toLowerCase())
+        : true;
+      const matchesLocation = location
+        ? job.location.toLowerCase().includes(location.toLowerCase())
+        : true;
+      const matchesIndustry = selectedIndustry
+        ? job.industry === selectedIndustry
+        : true;
+      return matchesTitle && matchesLocation && matchesIndustry;
+    });
+    setFilteredJobs(filtered);
+  };
+
+  const removeJob = (jobId) => {
+    setJobPostings((prevJobs) => prevJobs.filter((job) => job.jobID !== jobId));
+    setFilteredJobs((prevJobs) =>
+      prevJobs.filter((job) => job.jobID !== jobId)
+    );
+  };
+
+  const handleInputClick = (field) => {
+    setActiveSearchField(field);
+    setModalVisible(true);
   };
 
   const renderJobPosting = useMemo(
@@ -138,108 +161,194 @@ const JobsFeed = () => {
   );
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          colors={["#ff0000", "#00ff00", "#0000ff"]}
-          tintColor="#063970"
+    <>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#063970"]}
+            tintColor="#063970"
+          />
+        }
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginBottom: 10,
+          }}
+          className="w-11/12 mx-auto"
+        >
+          {/* Job Title Input */}
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              height: 40,
+              borderColor: "#ccc",
+              borderWidth: 1,
+              borderRadius: 5,
+              justifyContent: "center",
+              paddingHorizontal: 10,
+            }}
+            onPress={() => handleInputClick("jobTitle")}
+          >
+            <Text style={{ color: jobTitle ? "black" : "#ccc" }}>
+              {jobTitle || "Search by job title"}
+            </Text>
+          </TouchableOpacity>
+          {/* Location Input */}
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              height: 40,
+              borderColor: "#ccc",
+              borderWidth: 1,
+              borderRadius: 5,
+              marginHorizontal: 5,
+              justifyContent: "center",
+              paddingHorizontal: 10,
+            }}
+            onPress={() => handleInputClick("location")}
+          >
+            <Text style={{ color: location ? "black" : "#ccc" }}>
+              {location || "Search by location"}
+            </Text>
+          </TouchableOpacity>
+          {/* Search Button */}
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#063970",
+              padding: 8,
+              borderRadius: 5,
+            }}
+            activeOpacity={0.8}
+            onPress={performSearchAndFilter}
+          >
+            <AntDesign name="search1" size={24} color="white" />
+          </TouchableOpacity>
+          {/* Clear Button */}
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#e6e6e6",
+              padding: 8,
+              borderRadius: 5,
+              marginLeft: 5,
+            }}
+            activeOpacity={0.8}
+            onPress={clearSearch}
+          >
+            <AntDesign name="close" size={24} color="black" />
+          </TouchableOpacity>
+          {/* Filter Button */}
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#e6e6e6",
+              padding: 8,
+              borderRadius: 5,
+              marginLeft: 5,
+            }}
+            activeOpacity={0.8}
+            onPress={() => setIsFilterVisible(true)}
+          >
+            <MaterialCommunityIcons
+              name="filter-variant"
+              size={24}
+              color="#063970"
+            />
+          </TouchableOpacity>
+        </View>
+
+        <Filter
+          visible={isFilterVisible}
+          onRequestClose={() => setIsFilterVisible(false)}
+          animationType="slide"
+          presentationStyle="formSheet"
+          setSelectedIndustry={setSelectedIndustry}
         />
-      }
-    >
-      <View
-  style={{
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  }}
-  className="w-11/12 mx-auto"
->
-  {/* Job Title Input */}
-  <TextInput
-    style={{
-      flex: 1,
-      height: 40,
-      borderColor: "#ccc",
-      fontSize: 12.5,
-      borderWidth: 1,
-      borderRadius: 5,
-      paddingHorizontal: 10,
-    }}
-    placeholder="Search by job title"
-    value={jobTitle}
-    onChangeText={setJobTitle}
-  />
-  {/* Location Input */}
-  <TextInput
-    style={{
-      flex: 1,
-      height: 40,
-      borderColor: "#ccc",
-      fontSize: 12.5,
-      borderWidth: 1,
-      borderRadius: 5,
-      marginRight: 5, // Spacing between last input and search button
-      paddingHorizontal: 10,
-    }}
-    placeholder="Search by location"
-    value={location}
-    onChangeText={setLocation}
-  />
-  {/* Search Button */}
-  <TouchableOpacity
-    style={{
-      backgroundColor: "#063970",
-      padding: 8,
-      borderRadius: 5,
-      marginRight: 3, // Spacing between search and clear buttons
-    }}
-    activeOpacity={0.8}
-    onPress={performSearch}
-  >
-    <AntDesign name="search1" size={24} color="white" />
-  </TouchableOpacity>
-  {/* Clear Button */}
-  <TouchableOpacity
-    style={{
-      backgroundColor: "#e6e6e6",
-      padding: 8,
-      borderRadius: 5,
-    }}
-    activeOpacity={0.8}
-    onPress={clearSearch}
-  >
-    <AntDesign name="close" size={24} color="black" />
-  </TouchableOpacity>
-</View>
 
+        {jobsLoading ? (
+          <ActivityIndicator size="large" color="#063970" />
+        ) : filteredJobs.length > 0 ? (
+          <FlatList
+            data={filteredJobs}
+            renderItem={renderJobPosting}
+            keyExtractor={(item) => item.id || item.jobID}
+          />
+        ) : (
+          <Text className="text-center text-darkGray text-base mt-10">
+            No jobs match your search or filter criteria.
+          </Text>
+        )}
+      </ScrollView>
 
-      <Filter
-        visible={isFilterVisible}
-        onRequestClose={() => setIsFilterVisible(false)}
-        animationType="slide"
-        presentationStyle="formSheet"
-        setUsers={() => {
-          console.log("yurr");
-        }}
-      />
-
-      {jobsLoading ? (
-        <ActivityIndicator size="large" color="#063970" />
-      ) : jobPostings.length > 0 ? (
-        <FlatList
-          data={jobPostings}
-          renderItem={renderJobPosting}
-          keyExtractor={(item) => item.id || item.jobID}
-        />
-      ) : (
-        <Text className="text-center text-darkGray text-base mt-10">
-          No jobs yet.
-        </Text>
-      )}
-    </ScrollView>
+      {/* Full-Screen Search Modal */}
+      <Modal visible={modalVisible} animationType="slide" transparent={false} presentationStyle="formSheet">
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+          }}
+        >
+          <TextInput
+            style={{
+              height: 50,
+              borderColor: "#ccc",
+              borderWidth: 1,
+              borderRadius: 5,
+              paddingHorizontal: 10,
+              fontSize: 18,
+              width: "100%",
+            }}
+            placeholder={
+              activeSearchField === "jobTitle"
+                ? "Enter job title"
+                : "Enter location"
+            }
+            value={
+              activeSearchField === "jobTitle" ? jobTitle : location
+            }
+            onChangeText={(text) => {
+              if (activeSearchField === "jobTitle") setJobTitle(text);
+              else setLocation(text);
+            }}
+            autoFocus
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+              marginTop: 20,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#063970",
+                padding: 15,
+                borderRadius: 5,
+              }}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={{ color: "white", textAlign: "center" }}>Done</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#e6e6e6",
+                padding: 15,
+                borderRadius: 5,
+              }}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={{ textAlign: "center" }}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 
