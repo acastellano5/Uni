@@ -13,7 +13,7 @@ import {
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
 import Filter from "../../components/postings/JobFilter";
-import { getAllJobs, deleteJobs, getJobsByIndustry } from "../../lib/useFirebase";
+import { getAllJobs, deleteJobs, getJobsByIndustry, getJobsByTitle } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -122,24 +122,14 @@ const JobsFeed = () => {
     setJobTitle("");
     setLocation("");
     setSelectedIndustry(null);
-    setFilteredJobs(jobPostings); // Reset to show all jobs
+    fetchJobs() // Reset to show all jobs
   };
 
-  const performSearchAndFilter = () => {
-    const filtered = jobPostings.filter((job) => {
-      const matchesTitle = jobTitle
-        ? job.jobRole.toLowerCase().includes(jobTitle.toLowerCase())
-        : true;
-      const matchesLocation = location
-        ? job.location.toLowerCase().includes(location.toLowerCase())
-        : true;
-      const matchesIndustry = selectedIndustry
-        ? job.industry === selectedIndustry
-        : true;
-      return matchesTitle && matchesLocation && matchesIndustry;
-    });
-    setFilteredJobs(filtered);
-  };
+ const performSearch = async () => {
+    setSelectedIndustry(null)
+    const jobs = await getJobsByTitle(orgId, jobTitle)
+    setJobPostings(jobs)
+ }
 
   const removeJob = (jobId) => {
     setJobPostings((prevJobs) => prevJobs.filter((job) => job.jobID !== jobId));
@@ -236,7 +226,7 @@ const JobsFeed = () => {
               borderRadius: 5,
             }}
             activeOpacity={0.8}
-            onPress={performSearchAndFilter}
+            onPress={performSearch}
           >
             <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
