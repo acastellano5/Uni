@@ -184,7 +184,12 @@ const CompaniesFeed = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#063970"]} tintColor={"#063970"} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#063970"]}
+            tintColor={"#063970"}
+          />
         }
       >
         <View
@@ -195,6 +200,7 @@ const CompaniesFeed = () => {
           }}
           className="w-11/12 mx-auto"
         >
+          {/* Search Inputs */}
           <TouchableOpacity
             style={{
               flex: 1,
@@ -212,7 +218,7 @@ const CompaniesFeed = () => {
               {companyName || "Search by company name"}
             </Text>
           </TouchableOpacity>
-
+  
           <TouchableOpacity
             style={{
               flex: 1,
@@ -230,7 +236,8 @@ const CompaniesFeed = () => {
               {location || "Search by location"}
             </Text>
           </TouchableOpacity>
-
+  
+          {/* Search and Clear Buttons */}
           <TouchableOpacity
             style={{
               backgroundColor: "#063970",
@@ -243,7 +250,7 @@ const CompaniesFeed = () => {
           >
             <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
-
+  
           <TouchableOpacity
             style={{
               backgroundColor: "#e6e6e6",
@@ -256,7 +263,7 @@ const CompaniesFeed = () => {
           >
             <AntDesign name="close" size={24} color="black" />
           </TouchableOpacity>
-
+  
           <TouchableOpacity
             style={{
               backgroundColor: "#e6e6e6",
@@ -269,7 +276,42 @@ const CompaniesFeed = () => {
             <MaterialCommunityIcons name="filter-variant" size={24} color="#063970" />
           </TouchableOpacity>
         </View>
-
+  
+        {/* Render Selected Industry Filter */}
+        {selectedIndustry && (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 10,
+              marginLeft: 15,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 20,
+            }}
+          >
+            <Text style={{ marginRight: 10, color: "#063970", fontSize: 16 }}>
+              {selectedIndustry}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setSelectedIndustry(null)
+                fetchCompanies()
+              }}
+              style={{
+                width: 20,
+                height: 20,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#e6e6e6",
+                borderRadius: 10,
+              }}
+            >
+              <AntDesign name="close" size={14} color="black" />
+            </TouchableOpacity>
+          </View>
+        )}
+  
         <Filter
           visible={isFilterVisible}
           onRequestClose={() => setIsFilterVisible(false)}
@@ -277,12 +319,12 @@ const CompaniesFeed = () => {
           presentationStyle="formSheet"
           setSelectedIndustry={setSelectedIndustry}
         />
-
+  
         {companiesLoading ? (
           <ActivityIndicator size="large" color="#063970" />
         ) : companies.length > 0 ? (
           <FlatList
-            data={companies}
+            data={filteredCompanies}
             renderItem={renderCompany}
             keyExtractor={(item) => item.companyID}
           />
@@ -292,7 +334,7 @@ const CompaniesFeed = () => {
           </Text>
         )}
       </ScrollView>
-
+  
       {/* Modal for Fullscreen Input */}
       <Modal visible={modalVisible} animationType="slide" transparent={false}>
         <View
@@ -358,6 +400,7 @@ const CompaniesFeed = () => {
       </Modal>
     </>
   );
+  
 };
 
 export default CompaniesFeed;
