@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, Alert, Dimensions } from "react-native";
+import { View, Text, Image, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
 import Comments from "./CommentsSection";
 import { router } from "expo-router";
@@ -15,8 +15,8 @@ const PostContent = ({ post, cuid, onDelete }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes.length);
   const [imageAspectRatio, setImageAspectRatio] = useState(1);
-  const [image, setImage] = useState(post.content);
-
+  const [image, setImage] = useState(null); // Default to null
+  const [loadingImage, setLoadingImage] = useState(true); // Track loading state for images
 
   const postedAtDate =
     post.source === "PostSection"
@@ -48,35 +48,46 @@ const PostContent = ({ post, cuid, onDelete }) => {
   };
 
   useEffect(() => {
-    let isMounted = true; // flag to track component mount status
-  
-    const fetchImageSize = async () => {
+    let isMounted = true; // Track component mount status
+
+    const fetchImage = async () => {
       try {
         const contentLink = await getDownloadURL(post.postId);
         if (isMounted) {
-          Image.getSize(contentLink, (width, height) => {
-            setImageAspectRatio(width / height);
-            setImage(contentLink);
-          });
+          Image.getSize(
+            contentLink,
+            (width, height) => {
+              setImageAspectRatio(width / height);
+              setImage(contentLink);
+              setLoadingImage(false); // Image is ready
+            },
+            () => {
+              setLoadingImage(false); // Handle failure to fetch image size
+            }
+          );
         }
       } catch (error) {
         console.error("Error fetching image size:", error);
+        setLoadingImage(false); // Ensure loading stops even on error
       }
     };
-  
-    fetchImageSize();
-  
+
+    if (post.content) {
+      fetchImage();
+    } else {
+      setLoadingImage(false); // No image, no loading
+    }
+
     return () => {
-      isMounted = false; // cleanup on component unmount
+      isMounted = false; // Cleanup on component unmount
     };
   }, [post]);
-  
 
   return (
     <>
       <View className="flex-row justify-between mb-3">
         <View className="flex-row items-center">
-          {/* author info */}
+          {/* Author Info */}
           <TouchableOpacity activeOpacity={0.8} onPress={navigateToProfile}>
             <FontAwesome name="user-circle" size={30} color="black" />
           </TouchableOpacity>
@@ -95,48 +106,60 @@ const PostContent = ({ post, cuid, onDelete }) => {
           </TouchableOpacity>
         ) : null}
       </View>
-      {/* post content */}
-      <Image
-        source={{ uri: image }}
-        className="rounded-md"
-        style={{
-          width: "100%",
-          height: undefined,
-          aspectRatio: imageAspectRatio,
-          resizeMode: imageAspectRatio > 1 ? "cover" : "contain"
-        }}
-      />
+      {/* Content Rendering */}
+      {loadingImage ? (
+        <ActivityIndicator size="large" color="#063970" style={{ marginVertical: 20 }} />
+      ) : image ? (
+        <Image
+          source={{ uri: image }}
+          className="rounded-md"
+          style={{
+            width: "100%",
+            height: undefined,
+            aspectRatio: imageAspectRatio,
+            resizeMode: imageAspectRatio > 1 ? "cover" : "contain",
+          }}
+        />
+      ) : (
+        <View
+          className="p-4 rounded-md bg-lightGray"
+          style={{
+            borderWidth: 1,
+            borderColor: "#ddd",
+          }}
+        >
+          <Text className="text-base">{post.caption}</Text>
+        </View>
+      )}
       <View className="mt-3">
         <Text className="text-base font-semibold mb-1">
           {likeCount === 1 ? `${likeCount} like` : `${likeCount} likes`}
         </Text>
         <View className="flex-row items-center">
-          {/* like button */}
+          {/* Like Button */}
           <LikeButton
             postId={post.postId}
             likeCount={likeCount}
             setLikeCount={setLikeCount}
           />
-          {/* comment button */}
+          {/* Comment Button */}
           <CommentButton
             setIsModalVisible={setIsModalVisible}
             initialComments={post.comments.length}
           />
         </View>
       </View>
-      <Text className="mt-3">{post.caption}</Text>
-      {/* opens up comments */}
       <TouchableOpacity
         className="mt-3"
         onPress={() => setIsModalVisible(true)}
       >
         <Text className="font-semibold text-darkGray">View Comments</Text>
       </TouchableOpacity>
-      {/* date of post */}
+      {/* Date of Post */}
       <Text className="font-semibold mt-3">
         {formatDistance(postedAtDate, new Date(), { addSuffix: true })}
       </Text>
-      {/* comment modal */}
+      {/* Comments Modal */}
       <Comments
         visible={isModalVisible}
         onRequestClose={() => setIsModalVisible(false)}
