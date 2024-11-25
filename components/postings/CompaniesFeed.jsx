@@ -162,9 +162,6 @@ const CompaniesFeed = () => {
 
   const fetchFilteredCompanies = async () => {
     const companies = await getCompanyByIndustry(orgId, selectedIndustry)
-    console.log("***************")
-    console.log(companies)
-    console.log("***************")
     setCompanies(companies)
   }
 

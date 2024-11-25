@@ -13,7 +13,7 @@ import {
 import React, { useState, useEffect, useMemo } from "react";
 import { router } from "expo-router";
 import Filter from "../../components/postings/JobFilter";
-import { getAllJobs, deleteJobs } from "../../lib/useFirebase";
+import { getAllJobs, deleteJobs, getJobsByIndustry } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -160,6 +160,18 @@ const JobsFeed = () => {
     []
   );
 
+  const fetchFilteredJobs = async () => {
+    const jobs = await getJobsByIndustry(orgId, selectedIndustry)
+    setJobPostings(jobs)
+  }
+
+  useEffect(() => {
+    if (selectedIndustry) {
+      setJobTitle("")
+      fetchFilteredJobs()
+    }
+  }, [ selectedIndustry ])
+
   return (
     <>
       <ScrollView
@@ -270,15 +282,15 @@ const JobsFeed = () => {
 
         {jobsLoading ? (
           <ActivityIndicator size="large" color="#063970" />
-        ) : filteredJobs.length > 0 ? (
+        ) : jobPostings.length > 0 ? (
           <FlatList
-            data={filteredJobs}
+            data={jobPostings}
             renderItem={renderJobPosting}
             keyExtractor={(item) => item.id || item.jobID}
           />
         ) : (
           <Text className="text-center text-darkGray text-base mt-10">
-            No jobs match your search or filter criteria.
+            No jobs found.
           </Text>
         )}
       </ScrollView>
