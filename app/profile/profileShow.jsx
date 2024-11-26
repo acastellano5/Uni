@@ -213,7 +213,7 @@ const ProfileShow = () => {
                     handlePress={() =>
                       router.push({
                         pathname: "./editProfile",
-                        params: user,
+                        params: { userId: user.id },
                       })
                     }
                   />

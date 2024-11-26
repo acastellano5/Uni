@@ -16,31 +16,40 @@ import MultiSelect from "../../components/dropdown/MultiSelect";
 import { useLocalSearchParams, router } from "expo-router";
 import { useGlobalContext } from "../../context/globalProvider";
 import { interestsData } from "../../assets/data";
-import { editProfile } from "../../lib/useFirebase";
+import { editProfile, getUserAttributes } from "../../lib/useFirebase";
 import EditProfileUpload from "../../components/imageUpload/EditProfile";
 
 const EditProfile = () => {
   // getting orgId from global context
   const { orgId } = useGlobalContext();
-  const params = useLocalSearchParams();
-  let user = params;
-  if (user.interests === "") {
-    user.interests = [];
-  } else {
-    user.interests = user.interests.split(",");
+  const { userId } = useLocalSearchParams();
+  const [ user, setUser ] = useState(null)
+  const [interests, setInterests] = useState(null);
+  // set form state
+  const [form, setForm] = useState({});
+  
+  const fetchUser = async () => {
+    const fetchedUser = await getUserAttributes(userId)
+    setInterests(fetchedUser.interests)
+    console.log("____________________________")
+    console.log(fetchedUser.interests)
+    console.log("____________________________")
+    setUser(fetchedUser)
+    setForm({
+      fullName: fetchedUser.fullName,
+      bio: fetchedUser.bio,
+      profilePicture: fetchedUser.profilePicture,
+      interests,
+    })
   }
 
-  // set interests state
-  const [interests, setInterests] = useState(user.interests);
+  useEffect(() => {
+    fetchUser()
+  }, [ ])
 
-
-  // set form state
-  const [form, setForm] = useState({
-    fullName: user.fullName,
-    bio: user.bio,
-    profilePicture: user.profilePicture,
-    interests,
-  });
+  useEffect(() => {
+    console.log(form)
+  }, [ form ])
 
   useEffect(() => {
     setForm({
@@ -55,7 +64,12 @@ const EditProfile = () => {
       Alert.alert("Validation Error", "You must provide your full name.");  
       return;  
     }
-    await editProfile(fullName, bio, interests, profilePicture)
+    if (profilePicture === user.profilePicture) {
+      await editProfile(fullName, bio, interests, null)
+    } else {
+      await editProfile(fullName, bio, interests, profilePicture)
+    }
+    
     router.dismiss()
   };
 
