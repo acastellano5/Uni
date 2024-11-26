@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import pongImage from "../../assets/images/pingpongbg.png";
 import { router } from "expo-router";
 import { getUserAttributes } from "../../lib/useFirebase";
+import tweet from "../../assets/images/tweet.png"
 
 const PostImage = ({ post }) => {
   // const [ postAuthor, setPostAuthor ] = useState({})
@@ -31,7 +32,7 @@ const PostImage = ({ post }) => {
       }
     >
       <Image
-        source={post.content ? { uri: post.content } : { uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUs55nkjiEFR-2RL9nfedkXcYZCAcWNlfLpg&s" }}
+        source={post.content ? { uri: post.content } : tweet }
         className="w-full h-full rounded-sm"
       />
     </TouchableOpacity>
