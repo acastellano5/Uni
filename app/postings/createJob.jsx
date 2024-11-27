@@ -11,6 +11,7 @@ import SingleSelect from "../../components/dropdown/SingleSelect";
 import { jobFieldsData } from "../../assets/data";
 import { createJob, getCompanyByOwner } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const CreateJob = () => {
   const { orgId, user } = useGlobalContext();
@@ -25,11 +26,19 @@ const CreateJob = () => {
     method: "",
     email: "",
     website: "",
+    deadline: ""
   });
 
   const [doesOwnComp, setDoesOwnComp] = useState("");
   const [ownedCompanies, setOwnedCompanies] = useState([]);
   const [alumniCompanyName, setAlumniCompanyName] = useState("");
+  const [tempDate, setTempDate] = useState(new Date());
+
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || tempDate;
+    handleFormUpdate("deadline", currentDate)
+    setTempDate(currentDate);
+  };
 
   // Fetch companies owned by the current user
   useEffect(() => {
@@ -59,11 +68,11 @@ const CreateJob = () => {
 
   useEffect(() => {
     if (form.method === "Email") {
-      handleFormUpdate("website", "")
+      handleFormUpdate("website", "");
     } else if (form.method === "Website") {
-      handleFormUpdate("email", "")
+      handleFormUpdate("email", "");
     }
-  }, [ form.method ])
+  }, [form.method]);
 
   const handleCreatePress = async () => {
     // Check if any form field is empty
@@ -201,6 +210,17 @@ const CreateJob = () => {
                 otherStyles="mb-3"
               />
             ) : null}
+
+            <View className="mb-3 items-center flex-row right-1">
+              <Text className="text-base">Select Application Deadline</Text>
+              <DateTimePicker
+                value={tempDate}
+                mode="date"
+                display="default"
+                accentColor="#063970"
+                onChange={onChangeDate}
+              />
+            </View>
 
             <FormField
               title="Description"
