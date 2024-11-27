@@ -10,6 +10,7 @@ import {
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import CustomButton from "../../components/CustomButton";
 
 const jobInfo = () => {
   const { jobId } = useLocalSearchParams();
@@ -79,6 +80,9 @@ const jobInfo = () => {
 
           <Text className="text-base font-semibold mt-5 mb-3">Description</Text>
           <Text className="text-base">{job.description}</Text>
+
+
+          <CustomButton title="Apply" containerStyles="bg-primary py-3 mt-5" textStyles="text-white text-base font-semibold"/>
         </ScrollView>
       </View>
     </SafeAreaView>

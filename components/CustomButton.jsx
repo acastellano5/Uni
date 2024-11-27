@@ -5,7 +5,7 @@ const CustomButton = ({title, handlePress, containerStyles, textStyles, image, i
   return (
     <TouchableOpacity
         onPress={handlePress}
-        activeOpacity={0.7}
+        activeOpacity={0.8}
         className={`items-center justify-center rounded-lg  ${containerStyles} flex-row`}
     >
         <Image
