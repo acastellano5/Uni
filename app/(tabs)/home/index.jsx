@@ -17,7 +17,7 @@ import Header from "../../../components/Header";
 import Post from "../../../components/post/Post";
 import TabsDisplay from "../../../components/TabsDisplay";
 import { useGlobalContext } from "../../../context/globalProvider";
-import { getUserAttributes, getPostsByTime, getGroupById, getFollowingPosts } from "../../../lib/useFirebase";
+import { getUserAttributes, getPostsByTime, getGroupById, getFollowingPosts, getCompanyById } from "../../../lib/useFirebase";
 import { getCurrentUser } from "../../../lib/firebase";
 
 const tabs = ["Following", "Community"]; // Tab options for the screen
@@ -61,6 +61,10 @@ export default function Home() {
         if (post.authorType === "group") {
           const group = await getGroupById(post.author, orgId);
           return { ...post, type: "group", authorName: group.name, authorType: group.category };
+        }
+        if (post.authorType === "company") {
+          const company = await getCompanyById(post.author)
+          return { ...post, type: "company", authorName: company.companyName, authorType: company.industry }
         }
         return post;
       })

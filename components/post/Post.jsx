@@ -13,13 +13,16 @@ import { formatDistance } from "date-fns";
 import { getCurrentUser } from "../../lib/firebase";
 import {
   delPost,
+  getCompanyById,
   getDownloadURL,
+  getGroupById,
   getUserAttributes,
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton";
 import { FontAwesome } from "@expo/vector-icons";
+import DefaultPic from "../../assets/images/profilepic.jpeg"
 
 const PostContent = ({ post, cuid, onDelete, profilePic }) => {
   const { orgId } = useGlobalContext();
@@ -35,9 +38,9 @@ const PostContent = ({ post, cuid, onDelete, profilePic }) => {
       : new Date(post.postedAt.seconds * 1000);
 
   const navigateToProfile = () => {
-    const route = post.type === "user" ? "/profile/profileShow" : "/group";
+    const route = post.type === "user" ? "/profile/profileShow" : post.type === "group" ? "/group" : "/postings/companyInfo";
     const params =
-      post.type === "user" ? { uid: post.author } : { id: post.author };
+      post.type === "user" ? { uid: post.author } : post.type === "group" ? { id: post.author } : { companyId: post.author };
     router.push({ pathname: route, params });
   };
 
@@ -101,7 +104,7 @@ const PostContent = ({ post, cuid, onDelete, profilePic }) => {
           {/* Author Info */}
           <TouchableOpacity activeOpacity={0.8} onPress={navigateToProfile}>
             <Image
-              source={{ uri: profilePic }}
+              source={profilePic ? { uri: profilePic } : DefaultPic}
               style={{
                 width: 50,
                 height: 50,
@@ -199,6 +202,7 @@ const PostContainer = ({ containerStyles, post, onDelete }) => {
   const [cuid, setCuid] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [loading, setLoading] = useState(true);
+  const { orgId } = useGlobalContext()
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -206,8 +210,17 @@ const PostContainer = ({ containerStyles, post, onDelete }) => {
       const cuser = await getCurrentUser();
       setCuid(cuser.uid);
 
-      const userAttr = await getUserAttributes(post.author);
-      setProfilePic(userAttr.profilePicture);
+
+      if (post.type === "user") {
+        const userAttr = await getUserAttributes(post.author);
+        setProfilePic(userAttr.profilePicture);
+      } else if (post.type === "group") {
+        const group = await getGroupById(post.author, orgId)
+        setProfilePic(group.image)
+      } else if (post.type === "company") {
+        const company = await getCompanyById(post.author)
+        setProfilePic(company.logo)
+      }
       setLoading(false);
     };
     fetchPostData();
