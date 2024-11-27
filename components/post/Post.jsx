@@ -1,16 +1,27 @@
-import { View, Text, Image, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import Comments from "./CommentsSection";
 import { router } from "expo-router";
 import { formatDistance } from "date-fns";
 import { getCurrentUser } from "../../lib/firebase";
-import { delPost, getDownloadURL } from "../../lib/useFirebase";
+import {
+  delPost,
+  getDownloadURL,
+  getUserAttributes,
+} from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton";
 import { FontAwesome } from "@expo/vector-icons";
 
-const PostContent = ({ post, cuid, onDelete }) => {
+const PostContent = ({ post, cuid, onDelete, profilePic }) => {
   const { orgId } = useGlobalContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes.length);
@@ -89,8 +100,16 @@ const PostContent = ({ post, cuid, onDelete }) => {
         <View className="flex-row items-center">
           {/* Author Info */}
           <TouchableOpacity activeOpacity={0.8} onPress={navigateToProfile}>
-            <FontAwesome name="user-circle" size={30} color="black" />
+            <Image
+              source={{ uri: profilePic }}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+              }}
+            />
           </TouchableOpacity>
+
           <TouchableOpacity
             className="ml-5"
             activeOpacity={0.8}
@@ -108,7 +127,11 @@ const PostContent = ({ post, cuid, onDelete }) => {
       </View>
       {/* Content Rendering */}
       {loadingImage ? (
-        <ActivityIndicator size="large" color="#063970" style={{ marginVertical: 20 }} />
+        <ActivityIndicator
+          size="large"
+          color="#063970"
+          style={{ marginVertical: 20 }}
+        />
       ) : image ? (
         <Image
           source={{ uri: image }}
@@ -174,12 +197,17 @@ const PostContent = ({ post, cuid, onDelete }) => {
 
 const PostContainer = ({ containerStyles, post, onDelete }) => {
   const [cuid, setCuid] = useState("");
+  const [profilePic, setProfilePic] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPostData = async () => {
+      // get user id
       const cuser = await getCurrentUser();
       setCuid(cuser.uid);
+
+      const userAttr = await getUserAttributes(post.author);
+      setProfilePic(userAttr.profilePicture);
       setLoading(false);
     };
     fetchPostData();
@@ -189,7 +217,12 @@ const PostContainer = ({ containerStyles, post, onDelete }) => {
 
   return (
     <View className={containerStyles}>
-      <PostContent post={post} cuid={cuid} onDelete={onDelete} />
+      <PostContent
+        post={post}
+        cuid={cuid}
+        onDelete={onDelete}
+        profilePic={profilePic}
+      />
     </View>
   );
 };
