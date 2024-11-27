@@ -31,12 +31,11 @@ const CreateJob = () => {
 
   const [doesOwnComp, setDoesOwnComp] = useState("");
   const [ownedCompanies, setOwnedCompanies] = useState([]);
-  const [alumniCompanyName, setAlumniCompanyName] = useState("");
   const [tempDate, setTempDate] = useState(new Date());
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || tempDate;
-    handleFormUpdate("deadline", currentDate)
+    handleFormUpdate("deadline", currentDate);
     setTempDate(currentDate);
   };
 
@@ -54,11 +53,6 @@ const CreateJob = () => {
     fetchCompanies();
   }, [user.uid, orgId]);
 
-  // Log form changes for debugging
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
-
   const handleFormUpdate = (key, value) => {
     setForm((prevForm) => ({
       ...prevForm,
@@ -74,11 +68,21 @@ const CreateJob = () => {
     }
   }, [form.method]);
 
+  useEffect(() => {
+    if (doesOwnComp === "No") {
+      handleFormUpdate("company", null)
+    }
+  }, [ doesOwnComp ])
+
+
+  useEffect(() => {
+    console.log(form)
+  }, [ form ])
+
   const handleCreatePress = async () => {
-    // Check if any form field is empty
     if (
       !form.role ||
-      (!form.companyName && !form.company) || // Either companyName or company must be filled
+      (!form.companyName && !form.company) ||
       !form.industry ||
       !form.location ||
       !form.description
@@ -86,13 +90,12 @@ const CreateJob = () => {
       alert("Please fill out all fields before proceeding.");
       return;
     }
-  
-    // Validate method of application
+
     if (!form.method) {
       alert("Please select a method of application.");
       return;
     }
-  
+
     if (form.method === "Email" && !form.email) {
       alert("Please provide a valid email address for application.");
       return;
@@ -101,13 +104,12 @@ const CreateJob = () => {
       alert("Please provide a valid website URL for application.");
       return;
     }
-  
-    // Validate application deadline
+
     if (!form.deadline || new Date(form.deadline) < new Date()) {
       alert("Please select a valid application deadline in the future.");
       return;
     }
-  
+
     try {
       const newJobId = await createJob(orgId, form);
       router.replace({
@@ -119,8 +121,6 @@ const CreateJob = () => {
       console.error("Error creating job:", error);
     }
   };
-  
-  
 
   return (
     <SafeAreaView className="h-full bg-secondary">
@@ -159,11 +159,10 @@ const CreateJob = () => {
                 title="Company"
                 placeholder="Select Company"
                 data={ownedCompanies}
-                selectedValue={alumniCompanyName}
+                selectedValue={form.company} // Use company ID as the selected value
                 onItemSelect={(item) => {
-                  setAlumniCompanyName(item.label);
-                  handleFormUpdate("company", item.value);
-                  handleFormUpdate("companyName", "");
+                  handleFormUpdate("company", item.value); // Update company ID
+                  handleFormUpdate("companyName", ""); // Clear companyName
                 }}
                 containerStyles="mb-3"
               />
