@@ -4,7 +4,6 @@ import ProfilePic from "../../assets/images/profilepic.jpeg";
 import { router } from "expo-router";
 
 const ProfileCard = ({ user }) => {
-  console.log(user.profilePicture);
   
   return (
     <View className="w-1/3 p-1">
