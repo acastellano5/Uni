@@ -11,6 +11,7 @@ import {
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import CustomButton from "../../components/CustomButton";
+import { format, isSameDay } from "date-fns";
 
 const jobInfo = () => {
   const { jobId } = useLocalSearchParams();
@@ -18,10 +19,20 @@ const jobInfo = () => {
 
   const [job, setJob] = useState({});
   const [contact, setContact] = useState({});
+  const [ formattedDate, setFormattedDate ] = useState("")
+  const [ isDeadline, setIsDeadline ] = useState(false)
 
   const fetchJob = async () => {
     const fetchedJob = await getJobById(jobId);
     const user = await getUserAttributes(fetchedJob.postedBy);
+
+    const date = new Date(fetchedJob.deadline.seconds * 1000);
+    const formattedDate = format(date, "MMMM dd, yyyy");
+    const today = new Date()
+    const isToday = isSameDay(date, today)
+
+    setIsDeadline(isToday)
+    setFormattedDate(formattedDate)
     setJob(fetchedJob);
     setContact(user);
   };
@@ -40,7 +51,7 @@ const jobInfo = () => {
           onPress: async () => {
             try {
               await deleteJobs(job.jobID); // Delete from database
-              router.dismiss()
+              router.dismiss();
             } catch (error) {
               console.error("Error deleting job:", error);
             }
@@ -74,6 +85,7 @@ const jobInfo = () => {
             {job.companyName}
           </Link>
           <Text className="text-xl font-semibold">{job.location}</Text>
+          <Text className="text-xl font-semibold">Deadline: {formattedDate}</Text>
           <Text className="text-lg font-semibold text-gray-400">
             Posted by {contact.fullName}
           </Text>
@@ -81,8 +93,12 @@ const jobInfo = () => {
           <Text className="text-base font-semibold mt-5 mb-3">Description</Text>
           <Text className="text-base">{job.description}</Text>
 
-
-          <CustomButton title="Apply" containerStyles="bg-primary py-3 mt-5" textStyles="text-white text-base font-semibold"/>
+          <CustomButton
+            title="Apply"
+            containerStyles={`py-3 mt-5 ${ isDeadline ? "bg-tertiary" : "bg-primary"}`}
+            textStyles={`text-base font-semibold ${ isDeadline ? null : "text-white"}`}
+            disabled={isDeadline}
+          />
         </ScrollView>
       </View>
     </SafeAreaView>
