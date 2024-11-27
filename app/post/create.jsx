@@ -63,25 +63,36 @@ const CreatePost = () => {
 
   // Handle post creation
   const handleCreatePost = async () => {
+    // Validate text content
     if (form.text.trim() === "") {
       Alert.alert("Validation Error", "You must provide text for the post.");
       return;
     }
-
+  
+    // Validate company selection for company posts
+    if (isCompanyPost && (!form.companyName || !form.companyId)) {
+      Alert.alert(
+        "Validation Error",
+        "You must select a company to create a company post."
+      );
+      return;
+    }
+  
     try {
       const imageUrl = form.image ? await uploadToFirebase(form.image) : "";
-
+  
       if (authorType === "group") {
         await createGroupPost(groupId, imageUrl, form.text, orgId);
       } else if (authorType === "user") {
         await createUserPost(imageUrl, form.text, orgId);
       }
-
+  
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", "An error occurred while creating the post.");
     }
   };
+  
 
   // Main render
   return (
