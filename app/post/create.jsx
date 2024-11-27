@@ -11,6 +11,7 @@ import {
   addJobDetails,
   getAllGroups,
   getAllJobs,
+  getUserRole,
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import { router, useLocalSearchParams } from "expo-router";
@@ -19,10 +20,11 @@ import ImageUpload from "../../components/imageUpload/ImageUpload";
 const CreatePost = () => {
   const { orgId } = useGlobalContext();
   const { authorType, groupId } = useLocalSearchParams();
+  const [userRole, setUserRole] = useState("");
   const [form, setForm] = useState({
     text: "",
     image: "",
-    isOrgCert: null
+    isOrgCert: null,
   });
 
   const [isEnabled, setIsEnabled] = useState(false);
@@ -31,13 +33,18 @@ const CreatePost = () => {
   useEffect(() => {
     setForm({
       ...form,
-      isOrgCert: isEnabled
-    })
-  }, [ isEnabled ])
+      isOrgCert: isEnabled,
+    });
+  }, [isEnabled]);
+
+  const fetchUserRole = async () => {
+    const role = await getUserRole(orgId);
+    setUserRole(role);
+  };
 
   useEffect(() => {
-    console.log(form)
-  }, [form])
+    fetchUserRole();
+  }, []);
 
   const onCreatePress = async () => {
     if (form.text.trim() === "") {
@@ -58,7 +65,7 @@ const CreatePost = () => {
     }
     router.push("/home");
   };
-  getAllJobs(2020102)
+  getAllJobs(2020102);
 
   return (
     <SafeAreaView className="h-full bg-secondary">
@@ -80,16 +87,18 @@ const CreatePost = () => {
           />
           <ImageUpload title="Image" form={form} setForm={setForm} />
 
-          <View className="flex-row justify-between mb-5">
-            <Text className="text-base">Make an org post</Text>
-            <Switch
-              trackColor={{ false: "#767577", true: "#063970" }}
-              thumbColor={isEnabled ? "#FFF" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
+          {userRole === "Admin" ? (
+            <View className="flex-row justify-between mb-5">
+              <Text className="text-base">Make an org post</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: "#063970" }}
+                thumbColor={isEnabled ? "#FFF" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
+            </View>
+          ) : null}
 
           <CustomButton
             title="Create"
