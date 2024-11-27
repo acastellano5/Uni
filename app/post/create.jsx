@@ -12,6 +12,7 @@ import {
   uploadToFirebase,
   getUserRole,
   getCompanyByOwner,
+  createCompanyPost,
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import SingleSelect from "../../components/dropdown/SingleSelect";
@@ -49,6 +50,10 @@ const CreatePost = () => {
     fetchData();
   }, [orgId]);
 
+  useEffect(() => {
+    console.log("author type: " + authorType);
+  }, [authorType]);
+
   // Reset company selection when the company post toggle is turned off
   useEffect(() => {
     if (!isCompanyPost) {
@@ -68,7 +73,7 @@ const CreatePost = () => {
       Alert.alert("Validation Error", "You must provide text for the post.");
       return;
     }
-  
+
     // Validate company selection for company posts
     if (isCompanyPost && (!form.companyName || !form.companyId)) {
       Alert.alert(
@@ -77,22 +82,23 @@ const CreatePost = () => {
       );
       return;
     }
-  
+
     try {
       const imageUrl = form.image ? await uploadToFirebase(form.image) : "";
-  
-      if (authorType === "group") {
+
+      if (isCompanyPost) {
+        await createCompanyPost(form.companyId, imageUrl, form.text, orgId);
+      } else if (authorType === "group") {
         await createGroupPost(groupId, imageUrl, form.text, orgId);
       } else if (authorType === "user") {
         await createUserPost(imageUrl, form.text, orgId);
       }
-  
+
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", "An error occurred while creating the post.");
     }
   };
-  
 
   // Main render
   return (
@@ -120,13 +126,18 @@ const CreatePost = () => {
             <ImageUpload title="Image" form={form} setForm={setForm} />
 
             {/* Org Post Toggle (Admins Only) */}
-            {userRole === "Admins" && (
+            {userRole === "Admin" && (
               <View className="flex-row justify-between mb-5">
                 <Text className="text-base">Make an org post</Text>
                 <Switch
                   trackColor={{ false: "#767577", true: "#063970" }}
                   thumbColor={isOrgPost ? "#FFF" : "#f4f3f4"}
-                  onValueChange={() => setIsOrgPost((prev) => !prev)}
+                  onValueChange={() => {
+                    setIsOrgPost((prev) => !prev);
+                    if (!isOrgPost) {
+                      setIsCompanyPost(false);
+                    }
+                  }}
                   value={isOrgPost}
                 />
               </View>
@@ -139,7 +150,12 @@ const CreatePost = () => {
                 <Switch
                   trackColor={{ false: "#767577", true: "#063970" }}
                   thumbColor={isCompanyPost ? "#FFF" : "#f4f3f4"}
-                  onValueChange={() => setIsCompanyPost((prev) => !prev)}
+                  onValueChange={() => {
+                    setIsCompanyPost((prev) => !prev);
+                    if (!isCompanyPost) {
+                      setIsOrgPost(false);
+                    }
+                  }}
                   value={isCompanyPost}
                 />
               </View>
