@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import pongImage from "../../assets/images/pingpongbg.png";
 import { router } from "expo-router";
 import { getUserAttributes } from "../../lib/useFirebase";
-import tweet from "../../assets/images/tweet.png"
+import tweet from "../../assets/images/tweet.webp"
 
 const PostImage = ({ post }) => {
   // const [ postAuthor, setPostAuthor ] = useState({})
