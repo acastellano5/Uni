@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 
@@ -22,6 +22,9 @@ const CreateJob = () => {
     description: "",
     industry: "",
     company: "",
+    method: "",
+    email: "",
+    website: "",
   });
 
   const [doesOwnComp, setDoesOwnComp] = useState("");
@@ -54,6 +57,14 @@ const CreateJob = () => {
     }));
   };
 
+  useEffect(() => {
+    if (form.method === "Email") {
+      handleFormUpdate("website", "")
+    } else if (form.method === "Website") {
+      handleFormUpdate("email", "")
+    }
+  }, [ form.method ])
+
   const handleCreatePress = async () => {
     // Check if any form field is empty
     if (
@@ -66,7 +77,7 @@ const CreateJob = () => {
       alert("Please fill out all fields before proceeding.");
       return;
     }
-  
+
     try {
       const newJobId = await createJob(orgId, form);
       router.replace({
@@ -78,101 +89,140 @@ const CreateJob = () => {
       console.error("Error creating job:", error);
     }
   };
-  
 
   return (
     <SafeAreaView className="h-full bg-secondary">
       <BackHeader containerStyles="w-11/12 mx-auto" />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
-        <View className="w-10/12 mx-auto top-[50]">
-          <Text className="text-3xl text-center font-semibold">Create Job</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View className="w-10/12 mx-auto top-[50]">
+            <Text className="text-3xl text-center font-semibold">
+              Create Job
+            </Text>
 
-          <FormField
-            title="Role"
-            value={form.role}
-            handleChangeText={(value) => handleFormUpdate("role", value)}
-            otherStyles="mb-3"
-            placeholder="Type here..."
-            labelStyles="text-base"
-            isEditable={true}
-          />
-
-          <SingleSelect
-            title="Do you own this company?"
-            placeholder="Select an answer"
-            data={[
-              { label: "Yes", value: "Yes" },
-              { label: "No", value: "No" },
-            ]}
-            selectedValue={doesOwnComp}
-            onItemSelect={(item) => setDoesOwnComp(item.value)}
-            containerStyles="mb-3"
-          />
-
-          {doesOwnComp === "Yes" ? (
-            <SingleSelect
-              title="Company"
-              placeholder="Select Company"
-              data={ownedCompanies}
-              selectedValue={alumniCompanyName}
-              onItemSelect={(item) => {
-                setAlumniCompanyName(item.label);
-                handleFormUpdate("company", item.value);
-                handleFormUpdate("companyName", "");
-              }}
-              containerStyles="mb-3"
-            />
-          ) : doesOwnComp === "No" ? (
             <FormField
-              title="Company"
-              value={form.companyName}
-              handleChangeText={(value) =>
-                handleFormUpdate("companyName", value)
-              }
+              title="Role"
+              value={form.role}
+              handleChangeText={(value) => handleFormUpdate("role", value)}
               otherStyles="mb-3"
               placeholder="Type here..."
               labelStyles="text-base"
               isEditable={true}
             />
-          ) : null}
 
-          <SingleSelect
-            title="Industry"
-            placeholder="Select Industry"
-            data={jobFieldsData}
-            selectedValue={form.industry}
-            onItemSelect={(item) => handleFormUpdate("industry", item.label)}
-            containerStyles="mb-3"
-          />
+            <SingleSelect
+              title="Do you own this company?"
+              placeholder="Select an answer"
+              data={[
+                { label: "Yes", value: "Yes" },
+                { label: "No", value: "No" },
+              ]}
+              selectedValue={doesOwnComp}
+              onItemSelect={(item) => setDoesOwnComp(item.value)}
+              containerStyles="mb-3"
+            />
 
-          <FormField
-            title="Location"
-            value={form.location}
-            handleChangeText={(value) => handleFormUpdate("location", value)}
-            otherStyles="mb-3"
-            placeholder="Type here..."
-            labelStyles="text-base"
-            isEditable={true}
-          />
+            {doesOwnComp === "Yes" ? (
+              <SingleSelect
+                title="Company"
+                placeholder="Select Company"
+                data={ownedCompanies}
+                selectedValue={alumniCompanyName}
+                onItemSelect={(item) => {
+                  setAlumniCompanyName(item.label);
+                  handleFormUpdate("company", item.value);
+                  handleFormUpdate("companyName", "");
+                }}
+                containerStyles="mb-3"
+              />
+            ) : doesOwnComp === "No" ? (
+              <FormField
+                title="Company"
+                value={form.companyName}
+                handleChangeText={(value) =>
+                  handleFormUpdate("companyName", value)
+                }
+                otherStyles="mb-3"
+                placeholder="Type here..."
+                labelStyles="text-base"
+                isEditable={true}
+              />
+            ) : null}
 
-          <FormField
-            title="Description"
-            value={form.description}
-            handleChangeText={(value) => handleFormUpdate("description", value)}
-            placeholder="Type here..."
-            isEditable={true}
-            isMultiLine={true}
-            maxLength={300}
-            otherStyles="mb-3 max-h-40"
-          />
+            <SingleSelect
+              title="Industry"
+              placeholder="Select Industry"
+              data={jobFieldsData}
+              selectedValue={form.industry}
+              onItemSelect={(item) => handleFormUpdate("industry", item.label)}
+              containerStyles="mb-3"
+            />
 
-          <CustomButton
-            title="Create"
-            containerStyles="bg-primary py-3"
-            textStyles="text-white text-base font-semibold"
-            handlePress={handleCreatePress}
-          />
-        </View>
+            <FormField
+              title="Location"
+              value={form.location}
+              handleChangeText={(value) => handleFormUpdate("location", value)}
+              otherStyles="mb-3"
+              placeholder="Type here..."
+              labelStyles="text-base"
+              isEditable={true}
+            />
+
+            <SingleSelect
+              title="How to apply"
+              placeholder="Select method"
+              data={[
+                { label: "Email", value: "Email" },
+                { label: "Website", value: "Website" },
+              ]}
+              selectedValue={form.method}
+              onItemSelect={(item) => handleFormUpdate("method", item.label)}
+              containerStyles="mb-3"
+            />
+
+            {form.method === "Email" ? (
+              <FormField
+                title="Email address"
+                value={form.email}
+                handleChangeText={(value) => handleFormUpdate("email", value)}
+                placeholder="Type here..."
+                isEditable={true}
+                otherStyles="mb-3"
+              />
+            ) : null}
+
+            {form.method === "Website" ? (
+              <FormField
+                title="Website"
+                value={form.website}
+                handleChangeText={(value) => handleFormUpdate("website", value)}
+                placeholder="Website url"
+                isEditable={true}
+                otherStyles="mb-3"
+              />
+            ) : null}
+
+            <FormField
+              title="Description"
+              value={form.description}
+              handleChangeText={(value) =>
+                handleFormUpdate("description", value)
+              }
+              placeholder="Type here..."
+              isEditable={true}
+              isMultiLine={true}
+              maxLength={300}
+              otherStyles="mb-3 max-h-40"
+            />
+
+            <CustomButton
+              title="Create"
+              containerStyles="bg-primary py-3 mb-24"
+              textStyles="text-white text-base font-semibold"
+              handlePress={handleCreatePress}
+            />
+          </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
