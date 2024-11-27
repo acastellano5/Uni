@@ -152,7 +152,7 @@ const CompaniesFeed = () => {
     setCompanyName("");
     setLocation("");
     setSelectedIndustry(null);
-    fetchCompanies()
+    fetchCompanies();
   };
 
   const handleInputClick = (field) => {
@@ -161,28 +161,34 @@ const CompaniesFeed = () => {
   };
 
   const fetchFilteredCompanies = async () => {
-    const companies = await getCompanyByIndustry(orgId, selectedIndustry)
-    setCompanies(companies)
-  }
+    const companies = await getCompanyByIndustry(orgId, selectedIndustry);
+    setCompanies(companies);
+  };
 
   const performSearch = async () => {
-    setSelectedIndustry(null)
-    const companies = await getCompanyByName(orgId, companyName)
-    setCompanies(companies)
-  }
+    setSelectedIndustry(null);
+    const companies = await getCompanyByName(orgId, companyName);
+    setCompanies(companies);
+  };
 
   useEffect(() => {
     if (selectedIndustry) {
-      setCompanyName("")
-      fetchFilteredCompanies()
+      setCompanyName("");
+      fetchFilteredCompanies();
     }
-  }, [ selectedIndustry ])
+  }, [selectedIndustry]);
 
-  const renderCompany = useMemo(
-    () =>
-      ({ item }) =>
-        <CompanyCard company={item} onDelete={(id) => handleCompanyDelete(id)} />,
-    []
+  const handleCompanyDelete = async (companyId) => {
+    setCompanies((prevCompanies) =>
+      prevCompanies.filter((company) => company.companyID !== companyId)
+    );
+    setFilteredCompanies((prevFiltered) =>
+      prevFiltered.filter((company) => company.companyID !== companyId)
+    );
+  };
+
+  const renderCompany = ({ item }) => (
+    <CompanyCard company={item} onDelete={handleCompanyDelete} />
   );
 
   return (
@@ -224,7 +230,7 @@ const CompaniesFeed = () => {
               {companyName || "Search by company name"}
             </Text>
           </TouchableOpacity>
-  
+
           <TouchableOpacity
             style={{
               flex: 1,
@@ -242,7 +248,7 @@ const CompaniesFeed = () => {
               {location || "Search by location"}
             </Text>
           </TouchableOpacity>
-  
+
           {/* Search and Clear Buttons */}
           <TouchableOpacity
             style={{
@@ -256,7 +262,7 @@ const CompaniesFeed = () => {
           >
             <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
-  
+
           <TouchableOpacity
             style={{
               backgroundColor: "#e6e6e6",
@@ -269,7 +275,7 @@ const CompaniesFeed = () => {
           >
             <AntDesign name="close" size={24} color="black" />
           </TouchableOpacity>
-  
+
           <TouchableOpacity
             style={{
               backgroundColor: "#e6e6e6",
@@ -279,10 +285,14 @@ const CompaniesFeed = () => {
             activeOpacity={0.8}
             onPress={() => setIsFilterVisible(true)}
           >
-            <MaterialCommunityIcons name="filter-variant" size={24} color="#063970" />
+            <MaterialCommunityIcons
+              name="filter-variant"
+              size={24}
+              color="#063970"
+            />
           </TouchableOpacity>
         </View>
-  
+
         {/* Render Selected Industry Filter */}
         {selectedIndustry && (
           <View
@@ -301,8 +311,8 @@ const CompaniesFeed = () => {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                setSelectedIndustry(null)
-                fetchCompanies()
+                setSelectedIndustry(null);
+                fetchCompanies();
               }}
               style={{
                 width: 20,
@@ -317,7 +327,7 @@ const CompaniesFeed = () => {
             </TouchableOpacity>
           </View>
         )}
-  
+
         <Filter
           visible={isFilterVisible}
           onRequestClose={() => setIsFilterVisible(false)}
@@ -325,7 +335,7 @@ const CompaniesFeed = () => {
           presentationStyle="formSheet"
           setSelectedIndustry={setSelectedIndustry}
         />
-  
+
         {companiesLoading ? (
           <ActivityIndicator size="large" color="#063970" />
         ) : companies.length > 0 ? (
@@ -340,73 +350,8 @@ const CompaniesFeed = () => {
           </Text>
         )}
       </ScrollView>
-  
-      {/* Modal for Fullscreen Input */}
-      <Modal visible={modalVisible} animationType="slide" transparent={false}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 20,
-          }}
-        >
-          <TextInput
-            style={{
-              height: 50,
-              borderColor: "#ccc",
-              borderWidth: 1,
-              borderRadius: 5,
-              paddingHorizontal: 10,
-              fontSize: 18,
-              width: "100%",
-            }}
-            placeholder={
-              activeSearchField === "companyName"
-                ? "Enter company name"
-                : "Enter location"
-            }
-            value={activeSearchField === "companyName" ? companyName : location}
-            onChangeText={(text) => {
-              if (activeSearchField === "companyName") setCompanyName(text);
-              else setLocation(text);
-            }}
-            autoFocus
-          />
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "100%",
-              marginTop: 20,
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#063970",
-                padding: 15,
-                borderRadius: 5,
-              }}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={{ color: "white", textAlign: "center" }}>Done</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#e6e6e6",
-                padding: 15,
-                borderRadius: 5,
-              }}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={{ textAlign: "center" }}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </>
   );
-  
 };
 
 export default CompaniesFeed;
