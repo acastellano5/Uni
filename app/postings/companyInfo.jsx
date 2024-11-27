@@ -11,17 +11,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BackHeader from "../../components/BackHeader";
 import React, { useState, useEffect } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import { getUserAttributes, deleteCompany, getCompanyById } from "../../lib/useFirebase";
+import { getUserAttributes, deleteCompany, getCompanyById, getPostByCompany } from "../../lib/useFirebase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
 import { useGlobalContext } from "../../context/globalProvider";
+import PostSection from "../../components/profile/PostSection";
 
 const companyInfo = () => {
   const { companyId, isEdited } = useLocalSearchParams();
   const [contact, setContact] = useState({});
   const [ company, setCompany ] = useState({})
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useGlobalContext();
+  const [ posts, setPosts ] = useState([])
+  const { user, orgId } = useGlobalContext();
 
   const fetchContact = async (ownerId) => {
     const fetchedContact = await getUserAttributes(ownerId);
@@ -34,8 +36,14 @@ const companyInfo = () => {
     setCompany(fetchedCompany)
   }
 
+  const fetchPosts = async () => {
+    const fetchedPosts = await getPostByCompany(companyId, orgId)
+    setPosts(fetchedPosts)
+  }
+
   useEffect(() => {
     fetchCompany();
+    fetchPosts()
     setIsLoading(false);
   }, []);
 
@@ -112,9 +120,11 @@ const companyInfo = () => {
                 Contact: {contact.fullName}
               </Text>
 
-              <Text className="text-base text-center mt-5">
+              <Text className="text-base text-center my-5">
                 {company.description}
               </Text>
+
+              <PostSection posts={posts}/>
             </>
           )}
         </ScrollView>
