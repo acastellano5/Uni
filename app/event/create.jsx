@@ -6,7 +6,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
-  Switch
+  Switch,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -19,6 +19,7 @@ import {
   createEvent,
   getGroupById,
   getUserAttributes,
+  getUserRole,
 } from "../../lib/useFirebase";
 import { getCurrentUser } from "../../lib/firebase";
 import { router, useLocalSearchParams } from "expo-router";
@@ -29,10 +30,13 @@ const CreateEvent = () => {
   const [loading, setLoading] = useState(true);
   const { orgId } = useGlobalContext();
   const { eventType, groupId } = useLocalSearchParams();
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
+      const role = await getUserRole(orgId);
+      setUserRole(role);
       setCurrentUser(user);
       setLoading(false);
     };
@@ -47,7 +51,7 @@ const CreateEvent = () => {
     endTime: null,
     description: "",
     image: "",
-    isOrgCert: null
+    isOrgCert: null,
   });
 
   const [isEnabled, setIsEnabled] = useState(false);
@@ -56,19 +60,18 @@ const CreateEvent = () => {
   useEffect(() => {
     setForm({
       ...form,
-      isOrgCert: isEnabled
-    })
-  }, [ isEnabled ])
+      isOrgCert: isEnabled,
+    });
+  }, [isEnabled]);
 
   useEffect(() => {
-    console.log(form)
-  }, [ form ])
+    console.log(form);
+  }, [form]);
 
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [tempStartTime, setTempStartTime] = useState(new Date());
   const [tempEndTime, setTempEndTime] = useState(new Date());
-
 
   const onChangeStartTime = (event, selectedDate) => {
     const currentDate = selectedDate || tempStartTime;
@@ -307,19 +310,20 @@ const CreateEvent = () => {
               )}
             </View>
 
+            <ImageUpload title="Event Banner" form={form} setForm={setForm} />
 
-            <ImageUpload title="Event Banner" form={form} setForm={setForm}/>
-
-            <View className="flex-row justify-between mb-5">
-            <Text className="text-base">Make an org post</Text>
-            <Switch
-              trackColor={{ false: "#767577", true: "#063970" }}
-              thumbColor={isEnabled ? "#FFF" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
+            {userRole === "Admin" ? (
+              <View className="flex-row justify-between mb-5">
+                <Text className="text-base">Make an org event</Text>
+                <Switch
+                  trackColor={{ false: "#767577", true: "#063970" }}
+                  thumbColor={isEnabled ? "#FFF" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+                />
+              </View>
+            ) : null}
 
             {/* create event button */}
             <CustomButton
@@ -337,5 +341,4 @@ const CreateEvent = () => {
 
 export default CreateEvent;
 
-const styles = StyleSheet.create({
-});
+const styles = StyleSheet.create({});
