@@ -86,7 +86,28 @@ const CreateJob = () => {
       alert("Please fill out all fields before proceeding.");
       return;
     }
-
+  
+    // Validate method of application
+    if (!form.method) {
+      alert("Please select a method of application.");
+      return;
+    }
+  
+    if (form.method === "Email" && !form.email) {
+      alert("Please provide a valid email address for application.");
+      return;
+    }
+    if (form.method === "Website" && !form.website) {
+      alert("Please provide a valid website URL for application.");
+      return;
+    }
+  
+    // Validate application deadline
+    if (!form.deadline || new Date(form.deadline) < new Date()) {
+      alert("Please select a valid application deadline in the future.");
+      return;
+    }
+  
     try {
       const newJobId = await createJob(orgId, form);
       router.replace({
@@ -98,6 +119,8 @@ const CreateJob = () => {
       console.error("Error creating job:", error);
     }
   };
+  
+  
 
   return (
     <SafeAreaView className="h-full bg-secondary">
