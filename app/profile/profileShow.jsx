@@ -24,6 +24,7 @@ import {
   unfollowUser,
   getPostByAuthor,
   getFollowing,
+  getCompanyByOwner,
 } from "../../lib/useFirebase";
 import { getCurrentUser } from "../../lib/firebase";
 import { useGlobalContext } from "../../context/globalProvider";
@@ -56,6 +57,8 @@ const ProfileShow = () => {
   // set current user state
   const [currentUserId, setCurrentUserId] = useState("");
 
+  const [ companies, setCompanies ] = useState([])
+
   // fetch the user's post
   const fetchUserPosts = async () => {
     let userPosts = await getPostByAuthor(uid, orgId);
@@ -78,6 +81,13 @@ const ProfileShow = () => {
     const followingUsers = await getFollowing(uid, orgId, true);
     setFollowing(followingUsers);
   };
+
+
+  const fetchCompanies = async () => {
+    const companies = await getCompanyByOwner(uid, orgId)
+    console.log(companies)
+    setCompanies(companies)
+  }
 
   // fetch user info and groups
   useFocusEffect(
@@ -109,6 +119,9 @@ const ProfileShow = () => {
 
         // fetch following users
         fetchUserFollowing();
+
+        // fetch companies
+        fetchCompanies()
 
         // fetch current user info
         const user = await getCurrentUser();
@@ -254,6 +267,10 @@ const ProfileShow = () => {
 
               {/* groups section */}
               <InfoBox title="Groups" info={groups} />
+
+              { companies.length > 0 ? (
+                <InfoBox title="Companies" info={companies} />
+              ) : null }
 
               <PostSection posts={posts} />
 
