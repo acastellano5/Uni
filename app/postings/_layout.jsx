@@ -48,6 +48,13 @@ const PostingLayout = () => {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen
+          name="editJob"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
       <StatusBar style="dark" />
     </>

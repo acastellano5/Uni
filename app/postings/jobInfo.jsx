@@ -12,6 +12,7 @@ import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import CustomButton from "../../components/CustomButton";
 import { format, isSameDay } from "date-fns";
+import Feather from "@expo/vector-icons/Feather";
 
 const jobInfo = () => {
   const { jobId } = useLocalSearchParams();
@@ -19,8 +20,8 @@ const jobInfo = () => {
 
   const [job, setJob] = useState({});
   const [contact, setContact] = useState({});
-  const [ formattedDate, setFormattedDate ] = useState("")
-  const [ isDeadline, setIsDeadline ] = useState(false)
+  const [formattedDate, setFormattedDate] = useState("");
+  const [isDeadline, setIsDeadline] = useState(false);
 
   const fetchJob = async () => {
     const fetchedJob = await getJobById(jobId);
@@ -28,11 +29,11 @@ const jobInfo = () => {
 
     const date = new Date(fetchedJob.deadline.seconds * 1000);
     const formattedDate = format(date, "MMMM dd, yyyy");
-    const today = new Date()
-    const isToday = isSameDay(date, today)
+    const today = new Date();
+    const isToday = isSameDay(date, today);
 
-    setIsDeadline(isToday)
-    setFormattedDate(formattedDate)
+    setIsDeadline(isToday);
+    setFormattedDate(formattedDate);
     setJob(fetchedJob);
     setContact(user);
   };
@@ -65,15 +66,23 @@ const jobInfo = () => {
     );
   };
 
+  const handleEdit = () => {
+    router.replace({pathname: '/postings/editJob', params: { jobId }})
+  }
+
   return (
     <SafeAreaView className="h-full bg-primary">
       <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView className="w-11/12 mx-auto">
           {user.uid === job.postedBy ? (
-            <View className="d-flex items-end">
-              <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
+            <View className="d-flex flex-row items-center justify-end">
+              <TouchableOpacity activeOpacity={0.8} onPress={handleDelete} className="mr-3">
                 <FontAwesome name="trash-o" size={24} color="red" />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={handleEdit}>
+                <Feather name="edit" size={24} color="gray" />
               </TouchableOpacity>
             </View>
           ) : null}
@@ -85,7 +94,9 @@ const jobInfo = () => {
             {job.companyName}
           </Link>
           <Text className="text-xl font-semibold">{job.location}</Text>
-          <Text className="text-xl font-semibold">Deadline: {formattedDate}</Text>
+          <Text className="text-xl font-semibold">
+            Deadline: {formattedDate}
+          </Text>
           <Text className="text-lg font-semibold text-gray-400">
             Posted by {contact.fullName}
           </Text>
@@ -95,8 +106,12 @@ const jobInfo = () => {
 
           <CustomButton
             title="Apply"
-            containerStyles={`py-3 mt-5 ${ isDeadline ? "bg-tertiary" : "bg-primary"}`}
-            textStyles={`text-base font-semibold ${ isDeadline ? null : "text-white"}`}
+            containerStyles={`py-3 mt-5 ${
+              isDeadline ? "bg-tertiary" : "bg-primary"
+            }`}
+            textStyles={`text-base font-semibold ${
+              isDeadline ? null : "text-white"
+            }`}
             disabled={isDeadline}
           />
         </ScrollView>
