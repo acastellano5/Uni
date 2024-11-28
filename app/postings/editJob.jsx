@@ -151,7 +151,9 @@ const EditJob = () => {
         form.method,
         form.email,
         form.website, 
-        form.deadline
+        form.deadline,
+        form.company,
+        form.companyName
       )
       router.replace({
         pathname: "/postings/jobInfo",
@@ -205,7 +207,7 @@ const EditJob = () => {
                 selectedValue={form.company} // Use company ID as the selected value
                 onItemSelect={(item) => {
                   handleFormUpdate("company", item.value); // Update company ID
-                  handleFormUpdate("companyName", ""); // Clear companyName
+                  handleFormUpdate("companyName", item.label); // Clear companyName
                 }}
                 containerStyles="mb-3"
               />
