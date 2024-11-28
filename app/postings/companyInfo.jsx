@@ -61,7 +61,7 @@ const companyInfo = () => {
           onPress: async () => {
             try {
               await deleteCompany(company.companyID);
-              router.replace({pathname: "/postings", params: { tab: "Companies" }});
+              router.replace({pathname: '/postings', params: { tab: "Companies" }});
             } catch (error) {
               console.error("Error deleting company:", error);
             }
@@ -77,7 +77,7 @@ const companyInfo = () => {
 
   return (
     <SafeAreaView className="h-full bg-primary">
-      <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" />
+      <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum"/>
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView className="w-11/12 mx-auto">
           {isLoading ? (

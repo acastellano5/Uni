@@ -33,7 +33,7 @@ const Index = () => {
 
   return (
     <SafeAreaView className="h-full bg-primary">
-      <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" />
+      <BackHeader containerStyles="w-11/12 mx-auto" title="Salesianum" onBackPress={() => router.push('/home')}/>
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         {/* tabs for switching between feeds */}
         <TabsDisplay
