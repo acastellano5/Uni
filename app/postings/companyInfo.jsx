@@ -61,7 +61,7 @@ const companyInfo = () => {
           onPress: async () => {
             try {
               await deleteCompany(company.companyID);
-              router.replace("/postings");
+              router.replace({pathname: "/postings", params: { tab: "Companies" }});
             } catch (error) {
               console.error("Error deleting company:", error);
             }

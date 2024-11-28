@@ -6,11 +6,12 @@ import TabsDisplay from "../../components/TabsDisplay";
 import JobsFeed from "../../components/postings/JobsFeed";
 import CompaniesFeed from "../../components/postings/CompaniesFeed";
 import { Feather } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 const Index = () => {
   const tabs = ["Jobs", "Companies"];
-  const [activeTab, setActiveTab] = useState(tabs[0]); // Active tab state
+  const { tab } = useLocalSearchParams()
+  const [activeTab, setActiveTab] = useState(tab || tabs[0]); // Active tab state
 
   const displayContent = () => {
     switch (activeTab) {
