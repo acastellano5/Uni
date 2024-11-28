@@ -67,8 +67,8 @@ const jobInfo = () => {
   };
 
   const handleEdit = () => {
-    router.replace({pathname: '/postings/editJob', params: { jobId }})
-  }
+    router.replace({ pathname: "/postings/editJob", params: { jobId } });
+  };
 
   return (
     <SafeAreaView className="h-full bg-primary">
@@ -77,12 +77,11 @@ const jobInfo = () => {
         <ScrollView className="w-11/12 mx-auto">
           {user.uid === job.postedBy ? (
             <View className="d-flex flex-row items-center justify-end">
-              <TouchableOpacity activeOpacity={0.8} onPress={handleDelete} className="mr-3">
-                <FontAwesome name="trash-o" size={24} color="red" />
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={handleEdit}>
+              <TouchableOpacity onPress={handleEdit} className="mr-3">
                 <Feather name="edit" size={24} color="gray" />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
+                <FontAwesome name="trash-o" size={24} color="red" />
               </TouchableOpacity>
             </View>
           ) : null}

@@ -11,6 +11,7 @@ import SingleSelect from "../../components/dropdown/SingleSelect";
 import { jobFieldsData } from "../../assets/data";
 import {
   createJob,
+  editJob,
   getCompanyByOwner,
   getJobById,
 } from "../../lib/useFirebase";
@@ -110,7 +111,7 @@ const EditJob = () => {
     }
   }, [doesOwnComp]);
 
-  const handleCreatePress = async () => {
+  const handleEditPress = async () => {
     if (
       !form.role ||
       (!form.companyName && !form.company) ||
@@ -142,20 +143,33 @@ const EditJob = () => {
     }
 
     try {
-      const newJobId = await createJob(orgId, form);
+      await editJob(
+        job.jobID,
+        form.role,
+        form.location,
+        form.description,
+        form.method,
+        form.email,
+        form.website, 
+        form.deadline
+      )
       router.replace({
         pathname: "/postings/jobInfo",
-        params: { jobId: newJobId },
+        params: { jobId: job.jobID },
       });
     } catch (error) {
-      alert("There was an error creating the job. Please try again.");
-      console.error("Error creating job:", error);
+      alert("There was an error updating the job. Please try again.");
+      console.error("Error updating job:", error);
     }
   };
 
+  const handleBackPress = async () => {
+    router.replace({ pathname: "/postings/jobInfo", params: { jobId } })
+  }
+
   return (
     <SafeAreaView className="h-full bg-secondary">
-      <BackHeader containerStyles="w-11/12 mx-auto" />
+      <BackHeader containerStyles="w-11/12 mx-auto" onBackPress={handleBackPress} />
       <View className="bg-darkWhite mt-5 h-full rounded-t-3xl pt-5 pb-10">
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className="w-10/12 mx-auto top-[50]">
@@ -287,10 +301,10 @@ const EditJob = () => {
             />
 
             <CustomButton
-              title="Create"
+              title="Update"
               containerStyles="bg-primary py-3 mb-24"
               textStyles="text-white text-base font-semibold"
-              handlePress={handleCreatePress}
+              handlePress={handleEditPress}
             />
           </View>
         </ScrollView>

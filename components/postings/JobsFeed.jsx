@@ -21,6 +21,7 @@ import {
 } from "../../lib/useFirebase";
 import { useGlobalContext } from "../../context/globalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
@@ -49,6 +50,12 @@ const JobPosting = ({ job, removeJob }) => {
         },
       ]
     );
+  };
+  const handleEdit = () => {
+    router.push({
+      pathname: "/postings/editJob",
+      params: { jobId: job.jobID },
+    });
   };
 
   return (
@@ -84,6 +91,13 @@ const JobPosting = ({ job, removeJob }) => {
 
       {user.uid === job.postedBy ? (
         <View className="flex-row items-start">
+          <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handleEdit}
+              className="mr-3"
+            >
+              <Feather name="edit" size={24} color="gray" />
+            </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
             <FontAwesome name="trash-o" size={24} color="red" />
           </TouchableOpacity>
